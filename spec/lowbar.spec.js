@@ -38,4 +38,17 @@ describe('_', () => {
       expect(_.values()).to.equal(null);
     });
   });
+
+  describe('#first', () => {
+    it('is a function', () => {
+      expect(_.first).to.be.a('function');
+    });
+    it('returns the first n values of an array', () => {
+      let inputArr = [5, 4, 3];
+      expect(_.first(inputArr)).to.equal(5);
+    });
+    it('returns null for non-arrays', () => {
+      expect(_.first(undefined)).to.equal(null);
+    });
+  });
 });
