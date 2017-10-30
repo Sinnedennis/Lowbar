@@ -38,4 +38,23 @@ _.each = function (list, iteratee, context = this) {
   return list;
 };
 
+_.indexOf = function (array, value, isSorted = false) {
+
+  if (!isSorted) {
+
+    for (let i = 0; i < array.length; i++) {
+      if (array[i] === value) return i;
+    }
+    return -1;
+
+  } else {
+
+    if (array.length === 1) return 0;
+    let mid = Math.floor(array.length / 2);
+
+    if (value < array[mid]) return _.indexOf(array.slice(0, mid), value, true);
+    else return mid + _.indexOf(array.slice(mid), value, true);
+  }
+};
+
 module.exports = _;

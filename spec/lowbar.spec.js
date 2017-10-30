@@ -101,4 +101,23 @@ describe('_', () => {
       expect(testSpy.args[0][2]).to.eql('1234');
     });
   });
+
+  //How to test if binary search is faster than unsorted
+  describe('#indexOf', () => {
+    it('is a function', () => {
+      expect(_.indexOf).to.be.a('function');
+    });
+    it('returns index of value in unsorted arr', () => {
+      const arr = ['a', 'b', 'c'];
+      expect(_.indexOf(arr, 'b')).to.equal(1);
+      expect(_.indexOf(arr, 'c')).to.equal(2);
+      expect(_.indexOf(arr, 'hi')).to.equal(-1);
+    });
+    it('returns index via binary search of value a sorted arr', () => {
+      const arr = [1, 2, 3, 4, 5];
+      expect(_.indexOf(arr, 2)).to.equal(1);
+      expect(_.indexOf(arr, 5)).to.equal(4);
+      expect(_.indexOf(arr, 'hi')).to.equal(-1);
+    });
+  });
 });
