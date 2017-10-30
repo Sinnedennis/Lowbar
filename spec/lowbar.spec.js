@@ -120,4 +120,28 @@ describe('_', () => {
       expect(_.indexOf(arr, 'hi')).to.equal(-1);
     });
   });
+
+  describe('#filter', () => {
+    it('is a function', () => {
+      expect(_.filter).to.be.a('function');
+    });
+    it('passes every list item to the predicate', () => {
+      const arr = [0, 1, 2, 3, 4, 5];
+      let testSpy = sinon.spy();
+      _.filter(arr, testSpy);
+      expect(testSpy.callCount).to.equal(arr.length);
+      expect(testSpy.args[0][2]).to.eql(arr);
+    });
+    it('only returns list items that pass the predicate test', () => {
+      let arr = [0, 1, 2, 3, 4, 5];
+      let predicate = (num) => num > 2;
+      expect(_.filter(arr, predicate)).to.eql([3, 4, 5]);
+
+      arr = ['a', 'b', 'c'];
+      predicate = (char) => char === 'b';
+      expect(_.filter(arr, predicate)).to.eql(['b']);
+      predicate = (char) => char === 'hi';
+      expect(_.filter(arr, predicate)).to.eql([]);
+    });
+  });
 });
