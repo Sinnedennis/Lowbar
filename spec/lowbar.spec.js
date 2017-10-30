@@ -20,4 +20,22 @@ describe('_', () => {
       expect(_.identity(value)).to.eql(value);
     });
   });
+
+  describe('#values', () => {
+    it('is a function', () => {
+      expect(_.values).to.be.a('function');
+    });
+    it('returns the values of an object', () => {
+      let inputObj = { one: 10, two: 'hello', three: true };
+      expect(_.values(inputObj)).to.eql([10, 'hello', true]);
+    });
+    it('returns the values of an array', () => {
+      let inputObj = ['h', [1], [1, 2, 3]];
+      expect(_.values(inputObj)).to.eql(['h', [1], [1, 2, 3]]);
+    });
+    it('returns null for non-objects', () => {
+      expect(_.values(true)).to.equal(null);
+      expect(_.values()).to.equal(null);
+    });
+  });
 });
