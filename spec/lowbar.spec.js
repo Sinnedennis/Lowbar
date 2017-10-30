@@ -145,4 +145,28 @@ describe('_', () => {
       expect(_.filter(arr, predicate)).to.eql([]);
     });
   });
+
+  describe('#reject', () => {
+    it('is a function', () => {
+      expect(_.reject).to.be.a('function');
+    });
+    it('passes every list item to the predicate', () => {
+      const arr = [0, 1, 2, 3, 4, 5];
+      let testSpy = sinon.spy();
+      _.reject(arr, testSpy);
+      expect(testSpy.callCount).to.equal(arr.length);
+      expect(testSpy.args[0][2]).to.eql(arr);
+    });
+    it('should return a list of items that fail the predicate test', () => {
+      let arr = [0, 1, 2, 3, 4, 5];
+      let predicate = (num) => num > 2;
+      expect(_.reject(arr, predicate)).to.eql([0, 1, 2]);
+
+      arr = ['a', 'b', 'c'];
+      predicate = (char) => char === 'b';
+      expect(_.reject(arr, predicate)).to.eql(['a', 'c']);
+      predicate = (char) => char === 'hi';
+      expect(_.reject(arr, predicate)).to.eql(arr);
+    });
+  });
 });
