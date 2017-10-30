@@ -14,4 +14,9 @@ _.first = function (array, n) {
   return n === undefined ? array[0] : array.slice(0, n);
 };
 
+_.last = function (array, n) {
+  if (!Array.isArray(array)) return null;
+  return n === undefined ? array[array.length - 1] : array.slice(array.length - n, array.length);
+};
+
 module.exports = _;
