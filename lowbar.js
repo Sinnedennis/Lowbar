@@ -57,4 +57,15 @@ _.indexOf = function (array, value, isSorted = false) {
   }
 };
 
+_.filter = function (list, predicate, context = this) {
+
+  let results = [];
+
+  _.each(list, (value, index, list) => {
+    if (predicate(value, index, list)) results.push(value);
+  }, context);
+  
+  return results;
+};
+
 module.exports = _;
