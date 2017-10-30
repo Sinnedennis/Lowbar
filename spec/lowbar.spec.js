@@ -46,9 +46,32 @@ describe('_', () => {
     it('returns the first n values of an array', () => {
       let inputArr = [5, 4, 3];
       expect(_.first(inputArr)).to.equal(5);
+      expect(_.first(inputArr, 2)).to.eql([5, 4]);
+    });
+    it('returns the whole array if n > array length', () => {
+      let inputArr = [5, 4, 3];
+      expect(_.first(inputArr, 10)).to.eql([5, 4, 3]);
     });
     it('returns null for non-arrays', () => {
       expect(_.first(undefined)).to.equal(null);
+    });
+  });
+
+  describe('#last', () => {
+    it('is a function', () => {
+      expect(_.last).to.be.a('function');
+    });
+    it('returns the last n values of an array', () => {
+      let inputArr = [5, 4, 3];
+      expect(_.last(inputArr)).to.equal(3);
+      expect(_.last(inputArr, 2)).to.eql([4, 3]);
+    });
+    it('returns the whole array if n > array length', () => {
+      let inputArr = [5, 4, 3];
+      expect(_.last(inputArr, 10)).to.eql([5, 4, 3]);
+    });
+    it('returns null for non-arrays', () => {
+      expect(_.last(undefined)).to.equal(null);
     });
   });
 });
