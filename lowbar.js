@@ -67,4 +67,14 @@ _.filter = function (list, predicate, context = this) {
   return results;
 };
 
+//Can refactor with negate in Advanced Lowbar later
+_.reject = function (list, predicate, context = this) {
+  let results = [];
+
+  _.each(list, (value, index, list) => {
+    if (!predicate(value, index, list)) results.push(value);
+  }, context);
+  return results;
+};
+
 module.exports = _;
