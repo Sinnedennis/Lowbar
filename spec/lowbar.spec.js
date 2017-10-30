@@ -1,5 +1,6 @@
 const path = require('path');
 const expect = require('chai').expect;
+const sinon = require('sinon');
 
 const _ = require(path.join(__dirname, '..', './lowbar.js'));
 
@@ -49,6 +50,32 @@ describe('_', () => {
     });
     it('returns null for non-arrays', () => {
       expect(_.first(undefined)).to.equal(null);
+    });
+  });
+
+  //TEST CONTEXT
+  describe('#each', () => {
+    let testSpy = sinon.spy();
+    
+    it('is a function', () => {
+      expect(_.each).to.be.a('function');
+    });
+    it('invokes the iteratee for each item in an array', () => {
+      _.each([1, 2, 3, 4], testSpy);
+      expect(testSpy.callCount).to.equal(4);
+      expect(testSpy.args[0][2]).to.eql([1, 2, 3, 4]);
+    });
+    it('invokes the iteratee for each item in an object', () => {
+      testSpy.reset();
+      _.each({ 1: 1, 2: 2, 3: 3 }, testSpy);
+      expect(testSpy.callCount).to.equal(3);
+      expect(testSpy.args[0][2]).to.eql({ 1: 1, 2: 2, 3: 3 });
+    });
+    it('invokes the iteratee for each character in the string', () => {
+      testSpy.reset();
+      _.each('1234', testSpy);
+      expect(testSpy.callCount).to.equal(4);
+      expect(testSpy.args[0][2]).to.eql('1234');
     });
   });
 });
