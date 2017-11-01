@@ -135,4 +135,14 @@ _.reduce = function (list, iteratee, memo, context = this) {
   return memo;
 };
 
+_.every = function (list, predicate, context) {
+  
+  predicate.bind(context);
+
+  for(let i = 0; i < list.length; i++) {
+    if (!predicate(list[i])) return false;
+  }
+  return true;
+};
+
 module.exports = _;

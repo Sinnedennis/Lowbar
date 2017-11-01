@@ -18,3 +18,19 @@ A reimplementation of the underscore.js library to practice vanilla JS and TDD
 15. some
 16. extends
 17. defaults
+
+18. once
+19. negate
+20. shuffle
+21. invoke
+22. sortBy (NB the Underscore library uses the native JavaScript sort but feel free to use your sort algorithm!)
+23. zip
+24. sortedIndex
+25. flatten
+26. intersection
+27. difference
+28. memoize
+29. delay
+30. where
+31. throttle
+32. partial
