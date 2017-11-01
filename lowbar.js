@@ -116,4 +116,10 @@ _.contains = function (list, value, fromIndex = 0) {
   return _.indexOf(list, value, fromIndex) > -1 ? true : false;
 };
 
+_.pluck = function (list, propName) {
+  return _.map(list, item => {
+    return item[propName];
+  });
+};
+
 module.exports = _;

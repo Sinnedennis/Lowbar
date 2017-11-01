@@ -237,4 +237,28 @@ describe('_', () => {
       expect(_.contains(list, 1, 0)).to.be.true;
     });
   });
+
+  describe('#pluck', () => {
+    it('should be a function', () => {
+      expect(_.pluck).to.be.a('function');
+    });
+    it('should extract a value from an array of object', () => {
+      const arr = [
+        { name: 'moe', age: 40 },
+        { name: 'larry', age: 50 },
+        { name: 'curly', age: 60 }
+      ];
+
+      expect(_.pluck(arr, 'name')).to.eql(['moe', 'larry', 'curly']);
+      expect(_.pluck(arr, 'age')).to.eql([40, 50, 60]);
+    });
+    it('returns undefined when value is not present in object', () => {
+      const arr = [
+        {foo: 'bar'},
+        {foo: 'bar'}
+      ];
+
+      expect(_.pluck(arr, 'banana')).to.eql([undefined, undefined]);
+    });
+  });
 });
