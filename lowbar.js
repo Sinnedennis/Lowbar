@@ -4,6 +4,7 @@ _.identity = function (value) {
   return value;
 };
 
+//Refactor to not use ES6
 _.values = function (object) {
   if (typeof object !== 'object') return null;
   return Object.values(object);
@@ -63,7 +64,7 @@ _.filter = function (list, predicate, context = this) {
   _.each(list, (value, index, list) => {
     if (predicate(value, index, list)) results.push(value);
   }, context);
-  
+
   return results;
 };
 
@@ -82,11 +83,11 @@ _.uniq = function (array, isSorted = false, iteratee) {
   let result = [];
 
   if (!isSorted) {
-    
+
     for (let i = 0; i < array.length; i++) {
       if (_.indexOf(result, array[i], false) === -1) result.push(array[i]);
     }
-  
+
     if (iteratee !== undefined) {
       for (let i = 0; i < result.length; i++) {
         result[i] = iteratee(result[i]);
@@ -94,8 +95,19 @@ _.uniq = function (array, isSorted = false, iteratee) {
     }
     return result;
   } else {
-      //Is a binary search needed?
+    //Is a binary search needed?
+  }
+};
+
+_.map = function (list, iteratee, context = this) {
+  let mappedArr = [];
+  iteratee.bind(context);
+
+  for (let i = 0; i < list.length; i++) {
+    mappedArr[i] = iteratee(list[i], i, list);
   }
 
+  return mappedArr;
 };
+
 module.exports = _;
