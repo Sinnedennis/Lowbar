@@ -77,4 +77,25 @@ _.reject = function (list, predicate, context = this) {
   return results;
 };
 
+//Refactor to use === item comparison
+_.uniq = function (array, isSorted = false, iteratee) {
+  let result = [];
+
+  if (!isSorted) {
+    
+    for (let i = 0; i < array.length; i++) {
+      if (_.indexOf(result, array[i], false) === -1) result.push(array[i]);
+    }
+  
+    if (iteratee !== undefined) {
+      for (let i = 0; i < result.length; i++) {
+        result[i] = iteratee(result[i]);
+      }
+    }
+    return result;
+  } else {
+      //Is a binary search needed?
+  }
+
+};
 module.exports = _;

@@ -169,4 +169,23 @@ describe('_', () => {
       expect(_.reject(arr, predicate)).to.eql(arr);
     });
   });
+
+  describe('#uniq', () => {
+    it('is a function', () => {
+      expect(_.uniq).to.be.a('function');
+    });
+    it('removes duplicate entries from array', () => {
+      const testArr = [1, '2', 1, 'three'];
+      expect(_.uniq(testArr)).to.eql([1, '2', 'three']);
+    });
+    it('yeilds each unique item to an interatee', () => {
+      const testArr = [1, 2, 3, 2, 3];
+      const iteratee = (num) => num * 10;
+      expect(_.uniq(testArr, false, iteratee)).to.eql([10, 20, 30]);
+    });
+    xit('filters array via faster binary search', () => {
+      const testArr = [1, 2, 2, 2, 3, 3];
+      expect(_.uniq(testArr, true)).to.eql([1, 2, 3]);
+    });
+  });
 });
