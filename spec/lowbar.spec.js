@@ -110,14 +110,20 @@ describe('_', () => {
     it('returns index of value in unsorted arr', () => {
       const arr = ['a', 'b', 'c'];
       expect(_.indexOf(arr, 'b')).to.equal(1);
-      expect(_.indexOf(arr, 'c')).to.equal(2);
-      expect(_.indexOf(arr, 'hi')).to.equal(-1);
+      expect(_.indexOf(arr, 'c', false)).to.equal(2);
+      expect(_.indexOf(arr, 'hi', false)).to.equal(-1);
     });
-    it('returns index via binary search of value a sorted arr', () => {
+    xit('returns index via binary search of value a sorted arr', () => {
       const arr = [1, 2, 3, 4, 5];
-      expect(_.indexOf(arr, 2)).to.equal(1);
-      expect(_.indexOf(arr, 5)).to.equal(4);
-      expect(_.indexOf(arr, 'hi')).to.equal(-1);
+      expect(_.indexOf(arr, 2, true)).to.equal(1);
+      expect(_.indexOf(arr, 5, true)).to.equal(4);
+      expect(_.indexOf(arr, 'hi', true)).to.equal(-1);
+    });
+    it('starts searching at i if given number as third argument', () => {
+      const arr = [1, 2, 3, 4, 5];
+      expect(_.indexOf(arr, 2, 2)).to.equal(-1);
+      expect(_.indexOf(arr, 5, 1)).to.equal(4);
+      expect(_.indexOf(arr, 4, 1)).to.equal(3);
     });
   });
 
@@ -188,24 +194,47 @@ describe('_', () => {
       expect(_.uniq(testArr, true)).to.eql([1, 2, 3]);
 
     });
+  });
+  describe('#map', () => {
+    it('is a function', () => {
+      expect(_.map).to.be.a('function');
+    });
+    it('yields each item to the iteratee', () => {
+      const arr = [1, 2, 3];
+      let count = 0;
 
-    describe('#map', () => {
-      it('is a function', () => {
-        expect(_.map).to.be.a('function');
+      const result = _.map(arr, (item) => {
+        count++;
+        return item * 10;
       });
-      it('yields each item to the iteratee', () => {
-        const arr = [1, 2, 3];
-        let count = 0;
 
-        const result = _.map(arr, (item) => {
-          count++;
-          return item * 10;
-        });
+      expect(result).to.eql([10, 20, 30]);
+      expect(count).to.equal(arr.length);
+      expect(arr).to.eql([1, 2, 3]);
+    });
+  });
 
-        expect(result).to.eql([10, 20, 30]);
-        expect(count).to.equal(arr.length);
-        expect(arr).to.eql([1, 2, 3]);
-      });
+  describe('#contains', () => {
+    it('is a function', () => {
+      expect(_.contains).to.be.a('function');
+    });
+    it('returns true if value is present in list', () => {
+      const list = [1, 2, 3, 4];
+      expect(_.contains(list, 1)).to.be.true;
+      expect(_.contains(list, 4)).to.be.true;
+      expect(_.contains(list, 2, 0)).to.be.true;
+    });
+    it('returns false if value is not present in list', () => {
+      const list = [1, 2, 3, 4];
+      expect(_.contains(list, 'foo')).to.be.false;
+      expect(_.contains(list, '2')).to.be.false;
+      expect(_.contains(list, true, 0)).to.be.false;
+    });
+    it('starts searching from given index', () => {
+      const list = [1, 2, 3, 4];
+      expect(_.contains(list, 1, 2)).to.be.false;
+      expect(_.contains(list, 1, 1)).to.be.false;
+      expect(_.contains(list, 1, 0)).to.be.true;
     });
   });
 });
