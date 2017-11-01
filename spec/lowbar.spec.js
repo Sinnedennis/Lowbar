@@ -2,14 +2,16 @@ const path = require('path');
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
-const _ = require(path.join(__dirname, '..', './lowbar.js'));
+let _;
+
+if (process.env.underscore === 'true') {
+  _ = require('underscore');
+} else {
+  _ = require(path.join(__dirname, '..', './lowbar.js'));
+}
 
 describe('_', () => {
   'use strict';
-
-  it('is an object', () => {
-    expect(_).to.be.an('object');
-  });
 
   describe('#identity', () => {
     it('is a function', function () {
@@ -242,7 +244,7 @@ describe('_', () => {
     it('should be a function', () => {
       expect(_.pluck).to.be.a('function');
     });
-    it('should extract a value from an array of object', () => {
+    it('should extract a value from an array of objects', () => {
       const arr = [
         { name: 'moe', age: 40 },
         { name: 'larry', age: 50 },
@@ -259,6 +261,22 @@ describe('_', () => {
       ];
 
       expect(_.pluck(arr, 'banana')).to.eql([undefined, undefined]);
+    });
+  });
+
+  describe('#reduce', () => {
+    it('should be a function', () => {
+      expect(_.reduce).to.be.a('function');
+    });
+    it('should reduce a list of values down to a single value', () => {
+      const arr = [5, 5, 5, 5];
+      const iteratee = (memo, num) => memo + num;
+      expect(_.reduce(arr, iteratee, 0)).to.equal(20);
+    });
+    it('uses the first list item as the memo if memo is not supplied', () => {
+      const arr = [5, 5, 5, 5];
+      const iteratee = (memo, num) => memo + num;
+      expect(_.reduce(arr, iteratee)).to.equal(20);
     });
   });
 });

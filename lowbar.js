@@ -122,4 +122,17 @@ _.pluck = function (list, propName) {
   });
 };
 
+_.reduce = function (list, iteratee, memo, context = this) {
+
+  iteratee.bind(this);
+
+  if (memo === undefined) memo = list.splice(0, 1)[0];
+
+  _.each(list, (value, i, list) => {
+    memo = iteratee(memo, value, i, list);
+  }, context);
+
+  return memo;
+};
+
 module.exports = _;
