@@ -79,7 +79,7 @@ describe('_', () => {
   //Test context
   describe('#each', () => {
     let testSpy = sinon.spy();
-    
+
     it('is a function', () => {
       expect(_.each).to.be.a('function');
     });
@@ -167,6 +167,25 @@ describe('_', () => {
       expect(_.reject(arr, predicate)).to.eql(['a', 'c']);
       predicate = (char) => char === 'hi';
       expect(_.reject(arr, predicate)).to.eql(arr);
+    });
+  });
+
+  describe.only('#map', () => {
+    it('is a function', () => {
+      expect(_.map).to.be.a('function');
+    });
+    it('yields each item to the iteratee', () => {
+      const arr = [1, 2, 3];
+      let count = 0;
+
+      const result = _.map(arr, (item) => {
+        count++;
+        return item * 10;
+      });
+
+      expect(result).to.eql([10, 20, 30]);
+      expect(count).to.equal(arr.length);
+      expect(arr).to.eql([1, 2, 3]);
     });
   });
 });

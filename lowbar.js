@@ -63,7 +63,7 @@ _.filter = function (list, predicate, context = this) {
   _.each(list, (value, index, list) => {
     if (predicate(value, index, list)) results.push(value);
   }, context);
-  
+
   return results;
 };
 
@@ -77,4 +77,14 @@ _.reject = function (list, predicate, context = this) {
   return results;
 };
 
+_.map = function (list, iteratee, context = this) {
+  let mappedArr = [];
+  iteratee.bind(context);
+
+  for (let i = 0; i < list.length; i++) {
+    mappedArr[i] = iteratee(list[i], i, list);
+  }
+
+  return mappedArr;
+};
 module.exports = _;
