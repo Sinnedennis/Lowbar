@@ -42,7 +42,7 @@ describe('_', () => {
     });
   });
 
-  describe('#first', () => {
+  describe.only('#first', () => {
     it('is a function', () => {
       expect(_.first).to.be.a('function');
     });
@@ -55,8 +55,13 @@ describe('_', () => {
       let inputArr = [5, 4, 3];
       expect(_.first(inputArr, 10)).to.eql([5, 4, 3]);
     });
-    it('returns null for non-arrays', () => {
-      expect(_.first(undefined)).to.equal(null);
+    it('works for strings', () => {
+      expect(_.first('hello')).to.equal('h');
+      expect(_.first('hello', 2)).to.eql(['h', 'e']);
+      expect(_.first('hello', 100)).to.eql(['h', 'e', 'l', 'l', 'o']);
+    });
+    it('returns [] for non-arrays', () => {
+      expect(_.first(true)).to.equal(undefined);
     });
   });
 

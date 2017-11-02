@@ -11,7 +11,8 @@ _.values = function (object) {
 };
 
 _.first = function (array, n) {
-  if (!Array.isArray(array)) return null;
+  if (!Array.isArray(array) && typeof array !== 'string') return;
+  if (typeof array === 'string') return n === undefined ? array[0] : array.split('').slice(0, n);
   return n === undefined ? array[0] : array.slice(0, n);
 };
 
