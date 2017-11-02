@@ -6,7 +6,7 @@ _.identity = function (value) {
 
 //Refactor to not use ES6
 _.values = function (object) {
-  if (typeof object !== 'object') return null;
+  if (typeof object !== 'object') return [];
   return Object.values(object);
 };
 

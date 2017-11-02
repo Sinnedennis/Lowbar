@@ -37,8 +37,8 @@ describe('_', () => {
       expect(_.values(inputObj)).to.eql(['h', [1], [1, 2, 3]]);
     });
     it('returns null for non-objects', () => {
-      expect(_.values(true)).to.equal(null);
-      expect(_.values()).to.equal(null);
+      expect(_.values(true)).to.eql([]);
+      expect(_.values()).to.eql([]);
     });
   });
 
