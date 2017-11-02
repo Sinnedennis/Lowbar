@@ -6,7 +6,7 @@ _.identity = function (value) {
 
 //Refactor to not use ES6
 _.values = function (object) {
-  if (typeof object !== 'object') return null;
+  if (typeof object !== 'object') return [];
   return Object.values(object);
 };
 
@@ -135,6 +135,16 @@ _.reduce = function (list, iteratee, memo, context = this) {
   }, context);
 
   return memo;
+};
+
+_.every = function (list, predicate, context) {
+  
+  predicate.bind(context);
+
+  for(let i = 0; i < list.length; i++) {
+    if (!predicate(list[i])) return false;
+  }
+  return true;
 };
 
 module.exports = _;

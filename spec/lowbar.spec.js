@@ -37,8 +37,8 @@ describe('_', () => {
       expect(_.values(inputObj)).to.eql(['h', [1], [1, 2, 3]]);
     });
     it('returns null for non-objects', () => {
-      expect(_.values(true)).to.equal(null);
-      expect(_.values()).to.equal(null);
+      expect(_.values(true)).to.eql([]);
+      expect(_.values()).to.eql([]);
     });
   });
 
@@ -287,6 +287,22 @@ describe('_', () => {
       const arr = [5, 5, 5, 5];
       const iteratee = (memo, num) => memo + num;
       expect(_.reduce(arr, iteratee)).to.equal(20);
+    });
+  });
+
+  describe('#every', () => {
+    it('should be a function', ()=> {
+      expect(_.every).to.be.a('function');
+    });
+    it('returns true if every list item passes the predicate', () => {
+      const arr = [1, 2, 3, 4, 5];
+      const predicate = num => num < 10;
+      expect(_.every(arr, predicate)).to.be.true;
+    });
+    it('returns false if one of the items fails the predicate', () => {
+      const arr = [1, 2, 3, 4, 5];
+      const predicate = num => num < 5;
+      expect(_.every(arr, predicate)).to.be.false;
     });
   });
 });
