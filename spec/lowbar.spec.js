@@ -42,7 +42,7 @@ describe('_', () => {
     });
   });
 
-  describe.only('#first', () => {
+  describe('#first', () => {
     it('is a function', () => {
       expect(_.first).to.be.a('function');
     });
@@ -65,7 +65,7 @@ describe('_', () => {
     });
   });
 
-  describe('#last', () => {
+  describe.only('#last', () => {
     it('is a function', () => {
       expect(_.last).to.be.a('function');
     });
@@ -78,8 +78,13 @@ describe('_', () => {
       let inputArr = [5, 4, 3];
       expect(_.last(inputArr, 10)).to.eql([5, 4, 3]);
     });
+    it('works with strings', () => {
+      expect(_.last('foobar')).to.equal('r');
+      expect(_.last('foobar', 2)).to.eql(['a', 'r']);
+      expect(_.last('foobar', 100)).to.eql(['f', 'o', 'o', 'b', 'a', 'r']);
+    });
     it('returns null for non-arrays', () => {
-      expect(_.last(undefined)).to.equal(null);
+      expect(_.last(true)).to.equal(undefined);
     });
   });
 

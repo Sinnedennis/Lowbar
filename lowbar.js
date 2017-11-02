@@ -17,7 +17,8 @@ _.first = function (array, n) {
 };
 
 _.last = function (array, n) {
-  if (!Array.isArray(array)) return null;
+  if (!Array.isArray(array) && typeof array !== 'string') return;
+  if (typeof array === 'string') return n === undefined ? array[array.length - 1] : array.split('').slice(array.length - n, array.length);
   return n === undefined ? array[array.length - 1] : array.slice(array.length - n, array.length);
 };
 
