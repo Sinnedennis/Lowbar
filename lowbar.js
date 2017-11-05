@@ -83,23 +83,21 @@ _.reject = function (list, predicate, context = this) {
 };
 
 //Refactor to use === item comparison
+//Underscore passes EVERY item to the iteratee - why?
+//Underscore produces some really weird results...
 _.uniq = function (array, isSorted = false, iteratee) {
   let result = [];
 
   if (!isSorted) {
 
     for (let i = 0; i < array.length; i++) {
+      if (iteratee !== undefined) iteratee(array[i], i, array);
       if (_.indexOf(result, array[i], false) === -1) result.push(array[i]);
     }
 
-    if (iteratee !== undefined) {
-      for (let i = 0; i < result.length; i++) {
-        result[i] = iteratee(result[i]);
-      }
-    }
     return result;
   } else {
-    //Is a binary search needed?
+    //Binary search needed?
   }
 };
 

@@ -65,7 +65,7 @@ describe('_', () => {
     });
   });
 
-  describe.only('#last', () => {
+  describe('#last', () => {
     it('is a function', () => {
       expect(_.last).to.be.a('function');
     });
@@ -193,13 +193,32 @@ describe('_', () => {
       expect(_.uniq).to.be.a('function');
     });
     it('removes duplicate entries from array', () => {
-      const testArr = [1, '2', 1, 'three'];
-      expect(_.uniq(testArr)).to.eql([1, '2', 'three']);
+      let testArr = [1, '2', 1, 'three'];
+      expect(_.uniq(testArr, false)).to.eql([1, '2', 'three']);
+      testArr = [null, undefined, null, undefined];
+      expect(_.uniq(testArr, false)).to.eql([null, undefined]);
     });
-    it('yeilds each unique item to an interatee', () => {
+    it('yeilds EVERY item to an interatee, regardless of being uniq or not', () => {
+      //_ only returns first item in arr when given an iteratee
       const testArr = [1, 2, 3, 2, 3];
-      const iteratee = (num) => num * 10;
-      expect(_.uniq(testArr, false, iteratee)).to.eql([10, 20, 30]);
+      let testSpy = sinon.spy();
+      _.uniq(testArr, false, testSpy);
+      expect(testSpy.callCount).to.equal(testArr.length);
+
+      it('passes the array item, the iteration number, and the list to the iteratee', () => {
+        expect(testSpy.args[0][0]).to.equal(testArr[0]);
+        expect(testSpy.args[4][0]).to.equal(testArr[4]);
+
+        expect(testSpy.args[0][1]).to.equal(0);
+        expect(testSpy.args[4][1]).to.equal(testArr.length - 1);
+
+        expect(testSpy.args[0][2]).to.eql(testArr);
+      });
+
+      let iteratedArr = [];
+      const iteratee = (item) => { return iteratedArr.push(item + 'foo'); };
+      _.uniq([1, 2, 1, 3], false, iteratee);
+      expect(iteratedArr).to.eql(['1foo', '2foo', '1foo', '3foo']);
     });
     xit('filters array via faster binary search', () => {
       const testArr = [1, 2, 2, 2, 3, 3];
@@ -266,8 +285,8 @@ describe('_', () => {
     });
     it('returns undefined when value is not present in object', () => {
       const arr = [
-        {foo: 'bar'},
-        {foo: 'bar'}
+        { foo: 'bar' },
+        { foo: 'bar' }
       ];
 
       expect(_.pluck(arr, 'banana')).to.eql([undefined, undefined]);
@@ -291,7 +310,7 @@ describe('_', () => {
   });
 
   describe('#every', () => {
-    it('should be a function', ()=> {
+    it('should be a function', () => {
       expect(_.every).to.be.a('function');
     });
     it('returns true if every list item passes the predicate', () => {
