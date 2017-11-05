@@ -203,7 +203,7 @@ describe('_', () => {
       let testSpy = sinon.spy();
       _.uniq(testArr, false, testSpy);
       expect(testSpy.callCount).to.equal(testArr.length);
-      
+
       it('passes the array item, the iteration number, and the list to the iteratee', () => {
         expect(testSpy.args[0][0]).to.equal(testArr[0]);
         expect(testSpy.args[4][0]).to.equal(testArr[4]);
@@ -213,7 +213,7 @@ describe('_', () => {
 
         expect(testSpy.args[0][2]).to.eql(testArr);
       });
-      
+
       //_ only returns first item in arr when given an iteratee
       let iteratedArr = [];
       const iteratee = (item) => { return iteratedArr.push(item + 'foo'); };
@@ -334,7 +334,7 @@ describe('_', () => {
     });
   });
 
-  describe.only('#some', () => {
+  describe('#some', () => {
     it('should be a function', () => {
       expect(_.some).to.be.a('function');
     });
@@ -355,6 +355,28 @@ describe('_', () => {
       const testSpy = sinon.spy(predicate);
       _.some(arr, testSpy);
       expect(testSpy.calledTwice).to.be.true;
+    });
+  });
+
+  describe('#extend', () => {
+    it('should be a function', () => {
+      expect(_.extend).to.be.a('function');
+    });
+    it('makes a shallow copy of the properties in the source lists into the destination', () => {
+      const destination = { hello: 'world' };
+      const copy = _.extend(destination, { foo: 'bar' }, { fish: 'pie' });
+      expect(copy).to.eql({ hello: 'world', foo: 'bar', fish: 'pie' });
+    });
+    it('makes copies by reference', () => {
+      const destination = { hello: 'world' };
+      const reference = { foo: 'bar' };
+      const copy = _.extend(destination, { reference });
+      expect(copy.reference).to.equal(reference);
+    });
+    it('runs in-order, so the last source will override properties of the same name in previous arguments', () => {
+      const destination = { hello: 'world' };
+      const copy = _.extend(destination, { foo: 'sushi' }, { foo: 'bar' });
+      expect(copy.foo).to.equal('bar');
     });
   });
 });

@@ -157,4 +157,15 @@ _.some = function (list, predicate, context) {
   return false;
 };
 
+_.extend = function (destination) {
+
+  _.each(arguments, (arg) => {
+    _.reduce(arg, (memo, value, i) => {
+      return memo[i] = value;
+    }, destination);
+  });
+
+  return destination;
+};
+
 module.exports = _;
