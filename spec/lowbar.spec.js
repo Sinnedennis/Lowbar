@@ -199,12 +199,11 @@ describe('_', () => {
       expect(_.uniq(testArr, false)).to.eql([null, undefined]);
     });
     it('yeilds EVERY item to an interatee, regardless of being uniq or not', () => {
-      //_ only returns first item in arr when given an iteratee
       const testArr = [1, 2, 3, 2, 3];
       let testSpy = sinon.spy();
       _.uniq(testArr, false, testSpy);
       expect(testSpy.callCount).to.equal(testArr.length);
-
+      
       it('passes the array item, the iteration number, and the list to the iteratee', () => {
         expect(testSpy.args[0][0]).to.equal(testArr[0]);
         expect(testSpy.args[4][0]).to.equal(testArr[4]);
@@ -214,7 +213,8 @@ describe('_', () => {
 
         expect(testSpy.args[0][2]).to.eql(testArr);
       });
-
+      
+      //_ only returns first item in arr when given an iteratee
       let iteratedArr = [];
       const iteratee = (item) => { return iteratedArr.push(item + 'foo'); };
       _.uniq([1, 2, 1, 3], false, iteratee);
@@ -322,6 +322,39 @@ describe('_', () => {
       const arr = [1, 2, 3, 4, 5];
       const predicate = num => num < 5;
       expect(_.every(arr, predicate)).to.be.false;
+    });
+    it('short-circuits if one item fails', () => {
+      const arr = [1, 20, 3, 2, 1, 0];
+      const predicate = num => num < 5;
+
+      const testSpy = sinon.spy(predicate);
+      _.every(arr, testSpy);
+
+      expect(testSpy.calledTwice).to.be.true;
+    });
+  });
+
+  describe.only('#some', () => {
+    it('should be a function', () => {
+      expect(_.some).to.be.a('function');
+    });
+    it('returns true if some of the values in the list pass the predicate', () => {
+      const arr = [0, 1, 2, 3, 4, 5];
+      const predicate = num => num === 3;
+      expect(_.some(arr, predicate)).to.be.true;
+    });
+    it('returns false if nonde of the values in the list pass the predicate', () => {
+      const arr = [0, 1, 2, 3, 4, 5];
+      const predicate = num => num === 'foo';
+      expect(_.some(arr, predicate)).to.be.false;
+    });
+    it('short-circuits of one item passes', () => {
+      const arr = [1, 'foo', 3, 2, 1, 0];
+      const predicate = num => num === 'foo';
+
+      const testSpy = sinon.spy(predicate);
+      _.some(arr, testSpy);
+      expect(testSpy.calledTwice).to.be.true;
     });
   });
 });
