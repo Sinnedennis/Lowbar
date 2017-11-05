@@ -379,4 +379,22 @@ describe('_', () => {
       expect(copy.foo).to.equal('bar');
     });
   });
+
+  describe('#defaults', () => {
+    it('should be a function', () => {
+      expect(_.defaults).to.be.a('function');
+    });
+    it('fills in undefined properties in the object with the default list', () => {
+      const object = {foo: 'bar'};
+      const defaults = {foo: 'ice-cream', yes: 'no'};
+      expect(_.defaults(object, defaults)).to.eql({foo: 'bar', yes: 'no'});
+    });
+    it('uses the first value present in the default lists', () => {
+      const object = {foo: 'bar'};
+      expect(_.defaults(object, 
+        {foo: 'ice-cream'}, 
+        {yes: 'no'},
+        {yes: 'maybe'})).to.eql({foo: 'bar', yes: 'no'});
+    });
+  });
 });

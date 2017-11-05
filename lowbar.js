@@ -157,6 +157,7 @@ _.some = function (list, predicate, context) {
   return false;
 };
 
+//Double-check that arguments are processed in order
 _.extend = function (destination) {
 
   _.each(arguments, (arg) => {
@@ -166,6 +167,21 @@ _.extend = function (destination) {
   });
 
   return destination;
+};
+
+_.defaults = function (object) {
+  _.each(arguments, (arg) => {
+    _.reduce(arg, (memo, value, i) => {
+
+      if (memo[i] === undefined) {
+        return memo[i] = value;
+      }
+      return memo;
+      
+    }, object);
+  });
+
+  return object;
 };
 
 module.exports = _;
