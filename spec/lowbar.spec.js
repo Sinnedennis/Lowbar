@@ -505,24 +505,42 @@ describe('_', () => {
       expect(str.length).to.equal(shuffledStr.length);
     });
   });
-  describe('#invoke', () => {
+  describe.only('#invoke', () => {
     it('should be a function', () => {
       expect(_.invoke).to.be.a('function');
     });
     it('applies an array method on each array value in an array list', () => {
-      expect(_.invoke([[3, 2, 4, 1], [7, 3, 9, 2]], 'sort'))
-        .to.eql([[1, 2, 3, 4], [2, 3, 7, 9]]);
+      expect(_.invoke([[2, 4, 1, 3], [4, 6, 5, 7]], 'sort'))
+        .to.eql([[1, 2, 3, 4], [4, 5, 6, 7]]);
 
-      expect(_.invoke([[3, 2, 4, 1], [7, 3, 9, 2]], 'join'))
-        .to.eql(['3,2,4,1', '7,3,9,2']);
+      expect(_.invoke([[2, 4, 1, 3], [4, 6, 5, 7]], 'join'))
+        .to.eql(['2,4,1,3', '4,6,5,7']);
     });
     it('passes any additional arguments to the array method', () => {
-      expect(_.invoke([[3, 2, 4, 1], [7, 3, 9, 2]], 'join', '+'))
-        .to.eql(['3+2+4+1', '7+3+9+2']);
+      expect(_.invoke([[2, 4, 1, 3], [4, 6, 5, 7]], 'join', '+'))
+        .to.eql(['2+4+1+3', '4+6+5+7']);
     });
     it('works for objects', () => {
-      expect(_.invoke({a: 'a', b: 'b', c: 'c'}, 'toUpperCase', ' '))
+      expect(_.invoke({ x: 'a', y: 'b', z: 'c' }, 'toUpperCase'))
         .to.eql(['A', 'B', 'C']);
+    });
+    it('works for strings', () => {
+      expect(_.invoke('foo', 'toUpperCase'))
+        .to.eql(['F', 'O', 'O']);
+    });
+    it('returns undefined if no method is given', () => {
+      expect(_.invoke([1, 2, 3])).to.eql([undefined, undefined, undefined]);
+    });
+
+    it('returns undefined per-item if a inapppropriate method is given', () => {
+      expect(_.invoke([1, 2, 'foo'], 'toUpperCase'))
+        .to.eql([undefined, undefined, 'FOO']);
+
+      expect(_.invoke({a: 'a', b: 'b'}, 'sort'))
+        .to.eql([undefined, undefined]);
+
+      expect(_.invoke([[3,1,2], 'foo', [5,4,6]], 'sort'))
+        .to.eql([[1,2,3], undefined, [4,5,6]]);
     });
   });
 });

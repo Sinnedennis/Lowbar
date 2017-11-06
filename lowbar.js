@@ -231,11 +231,12 @@ _.shuffle = function (list) {
 };
 
 _.invoke = function (list, methodName) {
-  if (typeof list !== 'object') return [];
+  if (typeof list !== 'object' && typeof list !== 'string') return [];
 
   const args = [].slice.call(arguments, 2);
 
   return _.map(list, function (item) {
+    if (item[methodName] === undefined) return undefined;
     return item[methodName].apply(item, args);
   });
 };
