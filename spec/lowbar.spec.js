@@ -19,7 +19,11 @@ describe('_', () => {
     });
 
     it('returns the argument that was passed to it', () => {
-      const value = 'foo';
+      let value = 'foo';
+      expect(_.identity(value)).to.eql(value);
+      value = [10];
+      expect(_.identity(value)).to.eql(value);
+      value = {foo: 'bar'};
       expect(_.identity(value)).to.eql(value);
     });
   });
@@ -125,7 +129,7 @@ describe('_', () => {
       expect(_.indexOf(arr, 'c', false)).to.equal(2);
       expect(_.indexOf(arr, 'hi', false)).to.equal(-1);
     });
-    xit('returns index via binary search of value a sorted arr', () => {
+    it('returns index via binary search of value a sorted arr', () => {
       const arr = [1, 2, 3, 4, 5];
       expect(_.indexOf(arr, 2, true)).to.equal(1);
       expect(_.indexOf(arr, 5, true)).to.equal(4);
@@ -220,7 +224,7 @@ describe('_', () => {
       _.uniq([1, 2, 1, 3], false, iteratee);
       expect(iteratedArr).to.eql(['1foo', '2foo', '1foo', '3foo']);
     });
-    xit('filters array via faster binary search', () => {
+    it('filters array via faster binary search', () => {
       const testArr = [1, 2, 2, 2, 3, 3];
       expect(_.uniq(testArr, true)).to.eql([1, 2, 3]);
 

@@ -4,7 +4,7 @@ _.identity = function (value) {
   return value;
 };
 
-//Refactor to not use ES6
+//Refactor to not use ES6 ?
 _.values = function (object) {
   if (typeof object !== 'object') return [];
   return Object.values(object);
@@ -24,7 +24,7 @@ _.last = function (array, n) {
 
 _.each = function (list, iteratee, context = this) {
 
-  iteratee.bind(context);
+  iteratee = iteratee.bind(context);
 
   if (Array.isArray(list) || typeof list === 'string') {
 
@@ -53,13 +53,23 @@ _.indexOf = function (array, value, isSorted = false) {
     }
     return -1;
 
-  } else if (isSorted === true) {
-
-    if (array.length <= 1) return -1;
-    let mid = Math.floor(array.length / 2);
-    if (value < array[mid]) return _.indexOf(array.slice(0, mid), value, true);
-    else return mid + _.indexOf(array.slice(mid), value, true);
+  } else {
+    let start = 0;
+    let end = array.length - 1;
+    let mid;
+    while (end >= start) {
+      mid = Math.floor((start + end) / 2);
+      if (array[mid] === value) {
+        return mid;
+      }
+      else if (array[mid] < value) {
+        start = mid + 1;
+      } else {
+        end = mid - 1;
+      }
+    }
   }
+  return -1;
 };
 
 _.filter = function (list, predicate, context = this) {
@@ -88,17 +98,12 @@ _.reject = function (list, predicate, context = this) {
 _.uniq = function (array, isSorted = false, iteratee) {
   let result = [];
 
-  if (!isSorted) {
-
-    for (let i = 0; i < array.length; i++) {
-      if (iteratee !== undefined) iteratee(array[i], i, array);
-      if (_.indexOf(result, array[i], false) === -1) result.push(array[i]);
-    }
-
-    return result;
-  } else {
-    //Binary search needed?
+  for (let i = 0; i < array.length; i++) {
+    if (iteratee !== undefined) iteratee(array[i], i, array);
+    if (_.indexOf(result, array[i], isSorted) === -1) result.push(array[i]);
   }
+
+  return result;
 };
 
 _.map = function (list, iteratee, context = this) {
@@ -136,10 +141,10 @@ _.reduce = function (list, iteratee, memo, context = this) {
 };
 
 _.every = function (list, predicate, context) {
-  
+
   predicate = predicate.bind(context);
 
-  for(let i = 0; i < list.length; i++) {
+  for (let i = 0; i < list.length; i++) {
     if (!predicate(list[i])) return false;
   }
 
@@ -177,7 +182,7 @@ _.defaults = function (object) {
         return memo[i] = value;
       }
       return memo;
-      
+
     }, object);
   });
 
