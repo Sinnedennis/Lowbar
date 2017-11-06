@@ -110,9 +110,9 @@ _.map = function (list, iteratee, context = this) {
   let mappedArr = [];
   iteratee = iteratee.bind(context);
 
-  for (let i = 0; i < list.length; i++) {
-    mappedArr[i] = iteratee(list[i], i, list);
-  }
+  _.each(list, (value, index, list) => {
+    mappedArr.push(iteratee(value, index, list));
+  }, context);
 
   return mappedArr;
 };
@@ -228,6 +228,16 @@ _.shuffle = function (list) {
     list[rand] = list.pop();
   }
   return result;
+};
+
+_.invoke = function (list, methodName) {
+  if (typeof list !== 'object') return [];
+
+  const args = [].slice.call(arguments, 2);
+
+  return _.map(list, function (item) {
+    return item[methodName].apply(item, args);
+  });
 };
 
 module.exports = _;

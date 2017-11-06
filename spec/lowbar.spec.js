@@ -451,7 +451,7 @@ describe('_', () => {
     });
   });
   //Requires better testing
-  describe.only('#shuffle', () => {
+  describe('#shuffle', () => {
     it('should be a function', () => {
       expect(_.shuffle).to.be.a('function');
     });
@@ -492,7 +492,7 @@ describe('_', () => {
       expect(unshuffledSum).to.equal(shuffledSum);
 
       expect(shuffledObj.length).to.equal(_.values(obj).length);
-      
+
     });
     it('works for strings', () => {
       let str = '012345';
@@ -503,6 +503,26 @@ describe('_', () => {
       }
 
       expect(str.length).to.equal(shuffledStr.length);
+    });
+  });
+  describe('#invoke', () => {
+    it('should be a function', () => {
+      expect(_.invoke).to.be.a('function');
+    });
+    it('applies an array method on each array value in an array list', () => {
+      expect(_.invoke([[3, 2, 4, 1], [7, 3, 9, 2]], 'sort'))
+        .to.eql([[1, 2, 3, 4], [2, 3, 7, 9]]);
+
+      expect(_.invoke([[3, 2, 4, 1], [7, 3, 9, 2]], 'join'))
+        .to.eql(['3,2,4,1', '7,3,9,2']);
+    });
+    it('passes any additional arguments to the array method', () => {
+      expect(_.invoke([[3, 2, 4, 1], [7, 3, 9, 2]], 'join', '+'))
+        .to.eql(['3+2+4+1', '7+3+9+2']);
+    });
+    it('works for objects', () => {
+      expect(_.invoke({a: 'a', b: 'b', c: 'c'}, 'toUpperCase', ' '))
+        .to.eql(['A', 'B', 'C']);
     });
   });
 });
