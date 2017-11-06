@@ -108,7 +108,7 @@ _.uniq = function (array, isSorted = false, iteratee) {
 
 _.map = function (list, iteratee, context = this) {
   let mappedArr = [];
-  iteratee.bind(context);
+  iteratee = iteratee.bind(context);
 
   for (let i = 0; i < list.length; i++) {
     mappedArr[i] = iteratee(list[i], i, list);
@@ -129,7 +129,7 @@ _.pluck = function (list, propName) {
 
 _.reduce = function (list, iteratee, memo, context = this) {
 
-  iteratee.bind(this);
+  iteratee = iteratee.bind(this);
 
   if (memo === undefined) memo = list.splice(0, 1)[0];
 
