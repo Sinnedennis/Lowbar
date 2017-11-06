@@ -202,4 +202,11 @@ _.once = function (func) {
   };
 };
 
+_.negate = function (predicate) {
+
+  return function () {
+    return !predicate.apply(null, arguments);
+  };
+};
+
 module.exports = _;

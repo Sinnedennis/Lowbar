@@ -401,7 +401,7 @@ describe('_', () => {
         {yes: 'maybe'})).to.eql({foo: 'bar', yes: 'no'});
     });
   });
-  describe.only('#once', () => {
+  describe('#once', () => {
     it('should be a function', () => {
       expect(_.once).to.be.a('function');
     });
@@ -433,6 +433,21 @@ describe('_', () => {
       resultArr.push(wrappedFunc('bar'));
       resultArr.push(wrappedFunc('hello world'));
       expect(resultArr).to.eql(['foo', 'foo', 'foo']);
+    });
+  });
+  describe.only('#negate', () => {
+    it('should be a function', () => {
+      expect(_.negate).to.be.a('function');
+    });
+    it('returns a function', () => {
+      expect(_.negate()).to.be.a('function');
+    });
+    it('returns a negated predicate', () => {
+      const list = ['not', 'foobar'];
+      const predicate = string => string === 'foobar';
+      const negatedPred = _.negate(predicate);
+      const result = _.filter(list, negatedPred);
+      expect(result).to.eql(['not']);
     });
   });
 });
