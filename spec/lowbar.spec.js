@@ -401,4 +401,38 @@ describe('_', () => {
         {yes: 'maybe'})).to.eql({foo: 'bar', yes: 'no'});
     });
   });
+  describe.only('#once', () => {
+    it('should be a function', () => {
+      expect(_.once).to.be.a('function');
+    });
+    it('returns a function', () => {
+      expect(_.once()).to.be.a('function');
+    });
+    it('allows the invocation of the passed function', () => {
+      const func = () => 'foobar';
+      const wrappedFunc = _.once(func);
+      expect(wrappedFunc()).to.equal('foobar');
+    });
+    it('allows arguments to be passed to the wrapped function', () => {
+      const func = (working) => working ? 'hello world' : 'foobar';
+      let wrappedFunc = _.once(func);
+      expect(wrappedFunc(false)).to.equal('foobar');
+      wrappedFunc = _.once(func);
+      expect(wrappedFunc(true)).to.equal('hello world');
+    });
+    it('only allows one invocation of the wrapped function', () => {
+      const func = (working) => working ? 'once' : 'twice';
+      let wrappedFunc = _.once(func);
+      expect(wrappedFunc(true)).to.equal('once');
+      expect(wrappedFunc(true)).to.not.equal('twice');
+    });
+    it('should always return the result of the first invocation', () => {
+      const wrappedFunc = _.once(_.identity);
+      let resultArr = [];
+      resultArr.push(wrappedFunc('foo'));
+      resultArr.push(wrappedFunc('bar'));
+      resultArr.push(wrappedFunc('hello world'));
+      expect(resultArr).to.eql(['foo', 'foo', 'foo']);
+    });
+  });
 });
