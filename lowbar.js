@@ -209,4 +209,25 @@ _.negate = function (predicate) {
   };
 };
 
+_.shuffle = function (list) {
+
+  if (Array.isArray(list)) list = list.slice();
+  else if (typeof list === 'string') list = list.split('');
+  else if (typeof list === 'object' && list !== null) list = _.values(list);
+  else return [];
+
+  let result = [];
+  let rand;
+  const length = list.length;
+
+  for (let i = 0; i < length; i++) {
+    rand = Math.floor(Math.random() * (list.length - 1));
+
+    result.push(list[rand]);
+
+    list[rand] = list.pop();
+  }
+  return result;
+};
+
 module.exports = _;

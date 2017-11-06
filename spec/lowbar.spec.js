@@ -23,7 +23,7 @@ describe('_', () => {
       expect(_.identity(value)).to.eql(value);
       value = [10];
       expect(_.identity(value)).to.eql(value);
-      value = {foo: 'bar'};
+      value = { foo: 'bar' };
       expect(_.identity(value)).to.eql(value);
     });
   });
@@ -389,16 +389,16 @@ describe('_', () => {
       expect(_.defaults).to.be.a('function');
     });
     it('fills in undefined properties in the object with the default list', () => {
-      const object = {foo: 'bar'};
-      const defaults = {foo: 'ice-cream', yes: 'no'};
-      expect(_.defaults(object, defaults)).to.eql({foo: 'bar', yes: 'no'});
+      const object = { foo: 'bar' };
+      const defaults = { foo: 'ice-cream', yes: 'no' };
+      expect(_.defaults(object, defaults)).to.eql({ foo: 'bar', yes: 'no' });
     });
     it('uses the first value present in the default lists', () => {
-      const object = {foo: 'bar'};
-      expect(_.defaults(object, 
-        {foo: 'ice-cream'}, 
-        {yes: 'no'},
-        {yes: 'maybe'})).to.eql({foo: 'bar', yes: 'no'});
+      const object = { foo: 'bar' };
+      expect(_.defaults(object,
+        { foo: 'ice-cream' },
+        { yes: 'no' },
+        { yes: 'maybe' })).to.eql({ foo: 'bar', yes: 'no' });
     });
   });
   describe('#once', () => {
@@ -435,7 +435,7 @@ describe('_', () => {
       expect(resultArr).to.eql(['foo', 'foo', 'foo']);
     });
   });
-  describe.only('#negate', () => {
+  describe('#negate', () => {
     it('should be a function', () => {
       expect(_.negate).to.be.a('function');
     });
@@ -448,6 +448,61 @@ describe('_', () => {
       const negatedPred = _.negate(predicate);
       const result = _.filter(list, negatedPred);
       expect(result).to.eql(['not']);
+    });
+  });
+  //Requires better testing
+  describe.only('#shuffle', () => {
+    it('should be a function', () => {
+      expect(_.shuffle).to.be.a('function');
+    });
+    it('returns a randomly-shuffled array', () => {
+      let arr = [0, 1, 2, 3, 4, 5];
+      let shuffled = _.shuffle(arr);
+
+      expect(_.contains(shuffled, undefined)).to.be.false;
+
+      for (let i = 0; i < arr.length; i++) {
+        expect(_.contains(arr, arr[i])).to.be.true;
+      }
+
+      const shuffledSum = _.reduce(shuffled, (memo, value) => memo + value, 0);
+      const unshuffledSum = _.reduce(arr, (memo, value) => memo + value, 0);
+      expect(unshuffledSum).to.equal(shuffledSum);
+
+      expect(arr.length).to.equal(shuffled.length);
+    });
+    it('works for objects', () => {
+      let obj = {
+        a: 0,
+        b: 1,
+        c: 2,
+        d: 3,
+        e: 4,
+        f: 5
+      };
+
+      let shuffledObj = _.shuffle(obj);
+
+      for (let key in obj) {
+        expect(_.contains(shuffledObj, obj[key])).to.be.true;
+      }
+
+      const shuffledSum = _.reduce(shuffledObj, (memo, value) => memo + value, 0);
+      const unshuffledSum = _.reduce(obj, (memo, value) => memo + value, 0);
+      expect(unshuffledSum).to.equal(shuffledSum);
+
+      expect(shuffledObj.length).to.equal(_.values(obj).length);
+      
+    });
+    it('works for strings', () => {
+      let str = '012345';
+      let shuffledStr = _.shuffle(str);
+
+      for (let i = 0; i < str.length; i++) {
+        expect(_.contains(shuffledStr, str[i])).to.be.true;
+      }
+
+      expect(str.length).to.equal(shuffledStr.length);
     });
   });
 });
