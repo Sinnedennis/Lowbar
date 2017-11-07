@@ -241,4 +241,36 @@ _.invoke = function (list, methodName) {
   });
 };
 
+/*
+Returns a (stably) sorted copy of list, ranked in ascending order
+by the results of running each value through iteratee.
+iteratee may also be the string name of the property to 
+sort by (eg. length). 
+
+*/
+
+_.sortBy = function (list, iteratee, context) {
+
+  // if (typeof list !== 'object' && typeof list !== 'string') return [];
+  list = list.slice();
+
+  if (iteratee === undefined) return list.sort();
+
+  else if (typeof iteratee === 'function') {
+    iteratee = iteratee.bind(context);
+
+    return list.sort((a, b) => {
+      return iteratee(a) - iteratee(b);
+    });
+
+  } else if (typeof iteratee === 'string') {
+
+    return list.sort((a, b) => {
+      return a[iteratee] - b[iteratee];
+    });
+  }
+
+  return [];
+};
+
 module.exports = _;

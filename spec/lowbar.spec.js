@@ -505,7 +505,7 @@ describe('_', () => {
       expect(str.length).to.equal(shuffledStr.length);
     });
   });
-  describe.only('#invoke', () => {
+  describe('#invoke', () => {
     it('should be a function', () => {
       expect(_.invoke).to.be.a('function');
     });
@@ -541,6 +541,38 @@ describe('_', () => {
 
       expect(_.invoke([[3,1,2], 'foo', [5,4,6]], 'sort'))
         .to.eql([[1,2,3], undefined, [4,5,6]]);
+    });
+  });
+  describe.only('#sortBy', () => {
+    it('should be a function', () => {
+      expect(_.sortBy).to.be.a('function');
+    });
+    it('returns a stably sorted copy of the list', () => {
+      const arr = [0,1,2,3,4,5];
+      expect(_.sortBy(arr)).to.not.equal(arr);
+    });
+    it('returns an array in acending order if passed no iteratee', () => {
+      expect(_.sortBy([5,3,4,0,1,2])).to.eql([0,1,2,3,4,5]);
+      expect(_.sortBy(['a', 'c', 'b'])).to.eql(['a', 'b', 'c']);
+    });
+    it('returns an array sorted by iteratee in acending order', () => {
+      const arr = ['eggman', 'the', 'am', 'i'];
+      const func = x => x.length;
+      expect(_.sortBy(arr, func)).to.eql(['i', 'am', 'the', 'eggman']);
+    });
+    it('sorts arrays of objects via a passed property in acending order', () => {
+      const arr = [
+        { name: 'Dave',  age: 53 }, 
+        { name: 'Olie',  age: 26 },
+        { name: 'Holly', age: 42 }
+      ];
+
+      const answer = [
+        { name: 'Olie',  age: 26 },
+        { name: 'Holly', age: 42 },
+        { name: 'Dave',  age: 53 } 
+      ];
+      expect(_.sortBy(arr, 'age')).to.eql(answer);
     });
   });
 });
