@@ -14,81 +14,158 @@ describe('_', () => {
   'use strict';
 
   describe('#identity', () => {
+
     it('is a function', function () {
       expect(_.identity).to.be.a('function');
     });
 
     it('returns the argument that was passed to it', () => {
       let value = 'foo';
-      expect(_.identity(value)).to.eql(value);
+      expect(_.identity(value)).to.equal(value);
+
       value = [10];
+      expect(_.identity(value)).to.equal(value);
       expect(_.identity(value)).to.eql(value);
+
       value = { foo: 'bar' };
+      expect(_.identity(value)).to.equal(value);
       expect(_.identity(value)).to.eql(value);
     });
   });
 
   describe('#values', () => {
+
     it('is a function', () => {
       expect(_.values).to.be.a('function');
     });
+
     it('returns the values of an object', () => {
-      let inputObj = { one: 10, two: 'hello', three: true };
+      const inputObj = { one: 10, two: 'hello', three: true };
       expect(_.values(inputObj)).to.eql([10, 'hello', true]);
     });
-    it('returns the values of an array', () => {
-      let inputObj = ['h', [1], [1, 2, 3]];
+
+    it('returns a shallow copy of an array', () => {
+      const inputObj = ['h', [1], [1, 2, 3]];
       expect(_.values(inputObj)).to.eql(['h', [1], [1, 2, 3]]);
     });
-    it('returns null for non-objects', () => {
+
+    it('returns an empty array for non-objects/arrays', () => {
       expect(_.values(true)).to.eql([]);
       expect(_.values()).to.eql([]);
+      expect(_.values(12345)).to.eql([]);
+      expect(_.values('12345')).to.eql([]);
+    });
+
+    it('returns an empty array if passed the object null', () => {
+      expect(_.values(null)).to.eql([]);
     });
   });
 
   describe('#first', () => {
+
     it('is a function', () => {
       expect(_.first).to.be.a('function');
     });
+
     it('returns the first n values of an array', () => {
-      let inputArr = [5, 4, 3];
-      expect(_.first(inputArr)).to.equal(5);
-      expect(_.first(inputArr, 2)).to.eql([5, 4]);
+      const inputArr = [0, 1, 2, 3];
+      expect(_.first(inputArr, 1)).to.eql([0]);
+      expect(_.first(inputArr, 2)).to.eql([0, 1]);
+      expect(_.first(inputArr, 3)).to.eql([0, 1, 2]);
     });
+
+    it('returns the value of the first item if n is not provided', () => {
+      let inputArr = [0, 1, 2, 3];
+      expect(_.first(inputArr)).to.equal(0);
+
+      inputArr = ['foo', 'bar'];
+      expect(_.first(inputArr)).to.equal('foo');
+    });
+
     it('returns the whole array if n > array length', () => {
-      let inputArr = [5, 4, 3];
-      expect(_.first(inputArr, 10)).to.eql([5, 4, 3]);
+      const inputArr = [0, 1, 2, 3];
+      expect(_.first(inputArr, 99)).to.eql([0, 1, 2, 3]);
     });
+
+    it('returns an empty array if n <= 0', () => {
+      const inputArr = [0, 1, 2, 3];
+      expect(_.first(inputArr, 0)).to.eql([]);
+      expect(_.first(inputArr, -1)).to.eql([]);
+      expect(_.first(inputArr, -99)).to.eql([]);
+    });
+
     it('works for strings', () => {
       expect(_.first('hello')).to.equal('h');
       expect(_.first('hello', 2)).to.eql(['h', 'e']);
-      expect(_.first('hello', 100)).to.eql(['h', 'e', 'l', 'l', 'o']);
+      expect(_.first('hello', 99)).to.eql(['h', 'e', 'l', 'l', 'o']);
     });
-    it('returns [] for non-arrays', () => {
+
+    it('returns undefined for invalid inputs', () => {
       expect(_.first(true)).to.equal(undefined);
+      expect(_.first(null)).to.equal(undefined);
+      expect(_.first({ 1: 1, 2: 2, 3: 3 })).to.equal(undefined);
+      expect(_.first(31415)).to.equal(undefined);
+    });
+
+    xit('returns an empty array for invalid n inputs', () => {
+      expect(_.first([1], NaN)).to.eql([]);
+      expect(_.first([1], '1')).to.eql([]);
+      expect(_.first([1], true)).to.eql([]);
+      expect(_.first([1], [1, 2, 3])).to.eql([]);
     });
   });
 
   describe('#last', () => {
+
     it('is a function', () => {
       expect(_.last).to.be.a('function');
     });
+
     it('returns the last n values of an array', () => {
-      let inputArr = [5, 4, 3];
+      const inputArr = [0, 1, 2, 3];
+      expect(_.last(inputArr, 1)).to.eql([3]);
+      expect(_.last(inputArr, 2)).to.eql([2, 3]);
+      expect(_.last(inputArr, 3)).to.eql([1, 2, 3]);
+    });
+
+    it('returns the value of the last item if n is not provided', () => {
+      let inputArr = [0, 1, 2, 3];
       expect(_.last(inputArr)).to.equal(3);
-      expect(_.last(inputArr, 2)).to.eql([4, 3]);
+
+      inputArr = ['foo', 'bar'];
+      expect(_.last(inputArr)).to.equal('bar');
     });
+
     it('returns the whole array if n > array length', () => {
-      let inputArr = [5, 4, 3];
-      expect(_.last(inputArr, 10)).to.eql([5, 4, 3]);
+      const inputArr = [0, 1, 2, 3];
+      expect(_.last(inputArr, 10)).to.eql([0, 1, 2, 3]);
     });
+
+    it('returns an empty array if n <= 0', () => {
+      const inputArr = [0, 1, 2, 3];
+      expect(_.last(inputArr, 0)).to.eql([]);
+      expect(_.last(inputArr, -1)).to.eql([]);
+      expect(_.last(inputArr, -99)).to.eql([]);
+    });
+
     it('works with strings', () => {
       expect(_.last('foobar')).to.equal('r');
       expect(_.last('foobar', 2)).to.eql(['a', 'r']);
       expect(_.last('foobar', 100)).to.eql(['f', 'o', 'o', 'b', 'a', 'r']);
     });
-    it('returns null for non-arrays', () => {
-      expect(_.last(true)).to.equal(undefined);
+
+    it('returns undefined for invalid list inputs', () => {
+      expect(_.last(true)).to.eql(undefined);
+      expect(_.last(null)).to.eql(undefined);
+      expect(_.last({ 1: 1, 2: 2, 3: 3 })).to.eql(undefined);
+      expect(_.last(31415)).to.eql(undefined);
+    });
+
+    xit('returns an empty array for invalid n inputs', () => {
+      expect(_.last([1], NaN)).to.eql([]);
+      expect(_.last([1], '1')).to.eql([]);
+      expect(_.last([1], true)).to.eql([]);
+      expect(_.last([1], [1, 2, 3])).to.eql([]);
     });
   });
 
@@ -536,23 +613,23 @@ describe('_', () => {
       expect(_.invoke([1, 2, 'foo'], 'toUpperCase'))
         .to.eql([undefined, undefined, 'FOO']);
 
-      expect(_.invoke({a: 'a', b: 'b'}, 'sort'))
+      expect(_.invoke({ a: 'a', b: 'b' }, 'sort'))
         .to.eql([undefined, undefined]);
 
-      expect(_.invoke([[3,1,2], 'foo', [5,4,6]], 'sort'))
-        .to.eql([[1,2,3], undefined, [4,5,6]]);
+      expect(_.invoke([[3, 1, 2], 'foo', [5, 4, 6]], 'sort'))
+        .to.eql([[1, 2, 3], undefined, [4, 5, 6]]);
     });
   });
-  describe.only('#sortBy', () => {
+  describe('#sortBy', () => {
     it('should be a function', () => {
       expect(_.sortBy).to.be.a('function');
     });
     it('returns a stably sorted copy of the list', () => {
-      const arr = [0,1,2,3,4,5];
+      const arr = [0, 1, 2, 3, 4, 5];
       expect(_.sortBy(arr)).to.not.equal(arr);
     });
     it('returns an array in acending order if passed no iteratee', () => {
-      expect(_.sortBy([5,3,4,0,1,2])).to.eql([0,1,2,3,4,5]);
+      expect(_.sortBy([5, 3, 4, 0, 1, 2])).to.eql([0, 1, 2, 3, 4, 5]);
       expect(_.sortBy(['a', 'c', 'b'])).to.eql(['a', 'b', 'c']);
     });
     it('returns an array sorted by iteratee in acending order', () => {
@@ -562,15 +639,15 @@ describe('_', () => {
     });
     it('sorts arrays of objects via a passed property in acending order', () => {
       const arr = [
-        { name: 'Dave',  age: 53 }, 
-        { name: 'Olie',  age: 26 },
+        { name: 'Dave', age: 53 },
+        { name: 'Olie', age: 26 },
         { name: 'Holly', age: 42 }
       ];
 
       const answer = [
-        { name: 'Olie',  age: 26 },
+        { name: 'Olie', age: 26 },
         { name: 'Holly', age: 42 },
-        { name: 'Dave',  age: 53 } 
+        { name: 'Dave', age: 53 }
       ];
       expect(_.sortBy(arr, 'age')).to.eql(answer);
     });

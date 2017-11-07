@@ -6,20 +6,39 @@ _.identity = function (value) {
 
 //Refactor to not use ES6 ?
 _.values = function (object) {
-  if (typeof object !== 'object') return [];
+
+  if (typeof object !== 'object' || object === null) return [];
   return Object.values(object);
 };
 
-_.first = function (array, n) {
-  if (!Array.isArray(array) && typeof array !== 'string') return;
-  if (typeof array === 'string') return n === undefined ? array[0] : array.split('').slice(0, n);
-  return n === undefined ? array[0] : array.slice(0, n);
+_.first = function (list, n) {
+
+  if (!Array.isArray(list) && typeof list !== 'string') return;
+  if (n !== undefined && typeof n !== 'number') return [];
+  
+  if (n < 0) n = 0;
+
+  if (typeof list === 'string') {
+    return n === undefined ? list[0] : list.split('').slice(0, n);
+  }
+
+  return n === undefined ? list[0] : list.slice(0, n);
 };
 
-_.last = function (array, n) {
-  if (!Array.isArray(array) && typeof array !== 'string') return;
-  if (typeof array === 'string') return n === undefined ? array[array.length - 1] : array.split('').slice(array.length - n, array.length);
-  return n === undefined ? array[array.length - 1] : array.slice(array.length - n, array.length);
+_.last = function (list, n) {
+
+  if (!Array.isArray(list) && typeof list !== 'string') return;
+  if (n !== undefined && typeof n !== 'number') return [];
+
+  if (typeof list === 'string') {
+    return n === undefined
+      ? list[list.length - 1]
+      : list.split('').slice(list.length - n, list.length);
+  }
+
+  return n === undefined
+    ? list[list.length - 1]
+    : list.slice(list.length - n, list.length);
 };
 
 _.each = function (list, iteratee, context = this) {
