@@ -389,7 +389,7 @@ describe('_', () => {
 
     });
 
-    it('takes a context argument for arrays', () => {
+    it('takes a context argument for objects', () => {
       const predicateObj = {
         predicate: item => item > 2,
       };
@@ -436,7 +436,7 @@ describe('_', () => {
     });
   });
 
-  describe.only('#uniq', () => {
+  describe('#uniq', () => {
     it('is a function', () => {
       expect(_.uniq).to.be.a('function');
     });
@@ -481,7 +481,7 @@ describe('_', () => {
 
     it('returns empty array when given invalid array input', () => {
       expect(_.uniq(1)).to.eql([]);
-      expect(_.uniq({1: 1, 2: 2})).to.eql([]);
+      expect(_.uniq({ 1: 1, 2: 2 })).to.eql([]);
       expect(_.uniq(null)).to.eql([]);
       expect(_.uniq([])).to.eql([]);
     });
@@ -493,22 +493,79 @@ describe('_', () => {
     });
   });
 
-  describe('#map', () => {
+  describe.only('#map', () => {
     it('is a function', () => {
       expect(_.map).to.be.a('function');
     });
-    it('yields each item to the iteratee', () => {
-      const arr = [1, 2, 3];
-      let count = 0;
 
-      const result = _.map(arr, (item) => {
-        count++;
+    it('yields each item to the iteratee', () => {
+      const testSpy = sinon.spy();
+      const testArr = [1, 2, 3];
+
+      _.map(testArr, testSpy);
+
+      expect(testSpy.callCount).to.equal(testArr.length);
+    });
+
+    it('passes the following arguments in order to the iteratee - value, index/key, list', () => {
+      const testSpy = sinon.spy();
+      const testArr = [1, 2, 3];
+
+      _.map(testArr, testSpy);
+
+      expect(testSpy.args).to.eql([
+        [1, 0, testArr],
+        [2, 1, testArr],
+        [3, 2, testArr]
+      ]);
+    });
+
+    it('returns a new transformed array without mutating the original input', () => {
+      const testArr = [1, 2, 3];
+
+      const result = _.map(testArr, (item) => {
         return item * 10;
       });
 
       expect(result).to.eql([10, 20, 30]);
-      expect(count).to.equal(arr.length);
-      expect(arr).to.eql([1, 2, 3]);
+      expect(testArr).to.eql([1, 2, 3]);
+    });
+
+    it('works for objects', () => {
+      const inputObj = {0: 'a', 1: 'b', 2: 'c'};
+
+      const result = _.map(inputObj, (char) => {
+        return char.toUpperCase();
+      });
+
+      expect(result).to.eql(['A', 'B', 'C']);
+    });
+
+    it('works for strings', () => {
+      const result = _.map('hello world', (char) => {
+        return char.toUpperCase();
+      });
+
+      expect(result).to.eql('HELLO WORLD'.split(''));
+    });
+
+    it('takes a context argument', () => {
+      const iterateeObj = {
+        iteratee: char => char.toUpperCase(),
+      };
+
+      const result = _.map('abc', function (item) {
+        return this.iteratee(item);
+      }, iterateeObj);
+
+      expect(result).to.eql(['A', 'B', 'C']);
+    });
+
+    it('returns an empty array when given invalid input list', () => {
+      expect(_.map(true)).to.eql([]);
+      expect(_.map(1010)).to.eql([]);
+      expect(_.map(null)).to.eql([]);
+      expect(_.map(undefined)).to.eql([]);
     });
   });
 
