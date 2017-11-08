@@ -12,7 +12,7 @@ _.values = function (object) {
 };
 
 _.first = function (list, n) {
-  
+
   if (typeof n === 'string' && !isNaN(n)) n = +n;
   if (!Array.isArray(list) && typeof list !== 'string') return;
   if (n !== undefined && typeof n !== 'number') return [];
@@ -41,7 +41,7 @@ _.last = function (list, n) {
 _.each = function (list, iteratee, context = this) {
 
   if (typeof iteratee !== 'function') return list;
-  iteratee = iteratee.bind(context);  
+  iteratee = iteratee.bind(context);
 
   if (Array.isArray(list) || typeof list === 'string') {
 
@@ -63,8 +63,8 @@ _.indexOf = function (array, value, isSorted = false) {
   if (typeof array === 'string') array = array.split('');
 
   if (!Array.isArray(array) || array.length === 0) return -1;
-  if(typeof isSorted !== 'boolean' && typeof isSorted !== 'number') return -1;
-  
+  if (typeof isSorted !== 'boolean' && typeof isSorted !== 'number') return -1;
+
   if (isSorted === false || typeof isSorted === 'number') {
 
     const startFrom = typeof isSorted === 'number' ? isSorted : 0;
@@ -100,7 +100,7 @@ _.indexOf = function (array, value, isSorted = false) {
 };
 
 _.filter = function (list, predicate, context = this) {
-  
+
   if (typeof predicate !== 'function') return list;
   predicate = predicate.bind(context);
 
@@ -117,16 +117,21 @@ _.reject = function (list, predicate, context = this) {
   return _.filter(list, _.negate(predicate), context);
 };
 
-//Refactor to use === item comparison
 //Underscore passes EVERY item to the iteratee - why?
-//Underscore produces some really weird results...
-_.uniq = function (array, isSorted = false, iteratee) {
-  let result = [];
+_.uniq = function (array, isSorted, iteratee) {
 
-  for (let i = 0; i < array.length; i++) {
-    if (iteratee !== undefined) iteratee(array[i], i, array);
-    if (_.indexOf(result, array[i], isSorted) === -1) result.push(array[i]);
-  }
+  if (typeof array === 'string' && array.length > 0) array = array.split('');
+  if (typeof iteratee !== 'function') iteratee = _.identity;
+  if (typeof isSorted !== 'boolean') isSorted = false;
+
+  if (!Array.isArray(array)) return [];
+
+  const result = [];
+
+  _.each(array, (value, i) => {
+    iteratee(value, i, array);
+    if (_.indexOf(result, value, isSorted) === -1) result.push(value);
+  });
 
   return result;
 };
