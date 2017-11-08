@@ -59,6 +59,11 @@ _.each = function (list, iteratee, context) {
 //Fix binary search
 _.indexOf = function (array, value, isSorted = false) {
 
+  if (typeof array === 'string') array = array.split('');
+
+  if (!Array.isArray(array) || array.length === 0) return -1;
+  if(typeof isSorted !== 'boolean' && typeof isSorted !== 'number') return -1;
+  
   if (isSorted === false || typeof isSorted === 'number') {
 
     const startFrom = typeof isSorted === 'number' ? isSorted : 0;
@@ -69,11 +74,15 @@ _.indexOf = function (array, value, isSorted = false) {
     return -1;
 
   } else {
+
     let start = 0;
     let end = array.length - 1;
     let mid;
+
     while (end >= start) {
+
       mid = Math.floor((start + end) / 2);
+
       if (array[mid] === value) {
         return mid;
       }
@@ -82,8 +91,10 @@ _.indexOf = function (array, value, isSorted = false) {
       } else {
         end = mid - 1;
       }
+
     }
   }
+  
   return -1;
 };
 

@@ -191,7 +191,7 @@ describe('_', () => {
   });
 
   //Test context
-  describe.only('#each', () => {
+  describe('#each', () => {
 
     it('is a function', () => {
       expect(_.each).to.be.a('function');
@@ -282,25 +282,48 @@ describe('_', () => {
   });
 
   //How to test if binary search is faster than unsorted
-  describe('#indexOf', () => {
+  describe.only('#indexOf', () => {
     it('is a function', () => {
       expect(_.indexOf).to.be.a('function');
     });
+
     it('returns index of value in unsorted arr', () => {
       const arr = ['a', 'b', 'c'];
+      expect(_.indexOf(arr, 'a')).to.equal(0);
       expect(_.indexOf(arr, 'b')).to.equal(1);
-      expect(_.indexOf(arr, 'c', false)).to.equal(2);
-      expect(_.indexOf(arr, 'hi', false)).to.equal(-1);
+      expect(_.indexOf(arr, 'c')).to.equal(2);
     });
-    it('returns index via binary search of value a sorted arr', () => {
+
+    it('returns -1 if array does not contain value', () => {
+      const arr = ['a', 'b', 'c'];
+      expect(_.indexOf(arr, 'aa')).to.equal(-1);
+      expect(_.indexOf(arr, 1)).to.equal(-1);
+      expect(_.indexOf(arr, 'true')).to.equal(-1);
+    });
+
+    it('returns -1 if given invalid input', () => {
+      expect(_.indexOf()).to.equal(-1);
+      expect(_.indexOf(1,2,3)).to.equal(-1);
+      expect(_.indexOf([], NaN, NaN)).to.equal(-1);
+    });
+
+    it('works for strings', () => {
+      expect(_.indexOf('hello', 'h')).to.equal(0);
+      expect(_.indexOf('hello', 'l')).to.equal(2);
+      expect(_.indexOf('hello', 'o')).to.equal(4);
+      expect(_.indexOf('hello', 'x')).to.equal(-1);
+    });
+
+    it('returns index via binary search of value in a sorted arr', () => {
       const arr = [1, 2, 3, 4, 5];
       expect(_.indexOf(arr, 2, true)).to.equal(1);
       expect(_.indexOf(arr, 5, true)).to.equal(4);
       expect(_.indexOf(arr, 'hi', true)).to.equal(-1);
     });
+    
     it('starts searching at i if given number as third argument', () => {
       const arr = [1, 2, 3, 4, 5];
-      expect(_.indexOf(arr, 2, 2)).to.equal(-1);
+      expect(_.indexOf(arr, 1, 2)).to.equal(-1);
       expect(_.indexOf(arr, 5, 1)).to.equal(4);
       expect(_.indexOf(arr, 4, 1)).to.equal(3);
     });
