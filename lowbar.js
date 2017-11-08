@@ -113,14 +113,8 @@ _.filter = function (list, predicate, context = this) {
   return result;
 };
 
-//Can refactor with negate in Advanced Lowbar later
 _.reject = function (list, predicate, context = this) {
-  let results = [];
-
-  _.each(list, (value, index, list) => {
-    if (!predicate(value, index, list)) results.push(value);
-  }, context);
-  return results;
+  return _.filter(list, _.negate(predicate), context);
 };
 
 //Refactor to use === item comparison

@@ -191,7 +191,7 @@ describe('_', () => {
   });
 
   //Test context
-  describe.only('#each', () => {
+  describe('#each', () => {
 
     it('is a function', () => {
       expect(_.each).to.be.a('function');
@@ -337,7 +337,7 @@ describe('_', () => {
   });
 
   //Test context
-  describe.only('#filter', () => {
+  describe('#filter', () => {
     it('is a function', () => {
       expect(_.filter).to.be.a('function');
     });
@@ -403,7 +403,7 @@ describe('_', () => {
 
     });
 
-    it.only('returns list if given invalid inputs', () => {
+    it('returns list if given invalid inputs', () => {
       expect(_.filter([], () => {})).to.eql([]);
       expect(_.filter(1, NaN, false)).to.eql(1);
       expect(_.filter('five', null, undefined)).to.eql('five');
@@ -415,23 +415,25 @@ describe('_', () => {
     it('is a function', () => {
       expect(_.reject).to.be.a('function');
     });
-    it('passes every list item to the predicate', () => {
-      const arr = [0, 1, 2, 3, 4, 5];
-      let testSpy = sinon.spy();
-      _.reject(arr, testSpy);
-      expect(testSpy.callCount).to.equal(arr.length);
-      expect(testSpy.args[0][2]).to.eql(arr);
-    });
-    it('should return a list of items that fail the predicate test', () => {
-      let arr = [0, 1, 2, 3, 4, 5];
-      let predicate = (num) => num > 2;
-      expect(_.reject(arr, predicate)).to.eql([0, 1, 2]);
 
-      arr = ['a', 'b', 'c'];
+    it('passes every list item to the predicate', () => {
+      const inputArr = [0, 1, 2, 3, 4, 5];
+      const testSpy = sinon.spy();
+      _.reject(inputArr, testSpy);
+      expect(testSpy.callCount).to.equal(inputArr.length);
+    });
+
+    it('should return a list of items that fail the predicate test', () => {
+      const inputArr = [0, 1, 2, 3, 4, 5];
+      let predicate = (num) => num > 2;
+      expect(_.reject(inputArr, predicate)).to.eql([0, 1, 2]);
+
+      const inputObj = {a: 'a', b: 'b', c: 'c'};
       predicate = (char) => char === 'b';
-      expect(_.reject(arr, predicate)).to.eql(['a', 'c']);
+      expect(_.reject(inputObj, predicate)).to.eql(['a', 'c']);
+
       predicate = (char) => char === 'hi';
-      expect(_.reject(arr, predicate)).to.eql(arr);
+      expect(_.reject(inputObj, predicate)).to.eql(_.values(inputObj));
     });
   });
 
