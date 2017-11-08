@@ -12,36 +12,32 @@ _.values = function (object) {
 };
 
 _.first = function (list, n) {
-
+  
+  if (typeof n === 'string' && !isNaN(n)) n = +n;
   if (!Array.isArray(list) && typeof list !== 'string') return;
   if (n !== undefined && typeof n !== 'number') return [];
-  
-  if (n < 0) n = 0;
 
-  if (typeof list === 'string') {
-    return n === undefined ? list[0] : list.split('').slice(0, n);
-  }
+  if (+n < 0) n = 0;
+  if (typeof list === 'string') list = list.split('');
 
   return n === undefined ? list[0] : list.slice(0, n);
 };
 
+//Too busy. Refactor.
 _.last = function (list, n) {
-
+  // if (isNaN(n) && n !== undefined) return [];
+  if (typeof n === 'string' && !isNaN(n)) n = +n;
   if (!Array.isArray(list) && typeof list !== 'string') return;
   if (n !== undefined && typeof n !== 'number') return [];
 
-  if (typeof list === 'string') {
-    return n === undefined
-      ? list[list.length - 1]
-      : list.split('').slice(list.length - n, list.length);
-  }
+  if (typeof list === 'string') list = list.split('');
 
   return n === undefined
     ? list[list.length - 1]
     : list.slice(list.length - n, list.length);
 };
 
-_.each = function (list, iteratee, context = this) {
+_.each = function (list, iteratee, context) {
 
   iteratee = iteratee.bind(context);
 

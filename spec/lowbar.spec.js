@@ -61,6 +61,7 @@ describe('_', () => {
     });
   });
 
+  //Guard against decimal n's?
   describe('#first', () => {
 
     it('is a function', () => {
@@ -100,6 +101,14 @@ describe('_', () => {
       expect(_.first('hello', 99)).to.eql(['h', 'e', 'l', 'l', 'o']);
     });
 
+    it('accepts n as a string', () => {
+      expect(_.first('hello', '1')).to.eql(['h']);
+      expect(_.first('hello', '3')).to.eql(['h', 'e', 'l']);
+      expect(_.first('hello', '99')).to.eql(['h', 'e', 'l', 'l', 'o']);
+      expect(_.first('hello', '0')).to.eql([]);
+      expect(_.first('hello', '-1')).to.eql([]);
+    });
+
     it('returns undefined for invalid inputs', () => {
       expect(_.first(true)).to.equal(undefined);
       expect(_.first(null)).to.equal(undefined);
@@ -107,14 +116,16 @@ describe('_', () => {
       expect(_.first(31415)).to.equal(undefined);
     });
 
-    xit('returns an empty array for invalid n inputs', () => {
+    //true and false function as 1 and 0
+    it('returns an empty array for invalid n inputs', () => {
       expect(_.first([1], NaN)).to.eql([]);
-      expect(_.first([1], '1')).to.eql([]);
-      expect(_.first([1], true)).to.eql([]);
+      expect(_.first([1], 'a')).to.eql([]);
+      expect(_.first([1], false)).to.eql([]);
       expect(_.first([1], [1, 2, 3])).to.eql([]);
     });
   });
 
+  //Guard against decimal n's?
   describe('#last', () => {
 
     it('is a function', () => {
@@ -154,6 +165,14 @@ describe('_', () => {
       expect(_.last('foobar', 100)).to.eql(['f', 'o', 'o', 'b', 'a', 'r']);
     });
 
+    it('accepts n as a string', () => {
+      expect(_.last('hello', '1')).to.eql(['o']);
+      expect(_.last('hello', '3')).to.eql(['l', 'l', 'o']);
+      expect(_.last('hello', '99')).to.eql(['h', 'e', 'l', 'l', 'o']);
+      expect(_.last('hello', '0')).to.eql([]);
+      expect(_.last('hello', '-1')).to.eql([]);
+    });
+
     it('returns undefined for invalid list inputs', () => {
       expect(_.last(true)).to.eql(undefined);
       expect(_.last(null)).to.eql(undefined);
@@ -161,37 +180,104 @@ describe('_', () => {
       expect(_.last(31415)).to.eql(undefined);
     });
 
-    xit('returns an empty array for invalid n inputs', () => {
-      expect(_.last([1], NaN)).to.eql([]);
-      expect(_.last([1], '1')).to.eql([]);
-      expect(_.last([1], true)).to.eql([]);
-      expect(_.last([1], [1, 2, 3])).to.eql([]);
+    //true and false function as 1 and 0
+    //underscore.js returns whole array?
+    it('returns an empty array for invalid n inputs', () => {
+      // expect(_.last([1], NaN)).to.eql([]);
+      // expect(_.last([1], 'a')).to.eql([]);
+      // expect(_.last([1], [1, 2, 3])).to.eql([]);
+      expect(_.last([1], false)).to.eql([]);
     });
   });
 
   //Test context
-  describe('#each', () => {
-    let testSpy = sinon.spy();
+  describe.only('#each', () => {
 
     it('is a function', () => {
       expect(_.each).to.be.a('function');
     });
+
     it('invokes the iteratee for each item in an array', () => {
+      const testSpy = sinon.spy();
       _.each([1, 2, 3, 4], testSpy);
       expect(testSpy.callCount).to.equal(4);
-      expect(testSpy.args[0][2]).to.eql([1, 2, 3, 4]);
-    });
-    it('invokes the iteratee for each item in an object', () => {
+
       testSpy.reset();
+      _.each([1, 2, 3, 4, 5, 6, 7, 8], testSpy);
+      expect(testSpy.callCount).to.equal(8);
+    });
+
+    it('invokes the iteratee for each item in an object', () => {
+      const testSpy = sinon.spy();
       _.each({ 1: 1, 2: 2, 3: 3 }, testSpy);
       expect(testSpy.callCount).to.equal(3);
-      expect(testSpy.args[0][2]).to.eql({ 1: 1, 2: 2, 3: 3 });
-    });
-    it('invokes the iteratee for each character in the string', () => {
+
       testSpy.reset();
-      _.each('1234', testSpy);
-      expect(testSpy.callCount).to.equal(4);
-      expect(testSpy.args[0][2]).to.eql('1234');
+      _.each({ 1: 1, 2: 2, 3: 3, 4: 4, 5: 5 }, testSpy);
+      expect(testSpy.callCount).to.equal(5);
+    });
+
+    it('passes the following arguments in order to the iteratee - value, index/key, list', () => {
+      const testSpy = sinon.spy();
+      _.each(['foo', 'bar'], testSpy);
+
+      expect(testSpy.args[0]).to.eql(
+        ['foo', 0, ['foo', 'bar']]
+      );
+      expect(testSpy.args[1]).to.eql(
+        ['bar', 1, ['foo', 'bar']]
+      );
+
+      testSpy.reset();
+      _.each({ foo: 'bar', hello: 'world' }, testSpy);
+
+      expect(testSpy.args).to.eql([
+        ['bar', 'foo', { foo: 'bar', hello: 'world' }],
+        ['world', 'hello', { foo: 'bar', hello: 'world' }]
+      ]);
+    });
+
+    it('works for strings', () => {
+      const testSpy = sinon.spy();
+      _.each('123', testSpy);
+
+      expect(testSpy.callCount).to.equal(3);
+
+      expect(testSpy.args).to.eql([
+        ['1', 0, '123'],
+        ['2', 1, '123'],
+        ['3', 2, '123']
+      ]);
+    });
+
+    it('takes a context argument for arrays', () => {
+      const FoodList = {
+        addItem: food => `I like ${food}`,
+      };
+
+      const foodArr = [];
+
+      _.each(['pies', 'roast dinner', 'chutney'], function (item) {
+        foodArr.push(this.addItem(item));
+      }, FoodList);
+
+      expect(foodArr).to.eql(['I like pies', 'I like roast dinner', 'I like chutney']);
+
+    });
+
+    it('takes a context argument for objects', () => {
+      const FoodList = {
+        addItem: food => `I like ${food}`,
+      };
+
+      const foodArr = [];
+
+      _.each({0: 'risotto', 1: 'soup', 2: 'more pies'}, function (item) {
+        foodArr.push(this.addItem(item));
+      }, FoodList);
+
+      expect(foodArr).to.eql(['I like risotto', 'I like soup', 'I like more pies']);
+
     });
   });
 
