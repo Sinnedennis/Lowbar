@@ -191,7 +191,7 @@ describe('_', () => {
   });
 
   //Test context
-  describe('#each', () => {
+  describe.only('#each', () => {
 
     it('is a function', () => {
       expect(_.each).to.be.a('function');
@@ -279,26 +279,33 @@ describe('_', () => {
       expect(foodArr).to.eql(['I like risotto', 'I like soup', 'I like more pies']);
 
     });
+
+    it('returns the list if given invalid input', () => {
+      expect(_.each(1, NaN, 'that')).to.equal(1);
+      expect(_.each('list', false, 1337)).to.equal('list');
+      expect(_.each(null, undefined, true)).to.equal(null);
+      expect(_.each(undefined, NaN, 'that')).to.equal(undefined);
+    });
   });
 
   //How to test if binary search is faster than unsorted
-  describe.only('#indexOf', () => {
+  describe('#indexOf', () => {
     it('is a function', () => {
       expect(_.indexOf).to.be.a('function');
     });
 
     it('returns index of value in unsorted arr', () => {
-      const arr = ['a', 'b', 'c'];
-      expect(_.indexOf(arr, 'a')).to.equal(0);
-      expect(_.indexOf(arr, 'b')).to.equal(1);
-      expect(_.indexOf(arr, 'c')).to.equal(2);
+      const inputArr = ['a', 'b', 'c'];
+      expect(_.indexOf(inputArr, 'a')).to.equal(0);
+      expect(_.indexOf(inputArr, 'b')).to.equal(1);
+      expect(_.indexOf(inputArr, 'c')).to.equal(2);
     });
 
     it('returns -1 if array does not contain value', () => {
-      const arr = ['a', 'b', 'c'];
-      expect(_.indexOf(arr, 'aa')).to.equal(-1);
-      expect(_.indexOf(arr, 1)).to.equal(-1);
-      expect(_.indexOf(arr, 'true')).to.equal(-1);
+      const inputArr = ['a', 'b', 'c'];
+      expect(_.indexOf(inputArr, 'aa')).to.equal(-1);
+      expect(_.indexOf(inputArr, 1)).to.equal(-1);
+      expect(_.indexOf(inputArr, 'true')).to.equal(-1);
     });
 
     it('returns -1 if given invalid input', () => {
@@ -315,42 +322,92 @@ describe('_', () => {
     });
 
     it('returns index via binary search of value in a sorted arr', () => {
-      const arr = [1, 2, 3, 4, 5];
-      expect(_.indexOf(arr, 2, true)).to.equal(1);
-      expect(_.indexOf(arr, 5, true)).to.equal(4);
-      expect(_.indexOf(arr, 'hi', true)).to.equal(-1);
+      const inputArr = [1, 2, 3, 4, 5];
+      expect(_.indexOf(inputArr, 2, true)).to.equal(1);
+      expect(_.indexOf(inputArr, 5, true)).to.equal(4);
+      expect(_.indexOf(inputArr, 'hi', true)).to.equal(-1);
     });
     
     it('starts searching at i if given number as third argument', () => {
-      const arr = [1, 2, 3, 4, 5];
-      expect(_.indexOf(arr, 1, 2)).to.equal(-1);
-      expect(_.indexOf(arr, 5, 1)).to.equal(4);
-      expect(_.indexOf(arr, 4, 1)).to.equal(3);
+      const inputArr = [1, 2, 3, 4, 5];
+      expect(_.indexOf(inputArr, 1, 2)).to.equal(-1);
+      expect(_.indexOf(inputArr, 5, 1)).to.equal(4);
+      expect(_.indexOf(inputArr, 4, 1)).to.equal(3);
     });
   });
 
   //Test context
-  describe('#filter', () => {
+  describe.only('#filter', () => {
     it('is a function', () => {
       expect(_.filter).to.be.a('function');
     });
-    it('passes every list item to the predicate', () => {
-      const arr = [0, 1, 2, 3, 4, 5];
-      let testSpy = sinon.spy();
-      _.filter(arr, testSpy);
-      expect(testSpy.callCount).to.equal(arr.length);
-      expect(testSpy.args[0][2]).to.eql(arr);
-    });
-    it('only returns list items that pass the predicate test', () => {
-      let arr = [0, 1, 2, 3, 4, 5];
-      let predicate = (num) => num > 2;
-      expect(_.filter(arr, predicate)).to.eql([3, 4, 5]);
 
-      arr = ['a', 'b', 'c'];
+    it('passes every list item to the predicate', () => {
+      let inputArr = [0, 1, 2, 3, 4, 5];
+      let testSpy = sinon.spy();
+      _.filter(inputArr, testSpy);
+      expect(testSpy.callCount).to.equal(inputArr.length);
+
+      inputArr = [0, 1, 2, 3];
+      testSpy.reset();
+      _.filter(inputArr, testSpy);
+      expect(testSpy.callCount).to.equal(inputArr.length);
+    });
+
+    it('only returns list items that pass the predicate test', () => {
+      let inputArr = [0, 1, 2, 3, 4, 5];
+      let predicate = (num) => num > 2;
+      expect(_.filter(inputArr, predicate)).to.eql([3, 4, 5]);
+
+      inputArr = ['a', 'b', 'c'];
       predicate = (char) => char === 'b';
-      expect(_.filter(arr, predicate)).to.eql(['b']);
+      expect(_.filter(inputArr, predicate)).to.eql(['b']);
       predicate = (char) => char === 'hi';
-      expect(_.filter(arr, predicate)).to.eql([]);
+      expect(_.filter(inputArr, predicate)).to.eql([]);
+    });
+
+    it('works for objects', () => {
+      const testSpy = sinon.spy();
+      let inputObj = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5};
+
+      _.filter(inputObj, testSpy);
+      expect(testSpy.callCount).to.eql(Object.keys(inputObj).length);
+
+      let predicate = (num) => num > 2;
+      expect(_.filter(inputObj, predicate)).to.eql([3, 4, 5]);
+    });
+
+    it('takes a context argument for arrays', () => {
+      const predicateObj = {
+        predicate: item => item > 2,
+      };
+
+      const result = _.filter([0, 1, 2, 3, 4, 5], function (item) {
+        return this.predicate(item);
+      }, predicateObj);
+
+      expect(result).to.eql([3, 4, 5]);
+
+    });
+
+    it('takes a context argument for arrays', () => {
+      const predicateObj = {
+        predicate: item => item > 2,
+      };
+
+      const result = _.filter({1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, function (item) {
+        return this.predicate(item);
+      }, predicateObj);
+
+      expect(result).to.eql([3, 4, 5]);
+
+    });
+
+    it.only('returns list if given invalid inputs', () => {
+      expect(_.filter([], () => {})).to.eql([]);
+      expect(_.filter(1, NaN, false)).to.eql(1);
+      expect(_.filter('five', null, undefined)).to.eql('five');
+      expect(_.filter({}, 1, 2)).to.eql({});
     });
   });
 

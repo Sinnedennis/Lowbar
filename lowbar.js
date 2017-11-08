@@ -25,6 +25,7 @@ _.first = function (list, n) {
 
 //Too busy. Refactor.
 _.last = function (list, n) {
+
   // if (isNaN(n) && n !== undefined) return [];
   if (typeof n === 'string' && !isNaN(n)) n = +n;
   if (!Array.isArray(list) && typeof list !== 'string') return;
@@ -37,16 +38,17 @@ _.last = function (list, n) {
     : list.slice(list.length - n, list.length);
 };
 
-_.each = function (list, iteratee, context) {
+_.each = function (list, iteratee, context = this) {
 
-  iteratee = iteratee.bind(context);
+  if (typeof iteratee !== 'function') return list;
+  iteratee = iteratee.bind(context);  
 
   if (Array.isArray(list) || typeof list === 'string') {
 
     for (let i = 0; i < list.length; i++) {
       iteratee(list[i], i, list);
     }
-  } else if (typeof list === 'object') {
+  } else if (typeof list === 'object' && list !== null) {
 
     for (let key in list) {
       iteratee(list[key], key, list);
@@ -56,7 +58,6 @@ _.each = function (list, iteratee, context) {
   return list;
 };
 
-//Fix binary search
 _.indexOf = function (array, value, isSorted = false) {
 
   if (typeof array === 'string') array = array.split('');
@@ -94,18 +95,22 @@ _.indexOf = function (array, value, isSorted = false) {
 
     }
   }
-  
+
   return -1;
 };
 
 _.filter = function (list, predicate, context = this) {
-  let results = [];
+  
+  if (typeof predicate !== 'function') return list;
+  predicate = predicate.bind(context);
+
+  let result = [];
 
   _.each(list, (value, index, list) => {
-    if (predicate(value, index, list)) results.push(value);
+    if (predicate(value, index, list)) result.push(value);
   }, context);
 
-  return results;
+  return result;
 };
 
 //Can refactor with negate in Advanced Lowbar later
