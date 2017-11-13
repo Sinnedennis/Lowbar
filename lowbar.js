@@ -162,7 +162,7 @@ _.pluck = function (list, propName) {
 _.reduce = function (list, iteratee, memo, context = this) {
 
   iteratee = iteratee.bind(this);
-
+  list = list.slice();
   if (memo === undefined) memo = list.splice(0, 1)[0];
 
   _.each(list, (value, i, list) => {

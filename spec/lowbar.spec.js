@@ -2,6 +2,9 @@ const path = require('path');
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
+//At reduce
+//Make sure tests mirror their seperation of concerns
+
 let _;
 
 if (process.env.underscore === 'true') {
@@ -493,7 +496,7 @@ describe('_', () => {
     });
   });
 
-  describe.only('#map', () => {
+  describe('#map', () => {
     it('is a function', () => {
       expect(_.map).to.be.a('function');
     });
@@ -532,7 +535,7 @@ describe('_', () => {
     });
 
     it('works for objects', () => {
-      const inputObj = {0: 'a', 1: 'b', 2: 'c'};
+      const inputObj = { 0: 'a', 1: 'b', 2: 'c' };
 
       const result = _.map(inputObj, (char) => {
         return char.toUpperCase();
@@ -574,22 +577,19 @@ describe('_', () => {
       expect(_.contains).to.be.a('function');
     });
     it('returns true if value is present in list', () => {
-      const list = [1, 2, 3, 4];
-      expect(_.contains(list, 1)).to.be.true;
-      expect(_.contains(list, 4)).to.be.true;
-      expect(_.contains(list, 2, 0)).to.be.true;
+      const inputArr = [1, 2, 3, 4];
+      expect(_.contains(inputArr, 1)).to.be.true;
+      expect(_.contains(inputArr, 4)).to.be.true;
     });
-    it('returns false if value is not present in list', () => {
-      const list = [1, 2, 3, 4];
-      expect(_.contains(list, 'foo')).to.be.false;
-      expect(_.contains(list, '2')).to.be.false;
-      expect(_.contains(list, true, 0)).to.be.false;
+    it('returns false if value is not present in the array', () => {
+      const inputArr = [1, 2, 3, 4];
+      expect(_.contains(inputArr, 'foo')).to.be.false;
+      expect(_.contains(inputArr, '2')).to.be.false;
     });
     it('starts searching from given index', () => {
-      const list = [1, 2, 3, 4];
-      expect(_.contains(list, 1, 2)).to.be.false;
-      expect(_.contains(list, 1, 1)).to.be.false;
-      expect(_.contains(list, 1, 0)).to.be.true;
+      const inputArr = [1, 2, 3, 4];
+      expect(_.contains(inputArr, 1, 1)).to.be.false;
+      expect(_.contains(inputArr, 1, 0)).to.be.true;
     });
   });
 
@@ -597,39 +597,62 @@ describe('_', () => {
     it('should be a function', () => {
       expect(_.pluck).to.be.a('function');
     });
-    it('should extract a value from an array of objects', () => {
-      const arr = [
+
+    it('returns an array containing an extracted value from an array of objects', () => {
+      const inputArr = [
         { name: 'moe', age: 40 },
         { name: 'larry', age: 50 },
         { name: 'curly', age: 60 }
       ];
 
-      expect(_.pluck(arr, 'name')).to.eql(['moe', 'larry', 'curly']);
-      expect(_.pluck(arr, 'age')).to.eql([40, 50, 60]);
+      expect(_.pluck(inputArr, 'name')).to.eql(['moe', 'larry', 'curly']);
+      expect(_.pluck(inputArr, 'age')).to.eql([40, 50, 60]);
     });
+
     it('returns undefined when value is not present in object', () => {
-      const arr = [
+      const inputArr = [
         { foo: 'bar' },
         { foo: 'bar' }
       ];
 
-      expect(_.pluck(arr, 'banana')).to.eql([undefined, undefined]);
+      expect(_.pluck(inputArr, 'banana')).to.eql([undefined, undefined]);
     });
   });
 
-  describe('#reduce', () => {
+  describe.only('#reduce', () => {
     it('should be a function', () => {
       expect(_.reduce).to.be.a('function');
     });
-    it('should reduce a list of values down to a single value', () => {
-      const arr = [5, 5, 5, 5];
+
+    it('returns a single value by iterating through each array item', () => {
+      const inputArr = [5, 5, 5, 5, 5];
       const iteratee = (memo, num) => memo + num;
-      expect(_.reduce(arr, iteratee, 0)).to.equal(20);
+      expect(_.reduce(inputArr, iteratee, 0)).to.equal(25);
     });
+
     it('uses the first list item as the memo if memo is not supplied', () => {
-      const arr = [5, 5, 5, 5];
+      const inputArr = [5, 5, 5, 5, 5];
+      const iteratee = (memo, num) => memo * num;
+      expect(_.reduce(inputArr, iteratee)).to.equal(Math.pow(5, 5));
+    });
+
+    it('does not mutate the input array', () => {
+      const inputArr = [5, 5, 5, 5, 5];
       const iteratee = (memo, num) => memo + num;
-      expect(_.reduce(arr, iteratee)).to.equal(20);
+      _.reduce(inputArr, iteratee);
+      expect(inputArr).to.eql([5, 5, 5, 5, 5]);
+    });
+
+    xit('takes a context argument', () => {
+      const iterateeObj = {
+        iteratee: (memo, num) => memo + num,
+      };
+
+      const result = _.reduce([5, 5, 5, 5, 5], function (item) {
+        return this.iteratee(item);
+      }, iterateeObj);
+
+      expect(result).to.eql(25);
     });
   });
 
@@ -637,16 +660,19 @@ describe('_', () => {
     it('should be a function', () => {
       expect(_.every).to.be.a('function');
     });
+
     it('returns true if every list item passes the predicate', () => {
       const arr = [1, 2, 3, 4, 5];
       const predicate = num => num < 10;
       expect(_.every(arr, predicate)).to.be.true;
     });
+
     it('returns false if one of the items fails the predicate', () => {
       const arr = [1, 2, 3, 4, 5];
       const predicate = num => num < 5;
       expect(_.every(arr, predicate)).to.be.false;
     });
+
     it('short-circuits if one item fails', () => {
       const arr = [1, 20, 3, 2, 1, 0];
       const predicate = num => num < 5;
