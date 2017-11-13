@@ -702,7 +702,7 @@ describe('_', () => {
     });
   });
 
-  describe('#every', () => {
+  describe.only('#every', () => {
     it('should be a function', () => {
       expect(_.every).to.be.a('function');
     });
@@ -833,7 +833,7 @@ describe('_', () => {
       expect(_.some([false, false, true], predicate, predicateObj)).to.be.true;
     });
 
-    it.only('works for strings', () => {
+    it('works for strings', () => {
       let inputStr = '123';
       let predicate = value => value === '2';
       let testSpy = sinon.spy(predicate);
@@ -845,6 +845,20 @@ describe('_', () => {
       inputStr = 'foo';
       expect(_.some(inputStr, testSpy)).to.be.false;
       expect(testSpy.calledThrice).to.be.true;
+    });
+
+    it('returns false if given invalid list', () => {
+      expect(_.some()).to.be.false;
+      expect(_.some(false)).to.be.false;
+      expect(_.some(123)).to.be.false;
+      expect(_.some(null)).to.be.false;
+    });
+
+    it('returns false if given invalid predicate', () => {
+      expect(_.some([1,2,3], 'foo')).to.be.false;
+      expect(_.some([1,2,3], 123)).to.be.false;
+      expect(_.some([1,2,3], false)).to.be.false;
+      expect(_.some([1,2,3], true)).to.be.false;
     });
   });
 

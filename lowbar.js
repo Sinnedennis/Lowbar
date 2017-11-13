@@ -202,7 +202,7 @@ _.some = function (list, predicate, context) {
   if (Array.isArray(list)) list = list.slice();
   else if (typeof list === 'object' && list !== null) list = _.values(list);
   else if (typeof list === 'string') list = list.split('');
-  else return true;
+  else return false;
 
   if (typeof predicate !== 'function') return false;
   predicate = predicate.bind(context);
