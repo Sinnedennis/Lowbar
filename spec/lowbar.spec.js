@@ -690,9 +690,9 @@ describe('_', () => {
     });
 
     it('returns undefined if given invalid list', () => {
-      expect(_.reduce(true, _.identity)).to.equal(undefined);
-      expect(_.reduce(123, _.identity)).to.equal(undefined);
-      expect(_.reduce(NaN, _.identity)).to.equal(undefined);
+      expect(_.reduce(true)).to.equal(undefined);
+      expect(_.reduce(123)).to.equal(undefined);
+      expect(_.reduce(NaN)).to.equal(undefined);
     });
 
     it('throws type error if given invalid iteratee function', () => {
@@ -712,7 +712,7 @@ describe('_', () => {
       const predicate = value => value;
       expect(_.every(inputArr, predicate)).to.be.true;
 
-      const inputObj = {1: true, 2: true, 3: true};
+      const inputObj = { 1: true, 2: true, 3: true };
       expect(_.every(inputObj, predicate)).to.be.true;
     });
 
@@ -721,7 +721,7 @@ describe('_', () => {
       const predicate = value => value;
       expect(_.every(inputArr, predicate)).to.be.false;
 
-      const inputObj = {1: true, 2: false, 3: true};
+      const inputObj = { 1: true, 2: false, 3: true };
       expect(_.every(inputObj, predicate)).to.be.false;
     });
 
@@ -735,10 +735,23 @@ describe('_', () => {
 
       testSpy.reset();
 
-      const inputObj = {1: true, 2: false, 3: true};
+      const inputObj = { 1: true, 2: false, 3: true };
       _.every(inputObj, testSpy);
 
       expect(testSpy.calledTwice).to.be.true;
+    });
+
+    it('takes a context argument', () => {
+      const predicateObj = {
+        value: true
+      };
+
+      const predicate = function (value) {
+        return value === this.value;
+      };
+
+      expect(_.every([true, true, false], predicate, predicateObj)).to.be.false;
+      expect(_.every([true, true, true], predicate, predicateObj)).to.be.true;
     });
 
     it('works for strings', () => {
@@ -763,9 +776,9 @@ describe('_', () => {
     });
 
     it('returns true if given invalid predicate', () => {
-      expect(_.every([1,2,3], NaN)).to.be.false;
-      expect(_.every([1,2,3], 123)).to.be.false;
-      expect(_.every([1,2,3], 'foo')).to.be.false;
+      expect(_.every([1, 2, 3], NaN)).to.be.false;
+      expect(_.every([1, 2, 3], 123)).to.be.false;
+      expect(_.every([1, 2, 3], 'foo')).to.be.false;
     });
   });
 
@@ -773,23 +786,39 @@ describe('_', () => {
     it('should be a function', () => {
       expect(_.some).to.be.a('function');
     });
-    it('returns true if some of the values in the list pass the predicate', () => {
-      const arr = [0, 1, 2, 3, 4, 5];
-      const predicate = num => num === 3;
-      expect(_.some(arr, predicate)).to.be.true;
-    });
-    it('returns false if nonde of the values in the list pass the predicate', () => {
-      const arr = [0, 1, 2, 3, 4, 5];
-      const predicate = num => num === 'foo';
-      expect(_.some(arr, predicate)).to.be.false;
-    });
-    it('short-circuits of one item passes', () => {
-      const arr = [1, 'foo', 3, 2, 1, 0];
-      const predicate = num => num === 'foo';
 
+    it('returns true if some of the values in the list pass the predicate', () => {
+      const inputArr = [0, 1, 2, 3, 4, 5];
+      const predicate = num => num === 3;
+      expect(_.some(inputArr, predicate)).to.be.true;
+
+      const inputObj = { a: 0, b: 1, c: 2, d: 3, e: 4 };
+      expect(_.some(inputObj, predicate)).to.be.true;
+    });
+
+    it('returns false if none of the values in the list pass the predicate', () => {
+      const inputArr = [0, 1, 2, 3, 4, 5];
+      const predicate = num => num === 'foo';
+      expect(_.some(inputArr, predicate)).to.be.false;
+
+      const inputObj = { a: 0, b: 1, c: 2, d: 3, e: 4 };
+      expect(_.some(inputObj, predicate)).to.be.false;
+    });
+
+    it('short-circuits of one item passes', () => {
+      const inputArr = [1, 'foo', 3, 2, 1, 0];
+      const predicate = num => num === 'foo';
       const testSpy = sinon.spy(predicate);
-      _.some(arr, testSpy);
+
+      _.some(inputArr, testSpy);
       expect(testSpy.calledTwice).to.be.true;
+
+      testSpy.reset();
+
+      const inputObj = { a: 0, b: 'foo', c: 2, d: 3 };
+      _.some(inputObj, testSpy);
+      expect(testSpy.calledTwice).to.be.true;
+
     });
   });
 

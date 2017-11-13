@@ -136,7 +136,7 @@ _.uniq = function (array, isSorted, iteratee) {
   return result;
 };
 
-_.map = function (list, iteratee, context = this) {
+_.map = function (list, iteratee, context) {
 
   if (typeof iteratee !== 'function') return [];
   iteratee = iteratee.bind(context);
@@ -163,13 +163,14 @@ _.pluck = function (list, propName) {
 //when given an invalid iteratee function?
 _.reduce = function (list, iteratee, memo, context) {
 
-  // if (typeof iteratee !== 'function') return [];
-  iteratee = iteratee.bind(context);
   if (Array.isArray(list)) list = list.slice();
   else if (typeof list === 'object') list = _.values(list);
   else if (typeof list === 'string') list = list.split('');
   else return;
-  
+
+  // if (typeof iteratee !== 'function') return [];
+  iteratee = iteratee.bind(context);
+
   if (memo === undefined) memo = list.splice(0, 1)[0];
 
   _.each(list, (value, i, list) => {
@@ -185,7 +186,7 @@ _.every = function (list, predicate, context) {
   else if (typeof list === 'object' && list !== null) list = _.values(list);
   else if (typeof list === 'string') list = list.split('');
   else return true;
-  
+
   if (typeof predicate !== 'function') return false;
   predicate = predicate.bind(context);
 
@@ -197,6 +198,11 @@ _.every = function (list, predicate, context) {
 };
 
 _.some = function (list, predicate, context) {
+
+  if (Array.isArray(list)) list = list.slice();
+  else if (typeof list === 'object' && list !== null) list = _.values(list);
+  else if (typeof list === 'string') list = list.split('');
+  else return true;
 
   predicate = predicate.bind(context);
 
