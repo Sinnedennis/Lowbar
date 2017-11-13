@@ -966,20 +966,23 @@ describe('_', () => {
       expect(resultArr).to.eql(['foo', 'foo', 'foo']);
     });
   });
-  
+
   describe('#negate', () => {
     it('should be a function', () => {
       expect(_.negate).to.be.a('function');
     });
+
     it('returns a function', () => {
       expect(_.negate()).to.be.a('function');
     });
+
     it('returns a negated predicate', () => {
-      const list = ['not', 'foobar'];
-      const predicate = string => string === 'foobar';
+      const boolArr = [true, false];
+      const predicate = bool => bool;
       const negatedPred = _.negate(predicate);
-      const result = _.filter(list, negatedPred);
-      expect(result).to.eql(['not']);
+
+      const result = _.filter(boolArr, negatedPred);
+      expect(result).to.eql([false]);
     });
   });
   //Requires better testing
