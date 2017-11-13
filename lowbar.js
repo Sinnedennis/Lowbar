@@ -181,6 +181,12 @@ _.reduce = function (list, iteratee, memo, context) {
 
 _.every = function (list, predicate, context) {
 
+  if (Array.isArray(list)) list = list.slice();
+  else if (typeof list === 'object' && list !== null) list = _.values(list);
+  else if (typeof list === 'string') list = list.split('');
+  else return true;
+  
+  if (typeof predicate !== 'function') return false;
   predicate = predicate.bind(context);
 
   for (let i = 0; i < list.length; i++) {

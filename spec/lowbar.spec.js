@@ -4,6 +4,8 @@ const sinon = require('sinon');
 
 //At reduce
 //Make sure tests mirror their seperation of concerns
+//Refactor all input checking to check in order of arguments passed
+//Ensure all methods using a predicate bind context the same way
 
 let _;
 if (process.env.underscore === 'true') {
@@ -618,7 +620,7 @@ describe('_', () => {
     });
   });
 
-  describe.only('#reduce', () => {
+  describe('#reduce', () => {
     it('should be a function', () => {
       expect(_.reduce).to.be.a('function');
     });
@@ -700,7 +702,7 @@ describe('_', () => {
     });
   });
 
-  describe('#every', () => {
+  describe.only('#every', () => {
     it('should be a function', () => {
       expect(_.every).to.be.a('function');
     });
@@ -709,22 +711,61 @@ describe('_', () => {
       const inputArr = [true, true, true];
       const predicate = value => value;
       expect(_.every(inputArr, predicate)).to.be.true;
+
+      const inputObj = {1: true, 2: true, 3: true};
+      expect(_.every(inputObj, predicate)).to.be.true;
     });
 
     it('returns false if one of the items fails the predicate', () => {
       const inputArr = [true, false, true, true];
       const predicate = value => value;
       expect(_.every(inputArr, predicate)).to.be.false;
+
+      const inputObj = {1: true, 2: false, 3: true};
+      expect(_.every(inputObj, predicate)).to.be.false;
     });
 
     it('short-circuits if one item fails', () => {
       const inputArr = [true, false, true, true];
       const predicate = value => value;
+      let testSpy = sinon.spy(predicate);
 
-      const testSpy = sinon.spy(predicate);
       _.every(inputArr, testSpy);
+      expect(testSpy.calledTwice).to.be.true;
+
+      testSpy.reset();
+
+      const inputObj = {1: true, 2: false, 3: true};
+      _.every(inputObj, testSpy);
 
       expect(testSpy.calledTwice).to.be.true;
+    });
+
+    it('works for strings', () => {
+      let inputStr = 'fff';
+      let predicate = value => value === 'f';
+      let testSpy = sinon.spy(predicate);
+
+      expect(_.every(inputStr, testSpy)).to.be.true;
+      expect(testSpy.calledThrice).to.be.true;
+
+      testSpy.reset();
+      inputStr = 'foo';
+      expect(_.every(inputStr, testSpy)).to.be.false;
+      expect(testSpy.calledTwice).to.be.true;
+    });
+
+    it('returns true if given invalid list', () => {
+      expect(_.every()).to.be.true;
+      expect(_.every(123)).to.be.true;
+      expect(_.every(null)).to.be.true;
+      expect(_.every(NaN)).to.be.true;
+    });
+
+    it('returns true if given invalid predicate', () => {
+      expect(_.every([1,2,3], NaN)).to.be.false;
+      expect(_.every([1,2,3], 123)).to.be.false;
+      expect(_.every([1,2,3], 'foo')).to.be.false;
     });
   });
 
