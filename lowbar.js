@@ -309,4 +309,20 @@ _.sortBy = function (list, iteratee, context) {
   return [];
 };
 
+_.zip = function () {
+
+  const inputArrays = [].slice.apply(arguments);
+  const zippedArray = [];
+  const longestArr = _.sortBy(inputArrays, 'length').slice(-1)[0].length;
+
+  _.each(inputArrays, (array) => {
+    for(let i = 0; i < longestArr; i++) {
+      if (zippedArray[i] === undefined) zippedArray[i] = [array[i]];
+      else zippedArray[i].push(array[i]);
+    }
+  });
+
+  return zippedArray;
+};
+
 module.exports = _;

@@ -1151,4 +1151,61 @@ describe('_', () => {
       expect(_.sortBy(null)).to.eql([]);
     });
   });
+
+  describe('#zip', () => {
+    it('should be a function', () => {
+      expect(_.zip).to.be.a('function');
+    });
+
+    it('returns a zipped array of arrays', () => {
+      const inputArrays = [
+        ['moe', 'larry', 'curly'],
+        [30, 40, 50],
+        [true, false, false]
+      ];
+
+      const expected = [
+        ['moe', 30, true],
+        ['larry', 40, false],
+        ['curly', 50, false]
+      ];
+
+      expect(_.zip(...inputArrays)).to.eql(expected);
+    });
+
+    it('works for strings', () => {
+      const expected = [
+        ['h', 'p', 's'],
+        ['o', 'i', 'p'],
+        ['t', 'e', 'y']
+      ];
+
+      expect(_.zip('hot', 'pie', 'spy')).to.eql(expected);
+    });
+
+    it('fills in any gaps with undefined', () => {
+      const inputArrays = [
+        ['moe', 'larry', 'curly'],
+        [30],
+        [true, false]
+      ];
+
+      const expected = [
+        ['moe', 30, true],
+        ['larry', undefined, false],
+        ['curly', undefined, undefined]
+      ];
+
+      expect(_.zip(...inputArrays)).to.eql(expected);
+    });
+
+    it('returns an empty array if given invalid input', () => {
+      const inputArr = [
+        { foo: 'bar', hot: 'pie' },
+        { cake: 'good', true: false }
+      ];
+
+      expect(_.zip(...inputArr)).to.eql([]);
+    });
+  });
 });
