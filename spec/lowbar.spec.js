@@ -6,7 +6,6 @@ const sinon = require('sinon');
 //Make sure tests mirror their seperation of concerns
 
 let _;
-
 if (process.env.underscore === 'true') {
   _ = require('underscore');
 } else {
@@ -628,31 +627,51 @@ describe('_', () => {
       const inputArr = [5, 5, 5, 5, 5];
       const iteratee = (memo, num) => memo + num;
       expect(_.reduce(inputArr, iteratee, 0)).to.equal(25);
+
+      const inputObj = {a: 5, b: 5, c: 5, d: 5, e: 5};
+      expect(_.reduce(inputObj, iteratee, 0)).to.equal(25);
     });
 
     it('uses the first list item as the memo if memo is not supplied', () => {
       const inputArr = [5, 5, 5, 5, 5];
       const iteratee = (memo, num) => memo * num;
       expect(_.reduce(inputArr, iteratee)).to.equal(Math.pow(5, 5));
+
+      const inputObj = {a: 5, b: 5, c: 5, d: 5, e: 5};
+      expect(_.reduce(inputObj, iteratee)).to.equal(Math.pow(5, 5));
     });
 
     it('does not mutate the input array', () => {
       const inputArr = [5, 5, 5, 5, 5];
+      const inputObj = {a: 5, b: 5, c: 5, d: 5, e: 5};
+
       const iteratee = (memo, num) => memo + num;
-      _.reduce(inputArr, iteratee);
+
+      const arrResult = _.reduce(inputArr, iteratee);
+      const objResult = _.reduce(inputObj, iteratee);
+
       expect(inputArr).to.eql([5, 5, 5, 5, 5]);
+      expect(inputObj).to.eql({a: 5, b: 5, c: 5, d: 5, e: 5});
+
+      expect(arrResult).to.not.equal(inputArr);
+      expect(objResult).to.not.equal(inputObj);
     });
 
-    xit('takes a context argument', () => {
+    it('takes a context argument', () => {
       const iterateeObj = {
         iteratee: (memo, num) => memo + num,
       };
 
-      const result = _.reduce([5, 5, 5, 5, 5], function (item) {
-        return this.iteratee(item);
-      }, iterateeObj);
+      const arrResult = _.reduce([5, 5, 5, 5, 5], function (memo, value) {
+        return this.iteratee(memo, value);
+      }, 0, iterateeObj);
 
-      expect(result).to.eql(25);
+      const objResult = _.reduce({a: 5, b: 5, c: 5, d: 5, e: 5}, function (memo, value) {
+        return this.iteratee(memo, value);
+      }, 0, iterateeObj);
+
+      expect(arrResult).to.eql(25);
+      expect(objResult).to.eql(25);
     });
   });
 

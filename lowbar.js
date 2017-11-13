@@ -159,10 +159,14 @@ _.pluck = function (list, propName) {
   });
 };
 
-_.reduce = function (list, iteratee, memo, context = this) {
+_.reduce = function (list, iteratee, memo, context) {
 
-  iteratee = iteratee.bind(this);
-  list = list.slice();
+  if (typeof iteratee !== 'function') return [];
+  iteratee = iteratee.bind(context);
+
+  if (Array.isArray(list)) list = list.slice();
+  else if (typeof list === 'object') list = _.values(list);
+
   if (memo === undefined) memo = list.splice(0, 1)[0];
 
   _.each(list, (value, i, list) => {
