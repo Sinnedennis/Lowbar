@@ -986,8 +986,7 @@ describe('_', () => {
     });
   });
 
-  //Requires better testing
-  describe.only('#shuffle', () => {
+  describe('#shuffle', () => {
     it('should be a function', () => {
       expect(_.shuffle).to.be.a('function');
     });
@@ -1045,7 +1044,7 @@ describe('_', () => {
       _.shuffle(inputArr);
       expect(inputArr).to.eql(arrCopy);
 
-      const inputObj = {0: 0, 1: 1, 2: 2};
+      const inputObj = { 0: 0, 1: 1, 2: 2 };
       const objCopy = Object.assign({}, inputObj);
       _.shuffle(inputObj);
       expect(inputObj).to.eql(objCopy);
@@ -1056,7 +1055,7 @@ describe('_', () => {
       expect(inputStr).to.equal(strCopy);
     });
 
-    it('returns an empty array for invalid list input', () => {
+    it('returns an empty array when passed invalid list input', () => {
       expect(_.shuffle()).to.eql([]);
       expect(_.shuffle(true)).to.eql([]);
       expect(_.shuffle(123)).to.eql([]);
@@ -1069,30 +1068,35 @@ describe('_', () => {
     it('should be a function', () => {
       expect(_.invoke).to.be.a('function');
     });
-    it('applies an array method on each array value in an array list', () => {
-      expect(_.invoke([[2, 4, 1, 3], [4, 6, 5, 7]], 'sort'))
-        .to.eql([[1, 2, 3, 4], [4, 5, 6, 7]]);
 
+    it('applies an array method on each array value in an array list', () => {
       expect(_.invoke([[2, 4, 1, 3], [4, 6, 5, 7]], 'join'))
         .to.eql(['2,4,1,3', '4,6,5,7']);
+
+      expect(_.invoke([[2, 4, 1, 3], [8, 6, 5, 7]], 'sort'))
+        .to.eql([[1, 2, 3, 4], [5, 6, 7, 8]]);
     });
+
     it('passes any additional arguments to the array method', () => {
       expect(_.invoke([[2, 4, 1, 3], [4, 6, 5, 7]], 'join', '+'))
         .to.eql(['2+4+1+3', '4+6+5+7']);
     });
-    it('works for objects', () => {
+
+    it('applies the method to object values', () => {
       expect(_.invoke({ x: 'a', y: 'b', z: 'c' }, 'toUpperCase'))
         .to.eql(['A', 'B', 'C']);
     });
-    it('works for strings', () => {
+
+    it('applies the method to string characters', () => {
       expect(_.invoke('foo', 'toUpperCase'))
         .to.eql(['F', 'O', 'O']);
     });
-    it('returns undefined if no method is given', () => {
+
+    it('returns an array of undefined items if no method is given', () => {
       expect(_.invoke([1, 2, 3])).to.eql([undefined, undefined, undefined]);
     });
 
-    it('returns undefined per-item if a inapppropriate method is given', () => {
+    it('returns undefined on items when an inapppropriate method is given', () => {
       expect(_.invoke([1, 2, 'foo'], 'toUpperCase'))
         .to.eql([undefined, undefined, 'FOO']);
 
@@ -1103,6 +1107,7 @@ describe('_', () => {
         .to.eql([[1, 2, 3], undefined, [4, 5, 6]]);
     });
   });
+  
   describe('#sortBy', () => {
     it('should be a function', () => {
       expect(_.sortBy).to.be.a('function');
