@@ -2,10 +2,12 @@ const path = require('path');
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
-//At reduce
-//Make sure tests mirror their seperation of concerns
-//Refactor all input checking to check in order of arguments passed
-//Ensure all methods using a predicate bind context the same way
+/*
+Make sure tests mirror their seperation of concerns
+Refactor all input checking to check in order of arguments passed
+Ensure all methods using a predicate bind context the same way
+#extend testing for invalid inputs
+*/
 
 let _;
 if (process.env.underscore === 'true') {
@@ -905,44 +907,56 @@ describe('_', () => {
     it('should be a function', () => {
       expect(_.defaults).to.be.a('function');
     });
+
     it('fills in undefined properties in the object with the default list', () => {
-      const object = { foo: 'bar' };
-      const defaults = { foo: 'ice-cream', yes: 'no' };
-      expect(_.defaults(object, defaults)).to.eql({ foo: 'bar', yes: 'no' });
+      const destination = { foo: 'bar' };
+      const defaultObjs = { foo: 'ice-cream', yes: 'no' };
+      expect(_.defaults(destination, defaultObjs)).to.eql({ foo: 'bar', yes: 'no' });
     });
+    
     it('uses the first value present in the default lists', () => {
-      const object = { foo: 'bar' };
-      expect(_.defaults(object,
+      const destination = { foo: 'bar' };
+      expect(_.defaults(destination,
         { foo: 'ice-cream' },
         { yes: 'no' },
-        { yes: 'maybe' })).to.eql({ foo: 'bar', yes: 'no' });
+        { yes: 'maybe' }
+      )).to.eql({ foo: 'bar', yes: 'no' });
     });
   });
+
   describe('#once', () => {
     it('should be a function', () => {
       expect(_.once).to.be.a('function');
     });
+
     it('returns a function', () => {
       expect(_.once()).to.be.a('function');
     });
+
     it('allows the invocation of the passed function', () => {
       const func = () => 'foobar';
       const wrappedFunc = _.once(func);
       expect(wrappedFunc()).to.equal('foobar');
     });
+
     it('allows arguments to be passed to the wrapped function', () => {
       const func = (working) => working ? 'hello world' : 'foobar';
       let wrappedFunc = _.once(func);
+
       expect(wrappedFunc(false)).to.equal('foobar');
+
       wrappedFunc = _.once(func);
       expect(wrappedFunc(true)).to.equal('hello world');
     });
+
     it('only allows one invocation of the wrapped function', () => {
       const func = (working) => working ? 'once' : 'twice';
       let wrappedFunc = _.once(func);
+
       expect(wrappedFunc(true)).to.equal('once');
-      expect(wrappedFunc(true)).to.not.equal('twice');
+      expect(wrappedFunc(false)).to.not.equal('twice');
     });
+
     it('should always return the result of the first invocation', () => {
       const wrappedFunc = _.once(_.identity);
       let resultArr = [];
@@ -952,6 +966,7 @@ describe('_', () => {
       expect(resultArr).to.eql(['foo', 'foo', 'foo']);
     });
   });
+  
   describe('#negate', () => {
     it('should be a function', () => {
       expect(_.negate).to.be.a('function');
