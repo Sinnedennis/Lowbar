@@ -702,7 +702,7 @@ describe('_', () => {
     });
   });
 
-  describe.only('#every', () => {
+  describe('#every', () => {
     it('should be a function', () => {
       expect(_.every).to.be.a('function');
     });
@@ -782,7 +782,7 @@ describe('_', () => {
     });
   });
 
-  describe('#some', () => {
+  describe.only('#some', () => {
     it('should be a function', () => {
       expect(_.some).to.be.a('function');
     });
@@ -818,7 +818,33 @@ describe('_', () => {
       const inputObj = { a: 0, b: 'foo', c: 2, d: 3 };
       _.some(inputObj, testSpy);
       expect(testSpy.calledTwice).to.be.true;
+    });
 
+    it('takes a context argument', () => {
+      const predicateObj = {
+        value: true
+      };
+
+      const predicate = function (value) {
+        return value === this.value;
+      };
+
+      expect(_.some([false, false, false], predicate, predicateObj)).to.be.false;
+      expect(_.some([false, false, true], predicate, predicateObj)).to.be.true;
+    });
+
+    it.only('works for strings', () => {
+      let inputStr = '123';
+      let predicate = value => value === '2';
+      let testSpy = sinon.spy(predicate);
+
+      expect(_.some(inputStr, testSpy)).to.be.true;
+      expect(testSpy.calledTwice).to.be.true;
+
+      testSpy.reset();
+      inputStr = 'foo';
+      expect(_.some(inputStr, testSpy)).to.be.false;
+      expect(testSpy.calledThrice).to.be.true;
     });
   });
 

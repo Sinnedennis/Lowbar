@@ -204,6 +204,7 @@ _.some = function (list, predicate, context) {
   else if (typeof list === 'string') list = list.split('');
   else return true;
 
+  if (typeof predicate !== 'function') return false;
   predicate = predicate.bind(context);
 
   for (let i = 0; i < list.length; i++) {
