@@ -888,7 +888,7 @@ describe('_', () => {
 
     it('mutates the original object', () => {
       const inputObj = {};
-      expect(_.extend(inputObj, {foo: 'bar'})).to.equal(inputObj);
+      expect(_.extend(inputObj, { foo: 'bar' })).to.equal(inputObj);
     });
 
     it('runs in-order, so the last source will override properties of the same name in previous arguments', () => {
@@ -898,7 +898,7 @@ describe('_', () => {
     });
 
     it('returns the key-value pair of index-value when given an array as secondary argument', () => {
-      const copy = _.extend({ hello: 'world' }, [0,1,2]);
+      const copy = _.extend({ hello: 'world' }, [0, 1, 2]);
       expect(copy).to.eql({ 0: 0, 1: 1, 2: 2, hello: 'world' });
     });
   });
@@ -913,7 +913,7 @@ describe('_', () => {
       const defaultObjs = { foo: 'ice-cream', yes: 'no' };
       expect(_.defaults(destination, defaultObjs)).to.eql({ foo: 'bar', yes: 'no' });
     });
-    
+
     it('uses the first value present in the default lists', () => {
       const destination = { foo: 'bar' };
       expect(_.defaults(destination,
@@ -985,29 +985,37 @@ describe('_', () => {
       expect(result).to.eql([false]);
     });
   });
+
   //Requires better testing
-  describe('#shuffle', () => {
+  describe.only('#shuffle', () => {
     it('should be a function', () => {
       expect(_.shuffle).to.be.a('function');
     });
-    it('returns a randomly-shuffled array', () => {
-      let arr = [0, 1, 2, 3, 4, 5];
-      let shuffled = _.shuffle(arr);
 
-      expect(_.contains(shuffled, undefined)).to.be.false;
+    it('returns an array of the same length', () => {
+      const inputArr = [0, 1, 2, 3, 4, 5];
+      const shuffled = _.shuffle(inputArr);
 
-      for (let i = 0; i < arr.length; i++) {
-        expect(_.contains(arr, arr[i])).to.be.true;
-      }
-
-      const shuffledSum = _.reduce(shuffled, (memo, value) => memo + value, 0);
-      const unshuffledSum = _.reduce(arr, (memo, value) => memo + value, 0);
-      expect(unshuffledSum).to.equal(shuffledSum);
-
-      expect(arr.length).to.equal(shuffled.length);
+      expect(inputArr.length).to.equal(shuffled.length);
     });
+
+    it('returns an array containing the same values', () => {
+      const inputArr = [0, 1, 2, 3, 4, 5];
+      const shuffled = _.shuffle(inputArr);
+
+      expect(shuffled).to.include(0, 1, 2, 3, 4, 5);
+    });
+
+    it('produces a different shuffle (nearly) every time', () => {
+      const inputArr = [0, 1, 2, 3, 4, 5];
+      const firstShuffle = _.shuffle(inputArr);
+      const secondShuffle = _.shuffle(inputArr);
+
+      expect(firstShuffle).to.not.eql(secondShuffle);
+    });
+
     it('works for objects', () => {
-      let obj = {
+      const inputObj = {
         a: 0,
         b: 1,
         c: 2,
@@ -1016,30 +1024,47 @@ describe('_', () => {
         f: 5
       };
 
-      let shuffledObj = _.shuffle(obj);
+      const shuffled = _.shuffle(inputObj);
 
-      for (let key in obj) {
-        expect(_.contains(shuffledObj, obj[key])).to.be.true;
-      }
-
-      const shuffledSum = _.reduce(shuffledObj, (memo, value) => memo + value, 0);
-      const unshuffledSum = _.reduce(obj, (memo, value) => memo + value, 0);
-      expect(unshuffledSum).to.equal(shuffledSum);
-
-      expect(shuffledObj.length).to.equal(_.values(obj).length);
+      expect(shuffled).to.include(0, 1, 2, 3, 4, 5);
+      expect(_.values(inputObj).length).to.equal(shuffled.length);
 
     });
+
     it('works for strings', () => {
-      let str = '012345';
-      let shuffledStr = _.shuffle(str);
+      const inputStr = '012345';
+      const shuffled = _.shuffle(inputStr);
 
-      for (let i = 0; i < str.length; i++) {
-        expect(_.contains(shuffledStr, str[i])).to.be.true;
-      }
+      expect(shuffled).to.include('0', '1', '2', '3', '4', '5');
+      expect(inputStr.length).to.equal(shuffled.length);
+    });
 
-      expect(str.length).to.equal(shuffledStr.length);
+    it('does not mutate the input list', () => {
+      const inputArr = [0, 1, 2, 3, 4, 5];
+      const arrCopy = inputArr.slice();
+      _.shuffle(inputArr);
+      expect(inputArr).to.eql(arrCopy);
+
+      const inputObj = {0: 0, 1: 1, 2: 2};
+      const objCopy = Object.assign({}, inputObj);
+      _.shuffle(inputObj);
+      expect(inputObj).to.eql(objCopy);
+
+      const inputStr = '012345';
+      const strCopy = inputStr;
+      _.shuffle(inputStr);
+      expect(inputStr).to.equal(strCopy);
+    });
+
+    it('returns an empty array for invalid list input', () => {
+      expect(_.shuffle()).to.eql([]);
+      expect(_.shuffle(true)).to.eql([]);
+      expect(_.shuffle(123)).to.eql([]);
+      expect(_.shuffle(NaN)).to.eql([]);
+      expect(_.shuffle(null)).to.eql([]);
     });
   });
+
   describe('#invoke', () => {
     it('should be a function', () => {
       expect(_.invoke).to.be.a('function');
