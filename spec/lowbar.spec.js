@@ -1107,26 +1107,30 @@ describe('_', () => {
         .to.eql([[1, 2, 3], undefined, [4, 5, 6]]);
     });
   });
-  
+
   describe('#sortBy', () => {
     it('should be a function', () => {
       expect(_.sortBy).to.be.a('function');
     });
+
     it('returns a stably sorted copy of the list', () => {
-      const arr = [0, 1, 2, 3, 4, 5];
-      expect(_.sortBy(arr)).to.not.equal(arr);
+      const inputArr = [0, 1, 2, 3, 4, 5];
+      expect(_.sortBy(inputArr)).to.not.equal(inputArr);
     });
+
     it('returns an array in acending order if passed no iteratee', () => {
       expect(_.sortBy([5, 3, 4, 0, 1, 2])).to.eql([0, 1, 2, 3, 4, 5]);
       expect(_.sortBy(['a', 'c', 'b'])).to.eql(['a', 'b', 'c']);
     });
+
     it('returns an array sorted by iteratee in acending order', () => {
-      const arr = ['eggman', 'the', 'am', 'i'];
+      const inputArr = ['eggman', 'the', 'am', 'i'];
       const func = x => x.length;
-      expect(_.sortBy(arr, func)).to.eql(['i', 'am', 'the', 'eggman']);
+      expect(_.sortBy(inputArr, func)).to.eql(['i', 'am', 'the', 'eggman']);
     });
+
     it('sorts arrays of objects via a passed property in acending order', () => {
-      const arr = [
+      const inputArr = [
         { name: 'Dave', age: 53 },
         { name: 'Olie', age: 26 },
         { name: 'Holly', age: 42 }
@@ -1137,7 +1141,14 @@ describe('_', () => {
         { name: 'Holly', age: 42 },
         { name: 'Dave', age: 53 }
       ];
-      expect(_.sortBy(arr, 'age')).to.eql(answer);
+      expect(_.sortBy(inputArr, 'age')).to.eql(answer);
+    });
+
+    it('returns an empty array when given invalid list', () => {
+      expect(_.sortBy()).to.eql([]);
+      expect(_.sortBy(true)).to.eql([]);
+      expect(_.sortBy(123)).to.eql([]);
+      expect(_.sortBy(null)).to.eql([]);
     });
   });
 });

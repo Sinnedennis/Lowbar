@@ -214,7 +214,7 @@ _.extend = function (destination) {
     let sources = [].slice.call(arguments, 1);
     return Object.assign(destination, ...sources);
   }
-  
+
   return destination;
 };
 
@@ -275,7 +275,7 @@ _.shuffle = function (list) {
 };
 
 _.invoke = function (list, methodName) {
-  if (typeof list !== 'object' && typeof list !== 'string') return [];
+  if (typeof list !== 'object' && typeof list !== 'string' || list === null) return [];
 
   const args = [].slice.call(arguments, 2);
 
@@ -285,17 +285,9 @@ _.invoke = function (list, methodName) {
   });
 };
 
-/*
-Returns a (stably) sorted copy of list, ranked in ascending order
-by the results of running each value through iteratee.
-iteratee may also be the string name of the property to 
-sort by (eg. length). 
-
-*/
-
 _.sortBy = function (list, iteratee, context) {
 
-  // if (typeof list !== 'object' && typeof list !== 'string') return [];
+  if (typeof list !== 'object' && typeof list !== 'string' || list === null) return [];
   list = list.slice();
 
   if (iteratee === undefined) return list.sort();
