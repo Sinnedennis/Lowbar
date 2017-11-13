@@ -159,14 +159,17 @@ _.pluck = function (list, propName) {
   });
 };
 
+//Do I want to mirror underscore.js and throw a type error
+//when given an invalid iteratee function?
 _.reduce = function (list, iteratee, memo, context) {
 
-  if (typeof iteratee !== 'function') return [];
+  // if (typeof iteratee !== 'function') return [];
   iteratee = iteratee.bind(context);
-
   if (Array.isArray(list)) list = list.slice();
   else if (typeof list === 'object') list = _.values(list);
-
+  else if (typeof list === 'string') list = list.split('');
+  else return;
+  
   if (memo === undefined) memo = list.splice(0, 1)[0];
 
   _.each(list, (value, i, list) => {

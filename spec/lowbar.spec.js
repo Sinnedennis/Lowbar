@@ -628,7 +628,7 @@ describe('_', () => {
       const iteratee = (memo, num) => memo + num;
       expect(_.reduce(inputArr, iteratee, 0)).to.equal(25);
 
-      const inputObj = {a: 5, b: 5, c: 5, d: 5, e: 5};
+      const inputObj = { a: 5, b: 5, c: 5, d: 5, e: 5 };
       expect(_.reduce(inputObj, iteratee, 0)).to.equal(25);
     });
 
@@ -637,13 +637,13 @@ describe('_', () => {
       const iteratee = (memo, num) => memo * num;
       expect(_.reduce(inputArr, iteratee)).to.equal(Math.pow(5, 5));
 
-      const inputObj = {a: 5, b: 5, c: 5, d: 5, e: 5};
+      const inputObj = { a: 5, b: 5, c: 5, d: 5, e: 5 };
       expect(_.reduce(inputObj, iteratee)).to.equal(Math.pow(5, 5));
     });
 
     it('does not mutate the input array', () => {
       const inputArr = [5, 5, 5, 5, 5];
-      const inputObj = {a: 5, b: 5, c: 5, d: 5, e: 5};
+      const inputObj = { a: 5, b: 5, c: 5, d: 5, e: 5 };
 
       const iteratee = (memo, num) => memo + num;
 
@@ -651,7 +651,7 @@ describe('_', () => {
       const objResult = _.reduce(inputObj, iteratee);
 
       expect(inputArr).to.eql([5, 5, 5, 5, 5]);
-      expect(inputObj).to.eql({a: 5, b: 5, c: 5, d: 5, e: 5});
+      expect(inputObj).to.eql({ a: 5, b: 5, c: 5, d: 5, e: 5 });
 
       expect(arrResult).to.not.equal(inputArr);
       expect(objResult).to.not.equal(inputObj);
@@ -666,12 +666,37 @@ describe('_', () => {
         return this.iteratee(memo, value);
       }, 0, iterateeObj);
 
-      const objResult = _.reduce({a: 5, b: 5, c: 5, d: 5, e: 5}, function (memo, value) {
+      const objResult = _.reduce({ a: 5, b: 5, c: 5, d: 5, e: 5 }, function (memo, value) {
         return this.iteratee(memo, value);
       }, 0, iterateeObj);
 
       expect(arrResult).to.eql(25);
       expect(objResult).to.eql(25);
+    });
+
+    it('works for strings', () => {
+      const iterateeObj = {
+        iteratee: (memo, num) => (memo + num).toUpperCase(),
+      };
+
+      const strResult = _.reduce('foo', function (memo, value) {
+        return this.iteratee(memo, value);
+
+      }, '', iterateeObj);
+
+      expect(strResult).to.equal('FOO');
+    });
+
+    it('returns undefined if given invalid list', () => {
+      expect(_.reduce(true, _.identity)).to.equal(undefined);
+      expect(_.reduce(123, _.identity)).to.equal(undefined);
+      expect(_.reduce(NaN, _.identity)).to.equal(undefined);
+    });
+
+    it('throws type error if given invalid iteratee function', () => {
+      expect(function () { _.reduce([1, 2, 3], true); }).to.throw(TypeError);
+      expect(function () { _.reduce([1, 2, 3], 123); }).to.throw(TypeError);
+      expect(function () { _.reduce([1, 2, 3], 'foo'); }).to.throw(TypeError);
     });
   });
 
@@ -681,23 +706,23 @@ describe('_', () => {
     });
 
     it('returns true if every list item passes the predicate', () => {
-      const arr = [1, 2, 3, 4, 5];
-      const predicate = num => num < 10;
-      expect(_.every(arr, predicate)).to.be.true;
+      const inputArr = [true, true, true];
+      const predicate = value => value;
+      expect(_.every(inputArr, predicate)).to.be.true;
     });
 
     it('returns false if one of the items fails the predicate', () => {
-      const arr = [1, 2, 3, 4, 5];
-      const predicate = num => num < 5;
-      expect(_.every(arr, predicate)).to.be.false;
+      const inputArr = [true, false, true, true];
+      const predicate = value => value;
+      expect(_.every(inputArr, predicate)).to.be.false;
     });
 
     it('short-circuits if one item fails', () => {
-      const arr = [1, 20, 3, 2, 1, 0];
-      const predicate = num => num < 5;
+      const inputArr = [true, false, true, true];
+      const predicate = value => value;
 
       const testSpy = sinon.spy(predicate);
-      _.every(arr, testSpy);
+      _.every(inputArr, testSpy);
 
       expect(testSpy.calledTwice).to.be.true;
     });
