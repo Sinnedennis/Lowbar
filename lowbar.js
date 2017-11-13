@@ -49,7 +49,6 @@ _.each = function (list, iteratee, context = this) {
       iteratee(list[i], i, list);
     }
   } else if (typeof list === 'object' && list !== null) {
-
     for (let key in list) {
       iteratee(list[key], key, list);
     }
@@ -163,18 +162,12 @@ _.pluck = function (list, propName) {
 //when given an invalid iteratee function?
 _.reduce = function (list, iteratee, memo, context) {
 
-  if (Array.isArray(list)) list = list.slice();
-  else if (typeof list === 'object') list = _.values(list);
-  else if (typeof list === 'string') list = list.split('');
-  else return;
-
-  // if (typeof iteratee !== 'function') return [];
+  if (typeof list !== 'object' && !Array.isArray(list) && typeof list !== 'string') return;
   iteratee = iteratee.bind(context);
 
-  if (memo === undefined) memo = list.splice(0, 1)[0];
-
   _.each(list, (value, i, list) => {
-    memo = iteratee(memo, value, i, list);
+    if (memo === undefined) memo = value;
+    else memo = iteratee(memo, value, i, list);
   }, context);
 
   return memo;
@@ -217,12 +210,11 @@ _.some = function (list, predicate, context) {
 //Double-check that arguments are processed in order
 _.extend = function (destination) {
 
-  _.each(arguments, (arg) => {
-    _.reduce(arg, (memo, value, i) => {
-      return memo[i] = value;
-    }, destination);
-  });
-
+  if (typeof destination === 'object' && destination !== null) {
+    let sources = [].slice.call(arguments, 1);
+    return Object.assign(destination, ...sources);
+  }
+  
   return destination;
 };
 
