@@ -1277,7 +1277,23 @@ describe('_', () => {
       expect(_.flatten(null)).to.eql([]);
       expect(_.flatten(123)).to.eql([]);
       expect(_.flatten(NaN)).to.eql([]);
-      expect(_.flatten({1:1, 2: 2})).to.eql([]);
+      expect(_.flatten({ 1: 1, 2: 2 })).to.eql([]);
+    });
+  });
+
+  xdescribe('#intersection', () => {
+    it('should be a function', () => {
+      expect(_.intersection).to.be.a('function');
+    });
+
+    it('returns the common elements between different arrays', () => {
+      const inputArrays = [
+        [0, 1, 2, 3, 'foo', 'bar'],
+        [4, 5, 6, 7, 'foo', 'bar'],
+        [8, 9, 0, 'foo', 'bar'],
+      ];
+
+      expect(_.intersection(...inputArrays)).to.eql(['foo', 'bar']);
     });
   });
 });

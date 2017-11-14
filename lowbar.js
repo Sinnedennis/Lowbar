@@ -383,11 +383,32 @@ _.sortedIndex = function (list, value, iteratee, context = this) {
 
 _.flatten = function (array, shallow = false) {
   if (!Array.isArray(array) && typeof array !== 'string') return [];
-  
+
   return _.reduce(array, (memo, value) => {
     if (!shallow && Array.isArray(value)) value = _.flatten(value);
     return memo.concat(value);
   }, []);
+};
+
+_.intersection = function (...arrays) {
+
+  const values = _.flatten(...arrays, true);
+  const unique = [];
+  const common = _.reduce(values, (memo, value) => {
+
+    unique.push(values.shift());
+    if (_.contains(values, value)) memo.push(value);
+    return memo;
+
+  }, []);
+  console.log(unique, common);
+  return _.uniq(common);
+  // console.log([...arrays]);
+  // _.each([...arrays], (array) => {
+  //   _.each(array, (value) => {
+  //     console.log(value)
+  //   });
+  // });
 };
 
 module.exports = _;
