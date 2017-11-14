@@ -1208,4 +1208,42 @@ describe('_', () => {
       expect(_.zip(...inputArr)).to.eql([]);
     });
   });
+
+  describe.only('#sortedIndex', () => {
+    it('should be a function', () => {
+      expect(_.sortedIndex).to.be.a('function');
+    });
+
+    it('returns the index of the correct position', () => {
+      const inputArr = [0, 1, 2, 3, 4, 5];
+
+      expect(_.sortedIndex(inputArr, 3.5)).to.equal(4);
+      expect(_.sortedIndex(inputArr, 0.5)).to.equal(1);
+      expect(_.sortedIndex(inputArr, 4.5)).to.equal(5);
+    });
+
+    it('as above but for unsorted array', () => {
+      let inputArr = [0, 1, 2, 3, 4, 5];
+      inputArr = _.shuffle(inputArr);
+
+      expect(_.sortedIndex(inputArr, 3.5)).to.equal(4);
+      expect(_.sortedIndex(inputArr, 0.5)).to.equal(1);
+      expect(_.sortedIndex(inputArr, 4.5)).to.equal(5);
+    });
+
+    it('finds index based on passed iteratee', () => {
+      const inputArr = ['hello','my','name','is','dennis'];
+
+      expect(_.sortedIndex(inputArr, 'a', 'length')).to.equal(0);
+      expect(_.sortedIndex(inputArr, 'javascript', 'length')).to.equal(5);
+    });
+
+    it('Does stuff', () => {
+      expect(_.sortedIndex('abcde', 'c')).to.equal(2);
+      expect(_.sortedIndex(['a', 'b', 'c', 'd'], 'c')).to.equal(2);
+      expect(_.sortedIndex([{ age: 1 }, { age: 2 }, { age: 3 }], 2.5, 'age')).to.equal(0);
+      expect(_.sortedIndex([{ age: 1 }, { age: 2 }, { age: 3 }], { age: 2.5 }, 'age')).to.equal(2);
+
+    });
+  });
 });
