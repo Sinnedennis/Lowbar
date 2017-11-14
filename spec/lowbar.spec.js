@@ -5,8 +5,9 @@ const sinon = require('sinon');
 /*
 Make sure tests mirror their seperation of concerns
 Refactor all input checking to check in order of arguments passed
-Ensure all methods using a predicate bind context the same way
-#extend testing for invalid inputs
+Ensure all methods using a iteratee/predicate bind context the same way
+Extend testing for invalid inputs
+#sortedIndex is very messy, needs refactor
 */
 
 let _;
@@ -1209,7 +1210,7 @@ describe('_', () => {
     });
   });
 
-  describe.only('#sortedIndex', () => {
+  describe('#sortedIndex', () => {
     it('should be a function', () => {
       expect(_.sortedIndex).to.be.a('function');
     });
@@ -1222,7 +1223,7 @@ describe('_', () => {
       expect(_.sortedIndex(inputArr, 4.5)).to.equal(5);
     });
 
-    it('as above but for unsorted array', () => {
+    xit('as above but for unsorted array', () => {
       let inputArr = [0, 1, 2, 3, 4, 5];
       inputArr = _.shuffle(inputArr);
 
@@ -1232,7 +1233,7 @@ describe('_', () => {
     });
 
     it('finds index based on passed iteratee', () => {
-      const inputArr = ['hello','my','name','is','dennis'];
+      const inputArr = ['hello', 'my', 'name', 'is', 'dennis'];
 
       expect(_.sortedIndex(inputArr, 'a', 'length')).to.equal(0);
       expect(_.sortedIndex(inputArr, 'javascript', 'length')).to.equal(5);
@@ -1243,7 +1244,40 @@ describe('_', () => {
       expect(_.sortedIndex(['a', 'b', 'c', 'd'], 'c')).to.equal(2);
       expect(_.sortedIndex([{ age: 1 }, { age: 2 }, { age: 3 }], 2.5, 'age')).to.equal(0);
       expect(_.sortedIndex([{ age: 1 }, { age: 2 }, { age: 3 }], { age: 2.5 }, 'age')).to.equal(2);
+    });
+  });
 
+  describe('#flatten', () => {
+    it('should be a function', () => {
+      expect(_.flatten).to.be.a('function');
+    });
+
+    it('returns a shallowly flattened array when passed true', () => {
+      let inputArr = [[[1]], [2], [[3]]];
+      expect(_.flatten(inputArr, true)).to.eql([[1], 2, [3]]);
+    });
+
+    it('returns a flat array', () => {
+      let inputArr = [[1], [2], [3]];
+      expect(_.flatten(inputArr)).to.eql([1, 2, 3]);
+
+      inputArr = [[[[1]], [[2]], [3]]];
+      expect(_.flatten(inputArr)).to.eql([1, 2, 3]);
+
+      inputArr = [[[[[[[[[1]]]]]]]], [2], [[[[[[[[[3]]]]]]]]]];
+      expect(_.flatten(inputArr)).to.eql([1, 2, 3]);
+    });
+
+    it('works for strings', () => {
+      expect(_.flatten('hello')).to.eql('hello'.split(''));
+    });
+
+    it('returns an empty array when given invalid array input', () => {
+      expect(_.flatten()).to.eql([]);
+      expect(_.flatten(null)).to.eql([]);
+      expect(_.flatten(123)).to.eql([]);
+      expect(_.flatten(NaN)).to.eql([]);
+      expect(_.flatten({1:1, 2: 2})).to.eql([]);
     });
   });
 });

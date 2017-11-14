@@ -325,6 +325,7 @@ _.zip = function () {
   return zippedArray;
 };
 
+//Needs refactor
 _.sortedIndex = function (list, value, iteratee, context = this) {
 
   if (Array.isArray(list)) list = list.slice();
@@ -370,7 +371,6 @@ _.sortedIndex = function (list, value, iteratee, context = this) {
 
       else max = mid - 1;
 
-
     }
     return 0;
   }
@@ -379,6 +379,15 @@ _.sortedIndex = function (list, value, iteratee, context = this) {
   list.sort();
 
   return _.indexOf(list, value, true);
+};
+
+_.flatten = function (array, shallow = false) {
+  if (!Array.isArray(array) && typeof array !== 'string') return [];
+  
+  return _.reduce(array, (memo, value) => {
+    if (!shallow && Array.isArray(value)) value = _.flatten(value);
+    return memo.concat(value);
+  }, []);
 };
 
 module.exports = _;
