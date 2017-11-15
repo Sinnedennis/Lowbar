@@ -415,10 +415,12 @@ _.intersection = function (...arrays) {
 
 _.difference = function (array, ...otherArrays) {
 
-  const flatArrays = _.flatten([...otherArrays]);
+  if (typeof array === 'string') array = array.split('');
+  else if (typeof array === 'object' && !Array.isArray(array)) array = _.values(array);
+
+  const flatArrays = _.flatten([...otherArrays], true);
 
   return _.reject(array, (value) => {
-    // console.log(value, _.contains(flatArrays, value));
     return _.contains(flatArrays, value);
   });
 };

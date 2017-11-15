@@ -310,11 +310,11 @@ describe('_', () => {
 
     it('handles nested arrays and objects', () => {
       const nestedArr = ['foo'];
-      const nestedObj = {foo: 'bar'};
+      const nestedObj = { foo: 'bar' };
       expect(_.indexOf([nestedArr], nestedArr)).to.equal(0);
-      expect(_.indexOf([1,2,3, nestedArr, 4, 5], nestedArr)).to.equal(3);
+      expect(_.indexOf([1, 2, 3, nestedArr, 4, 5], nestedArr)).to.equal(3);
       expect(_.indexOf([nestedObj], nestedObj)).to.equal(0);
-      expect(_.indexOf([1,2,3, nestedObj, 4, 5], nestedObj)).to.equal(3);
+      expect(_.indexOf([1, 2, 3, nestedObj, 4, 5], nestedObj)).to.equal(3);
     });
 
     it('returns -1 if array does not contain value', () => {
@@ -1336,8 +1336,7 @@ describe('_', () => {
       expect(_.intersection(...inputArrays)).to.eql([nestedObj, 'foo', 'bar', nestedArr]);
     });
 
-    // console.log([] === []);
-    // Issue with indexOf return false for above
+    // Issue with use of flatten
     xit('handles empty nested arrays', () => {
       expect(_.intersection([[], [], []])).to.eql([[], [], []]);
     });
@@ -1353,6 +1352,7 @@ describe('_', () => {
       expect(_.intersection(...inputArrays)).to.not.eql(['O', 'o', 'f']);
     });
 
+    //Requires further testing
     it('mirrors underscore.js behaviour for strings', () => {
       expect(_.intersection('foo bar')).to.eql(['f', 'o', ' ', 'b', 'a', 'r']);
       expect(_.intersection('aabbcc')).to.eql(['a', 'b', 'c']);
@@ -1365,7 +1365,7 @@ describe('_', () => {
     });
   });
 
-  describe('#difference', () => {
+  describe.only('#difference', () => {
     it('should be a function', () => {
       expect(_.difference).to.be.a('function');
     });
@@ -1377,7 +1377,7 @@ describe('_', () => {
       expect(_.difference([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])).to.eql([]);
     });
 
-    xit('handles nested arrays and objects', () => {
+    it('handles nested arrays and objects', () => {
       const nestedArr = [1, 2, 3];
       const nestedObj = { hot: 'pie' };
 
@@ -1387,8 +1387,40 @@ describe('_', () => {
         [0, 1, 2, 3, 'foo', 'bar', nestedArr],
         [4, 5, 6, 7, 'foo', 'bar', nestedArr]
       ];
-      // console.log(_.contains([nestedArr], nestedArr));
+
       expect(_.difference(inputArray, ...inputArrays)).to.eql(['hello', 'world', nestedObj]);
+    });
+
+    it('works for strings', () => {
+      expect(_.difference('hello', ['h'])).to.eql('ello'.split(''));
+      expect(_.difference('1f2o3o4 5b6a7r8', ['1', '2', '3', '4'], ['5', '6', '7', '8'])).to.eql('foo bar'.split(''));
+    });
+
+    it('does not type-convert when comparing values', () => {
+      expect(_.difference('1f2o3o4', [1, 2], [3, 4])).to.eql('1f2o3o4'.split(''));
+    });
+
+    it('works with object values as target argument', () => {
+      expect(_.difference({ a: 0, b: 1, c: 2 }, [0])).to.eql([1, 2]);
+      expect(_.difference({ a: 0, b: 1, c: 2 }, [0], [1])).to.eql([2]);
+
+      const nestedArr = ['hello world'];
+      expect(_.difference({ a: 0, b: 1, c: nestedArr }, [1])).to.eql([0, nestedArr]);
+      expect(_.difference({ a: 0, b: 1, c: nestedArr }, [0], [nestedArr])).to.eql([1]);
+    });
+
+    it('returns an empty array when given invalid target array', () => {
+      expect(_.difference(123, [1, 2, 3])).to.eql([]);
+      expect(_.difference(undefined, [1, 2, 3])).to.eql([]);
+      expect(_.difference(null, [1, 2, 3])).to.eql([]);
+      expect(_.difference(NaN, [1, 2, 3])).to.eql([]);
+    });
+
+    it('returns primary argument when given invalid secondary argument(s)', () => {
+      expect(_.difference([1, 2, 3])).to.eql([1, 2, 3]);
+      expect(_.difference([1, 2, 3], 123)).to.eql([1, 2, 3]);
+      expect(_.difference([1, 2, 3], '123')).to.eql([1, 2, 3]);
+      expect(_.difference([1, 2, 3], { 1: 1, 2: 2 })).to.eql([1, 2, 3]);
     });
   });
 });
