@@ -1268,6 +1268,16 @@ describe('_', () => {
       expect(_.flatten(inputArr)).to.eql([1, 2, 3]);
     });
 
+    it('maintains duplicate data', () => {
+      const inputArrays = [
+        [1,2,3],
+        [1,2,3],
+        [1,2,3]
+      ];
+
+      expect(_.flatten(inputArrays)).to.eql([1,2,3,1,2,3,1,2,3]);
+    });
+
     it('works for strings', () => {
       expect(_.flatten('hello')).to.eql('hello'.split(''));
     });
@@ -1281,7 +1291,7 @@ describe('_', () => {
     });
   });
 
-  xdescribe('#intersection', () => {
+  describe.only('#intersection', () => {
     it('should be a function', () => {
       expect(_.intersection).to.be.a('function');
     });
@@ -1290,7 +1300,7 @@ describe('_', () => {
       const inputArrays = [
         [0, 1, 2, 3, 'foo', 'bar'],
         [4, 5, 6, 7, 'foo', 'bar'],
-        [8, 9, 0, 'foo', 'bar'],
+        [8, 9, 'foo', 'bar'],
       ];
 
       expect(_.intersection(...inputArrays)).to.eql(['foo', 'bar']);

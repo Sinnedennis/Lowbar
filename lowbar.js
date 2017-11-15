@@ -392,23 +392,17 @@ _.flatten = function (array, shallow = false) {
 
 _.intersection = function (...arrays) {
 
-  const values = _.flatten(...arrays, true);
-  const unique = [];
-  const common = _.reduce(values, (memo, value) => {
+  const values = _.flatten([...arrays], true);
 
+  const valuesCopy = values.slice();
+  const unique = [];
+  const common = _.reduce(valuesCopy, (memo, value) => {
     unique.push(values.shift());
     if (_.contains(values, value)) memo.push(value);
     return memo;
 
   }, []);
-  console.log(unique, common);
   return _.uniq(common);
-  // console.log([...arrays]);
-  // _.each([...arrays], (array) => {
-  //   _.each(array, (value) => {
-  //     console.log(value)
-  //   });
-  // });
 };
 
 module.exports = _;
