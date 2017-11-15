@@ -308,6 +308,15 @@ describe('_', () => {
       expect(_.indexOf(inputArr, 'c')).to.equal(2);
     });
 
+    it('handles nested arrays and objects', () => {
+      const nestedArr = ['foo'];
+      const nestedObj = {foo: 'bar'};
+      expect(_.indexOf([nestedArr], nestedArr)).to.equal(0);
+      expect(_.indexOf([1,2,3, nestedArr, 4, 5], nestedArr)).to.equal(3);
+      expect(_.indexOf([nestedObj], nestedObj)).to.equal(0);
+      expect(_.indexOf([1,2,3, nestedObj, 4, 5], nestedObj)).to.equal(3);
+    });
+
     it('returns -1 if array does not contain value', () => {
       const inputArr = ['a', 'b', 'c'];
       expect(_.indexOf(inputArr, 'aa')).to.equal(-1);
@@ -1300,14 +1309,14 @@ describe('_', () => {
       let inputArrays = [
         [0, 1, 2, 3, 'foo', 'bar'],
         [4, 5, 6, 7, 'foo', 'bar'],
-        [8, 9, 10,   'foo', 'bar'],
+        [8, 9, 10, 'foo', 'bar'],
       ];
 
       expect(_.intersection(...inputArrays)).to.eql(['foo', 'bar']);
 
       inputArrays = [
-        [{foo: 'bar'}], 
-        [1,2,3],
+        [{ foo: 'bar' }],
+        [1, 2, 3],
         ['hello']
       ];
 
@@ -1321,15 +1330,16 @@ describe('_', () => {
       const inputArrays = [
         [nestedObj, 0, 1, 2, 3, 'foo', 'bar', nestedArr],
         [nestedObj, 4, 5, 6, 7, 'foo', 'bar', nestedArr],
-        [nestedObj, 8, 9, 10,   'foo', 'bar', nestedArr],
+        [nestedObj, 8, 9, 10, 'foo', 'bar', nestedArr]
       ];
 
       expect(_.intersection(...inputArrays)).to.eql([nestedObj, 'foo', 'bar', nestedArr]);
     });
+
     // console.log([] === []);
     // Issue with indexOf return false for above
     xit('handles empty nested arrays', () => {
-      expect(_.intersection([[],[],[]])).to.eql([[],[],[]]);
+      expect(_.intersection([[], [], []])).to.eql([[], [], []]);
     });
 
     it('maintains order based on first in first out', () => {
@@ -1348,11 +1358,37 @@ describe('_', () => {
       expect(_.intersection('aabbcc')).to.eql(['a', 'b', 'c']);
     });
 
-
     it('returns an empty array when given invalid inputs', () => {
-      expect(_.intersection({foo: 'bar'}, {foo: 'bar'})).to.eql([]);
+      expect(_.intersection({ foo: 'bar' }, { foo: 'bar' })).to.eql([]);
       expect(_.intersection(10, 20, 30, 40)).to.eql([]);
       expect(_.intersection('foo', 'bar')).to.eql([]);
+    });
+  });
+
+  describe('#difference', () => {
+    it('should be a function', () => {
+      expect(_.difference).to.be.a('function');
+    });
+
+    it('returns the values present in the first array but not present in other arrays', () => {
+      expect(_.difference([1, 2, 3, 4, 5], [4], [5])).to.eql([1, 2, 3]);
+      expect(_.difference([1, 2, 3, 4, 5], [1], [2])).to.eql([3, 4, 5]);
+      expect(_.difference([1, 2, 3, 4, 5], [1, 2, 3])).to.eql([4, 5]);
+      expect(_.difference([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])).to.eql([]);
+    });
+
+    xit('handles nested arrays and objects', () => {
+      const nestedArr = [1, 2, 3];
+      const nestedObj = { hot: 'pie' };
+
+      const inputArray = [nestedArr, 'hello', 'world', nestedObj, 'foo', 'bar'];
+
+      const inputArrays = [
+        [0, 1, 2, 3, 'foo', 'bar', nestedArr],
+        [4, 5, 6, 7, 'foo', 'bar', nestedArr]
+      ];
+      // console.log(_.contains([nestedArr], nestedArr));
+      expect(_.difference(inputArray, ...inputArrays)).to.eql(['hello', 'world', nestedObj]);
     });
   });
 });

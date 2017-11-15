@@ -406,11 +406,21 @@ _.intersection = function (...arrays) {
     unique.push(input.shift());
     if (_.contains(input, value)) memo.push(value);
     return memo;
-    
+
   }, []);
 
   return _.uniq(common);
 
+};
+
+_.difference = function (array, ...otherArrays) {
+
+  const flatArrays = _.flatten([...otherArrays]);
+
+  return _.reject(array, (value) => {
+    // console.log(value, _.contains(flatArrays, value));
+    return _.contains(flatArrays, value);
+  });
 };
 
 module.exports = _;
