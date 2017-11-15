@@ -1365,7 +1365,7 @@ describe('_', () => {
     });
   });
 
-  describe.only('#difference', () => {
+  describe('#difference', () => {
     it('should be a function', () => {
       expect(_.difference).to.be.a('function');
     });
@@ -1421,6 +1421,59 @@ describe('_', () => {
       expect(_.difference([1, 2, 3], 123)).to.eql([1, 2, 3]);
       expect(_.difference([1, 2, 3], '123')).to.eql([1, 2, 3]);
       expect(_.difference([1, 2, 3], { 1: 1, 2: 2 })).to.eql([1, 2, 3]);
+    });
+  });
+
+  describe.only('#memoize', () => {
+    it('should be a function', () => {
+      expect(_.memoize).to.be.a('function');
+    });
+
+    it('returns the cached results of the passed function without making additional function calls', () => {
+      const func = (arg1, arg2) => arg1 * arg2;
+      const testSpy = sinon.spy(func);
+      const memoizedFunc = _.memoize(testSpy);
+
+      expect(memoizedFunc(2, 5)).to.equal(10);
+      expect(testSpy.calledOnce).to.be.true;
+      expect(memoizedFunc(2, 5)).to.equal(10);
+      expect(testSpy.calledOnce).to.be.true;
+    });
+
+    it('stores the results from the invocation of the passed function in the cache property with a default key of the first passed argument', () => {
+      const func = (arg1, arg2) => arg1 * arg2;
+      const memoizedFunc = _.memoize(func);
+
+      expect(memoizedFunc(2, 5)).to.equal(10);
+      expect(memoizedFunc.cache[2]).to.equal(10);
+
+      expect(memoizedFunc(12, 12)).to.equal(144);
+      expect(memoizedFunc.cache[12]).to.equal(144);
+    });
+
+    it('generates a hashed key based on a passed hash function', () => {
+      const func = (arg1, arg2) => arg1 + arg2;
+      const hashFunc = (arg1, arg2) => `${arg1} plus ${arg2}`;
+      const memoizedFunc = _.memoize(func, hashFunc);
+
+      expect(memoizedFunc(5, 5)).to.equal(10);
+      expect(memoizedFunc.cache['5 plus 5']).to.equal(10);
+    });
+
+    it('throws a TypeError when not given a valid function and called', () => {
+      expect(function () { _.memoize()(); }).to.throw(TypeError);
+      expect(function () { _.memoize([1, 2, 3])(); }).to.throw(TypeError);
+      expect(function () { _.memoize(123)(); }).to.throw(TypeError);
+      expect(function () { _.memoize('123')(); }).to.throw(TypeError);
+      expect(function () { _.memoize(null)(); }).to.throw(TypeError);
+    });
+
+    it('defaults to built-in hash func using first argument when given invalid hashing function', () => {
+      const func = (arg1, arg2) => arg1 + arg2;
+
+      expect(function () {_.memoize(func, 123)(2, 2);}).to.throw(TypeError);
+      expect(function () {_.memoize(func, '123')(2, 2);}).to.throw(TypeError);
+      expect(function () {_.memoize(func, [123])(2, 2);}).to.throw(TypeError);
     });
   });
 });

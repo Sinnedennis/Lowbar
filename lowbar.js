@@ -425,4 +425,24 @@ _.difference = function (array, ...otherArrays) {
   });
 };
 
+_.memoize = function (func, hashFunc) {
+
+  if (!hashFunc) hashFunc = function () { return arguments[0]; };
+
+  const memoizedFunc = function () {
+
+    const key = hashFunc.apply(null, arguments);
+
+    if (memoizedFunc.cache[key]) return memoizedFunc.cache[key];
+
+    const result = func.apply(null, arguments);
+    memoizedFunc.cache[key] = result;
+
+    return result;
+  };
+
+  memoizedFunc.cache = {};
+  return memoizedFunc;
+};
+
 module.exports = _;
