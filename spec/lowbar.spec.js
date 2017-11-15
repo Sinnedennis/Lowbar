@@ -1270,12 +1270,12 @@ describe('_', () => {
 
     it('maintains duplicate data', () => {
       const inputArrays = [
-        [1,2,3],
-        [1,2,3],
-        [1,2,3]
+        [1, 2, 3],
+        [1, 2, 3],
+        [1, 2, 3]
       ];
 
-      expect(_.flatten(inputArrays)).to.eql([1,2,3,1,2,3,1,2,3]);
+      expect(_.flatten(inputArrays)).to.eql([1, 2, 3, 1, 2, 3, 1, 2, 3]);
     });
 
     it('works for strings', () => {
@@ -1291,19 +1291,68 @@ describe('_', () => {
     });
   });
 
-  describe.only('#intersection', () => {
+  describe('#intersection', () => {
     it('should be a function', () => {
       expect(_.intersection).to.be.a('function');
     });
 
     it('returns the common elements between different arrays', () => {
-      const inputArrays = [
+      let inputArrays = [
         [0, 1, 2, 3, 'foo', 'bar'],
         [4, 5, 6, 7, 'foo', 'bar'],
-        [8, 9, 'foo', 'bar'],
+        [8, 9, 10,   'foo', 'bar'],
       ];
 
       expect(_.intersection(...inputArrays)).to.eql(['foo', 'bar']);
+
+      inputArrays = [
+        [{foo: 'bar'}], 
+        [1,2,3],
+        ['hello']
+      ];
+
+      expect(_.intersection(...inputArrays)).to.eql([]);
+    });
+
+    it('handles nested arrays and objects', () => {
+      const nestedArr = [1, 2, 3];
+      const nestedObj = { hot: 'pie' };
+
+      const inputArrays = [
+        [nestedObj, 0, 1, 2, 3, 'foo', 'bar', nestedArr],
+        [nestedObj, 4, 5, 6, 7, 'foo', 'bar', nestedArr],
+        [nestedObj, 8, 9, 10,   'foo', 'bar', nestedArr],
+      ];
+
+      expect(_.intersection(...inputArrays)).to.eql([nestedObj, 'foo', 'bar', nestedArr]);
+    });
+    // console.log([] === []);
+    // Issue with indexOf return false for above
+    xit('handles empty nested arrays', () => {
+      expect(_.intersection([[],[],[]])).to.eql([[],[],[]]);
+    });
+
+    it('maintains order based on first in first out', () => {
+      const inputArrays = [
+        ['f', 0, 'o', 1, 2, 'O'],
+        ['o', 'O', 3, 4, 'f', 5],
+        [7, 8, 9, 'o', 'f', 'O']
+      ];
+
+      expect(_.intersection(...inputArrays)).to.eql(['f', 'o', 'O']);
+      expect(_.intersection(...inputArrays)).to.not.eql(['O', 'o', 'f']);
+    });
+
+    it('mirrors underscore.js behaviour for strings', () => {
+      expect(_.intersection('foo bar')).to.eql(['f', 'o', ' ', 'b', 'a', 'r']);
+      expect(_.intersection('aabbcc')).to.eql(['a', 'b', 'c']);
+    });
+
+
+    it('returns an empty array when given invalid inputs', () => {
+      expect(_.intersection({foo: 'bar'}, {foo: 'bar'})).to.eql([]);
+      expect(_.intersection(10, 20, 30, 40)).to.eql([]);
+      expect(_.intersection('foo', 'bar')).to.eql([]);
     });
   });
 });
