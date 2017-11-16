@@ -1587,5 +1587,54 @@ describe('_', () => {
     it('returns a function', () => {
       expect(_.throttle()).to.be.a('function');
     });
+
+    xit('prevents repeated function calls until wait time has expired', () => {
+      const testSpy = sinon.spy();
+      const throttledFunc = _.throttle(testSpy, 100);
+      throttledFunc();
+      throttledFunc();
+      throttledFunc();
+      expect(testSpy.calledOnce).to.be.true;
+    });
+
+    xit('delays the intial call when passed optional argument', (done) => {
+      const testSpy = sinon.spy();
+      const throttledFunc = _.throttle(testSpy, 100, {leading: false});
+      throttledFunc();
+
+      expect(testSpy.callCount).to.equal(0);
+
+      setTimeout(() => {
+        expect(testSpy.calledOnce).to.be.true;
+        done();
+      }, 200);
+    });
+
+    xit('invokes the function immediately once the wait period as ended if it was called during this time', (done) => {
+      const testSpy = sinon.spy();
+      const throttledFunc = _.throttle(testSpy, 100);
+      throttledFunc();
+      throttledFunc();
+      expect(testSpy.calledOnce).to.be.true;
+
+      setTimeout(() => {
+        expect(testSpy.calledTwice).to.be.true;
+        done();
+      }, 200);
+    });
+
+    xit('does not follow the above behaviour if passed optional argument', (done) => {
+      const testSpy = sinon.spy();
+      const throttledFunc = _.throttle(testSpy, 100, {trailing: false});
+      throttledFunc();
+      throttledFunc();
+      expect(testSpy.calledOnce).to.be.true;
+
+      setTimeout(() => {
+        expect(testSpy.calledTwice).to.be.false;
+        expect(testSpy.calledOnce).to.be.true;
+        done();
+      }, 200);
+    });
   });
 });
