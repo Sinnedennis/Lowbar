@@ -445,4 +445,12 @@ _.memoize = function (func, hashFunc) {
   return memoizedFunc;
 };
 
+_.delay = function (func, wait, ...args) {
+
+  if (!isNaN(wait)) wait = +wait;
+  if (typeof wait !== 'number' || wait < 0) wait = 0;
+
+  return setTimeout(func, wait, ...args); 
+};
+
 module.exports = _;

@@ -1424,9 +1424,14 @@ describe('_', () => {
     });
   });
 
-  describe.only('#memoize', () => {
+  //test obscure hashes
+  describe('#memoize', () => {
     it('should be a function', () => {
       expect(_.memoize).to.be.a('function');
+    });
+
+    it('returns return a function', () => {
+      expect(_.memoize()).to.be.a('function');
     });
 
     it('returns the cached results of the passed function without making additional function calls', () => {
@@ -1471,9 +1476,53 @@ describe('_', () => {
     it('defaults to built-in hash func using first argument when given invalid hashing function', () => {
       const func = (arg1, arg2) => arg1 + arg2;
 
-      expect(function () {_.memoize(func, 123)(2, 2);}).to.throw(TypeError);
-      expect(function () {_.memoize(func, '123')(2, 2);}).to.throw(TypeError);
-      expect(function () {_.memoize(func, [123])(2, 2);}).to.throw(TypeError);
+      expect(function () { _.memoize(func, 123)(2, 2); }).to.throw(TypeError);
+      expect(function () { _.memoize(func, '123')(2, 2); }).to.throw(TypeError);
+      expect(function () { _.memoize(func, [123])(2, 2); }).to.throw(TypeError);
+    });
+  });
+
+  describe.only('#delay', () => {
+    it('should be a function', () => {
+      expect(_.delay).to.be.a('function');
+    });
+
+    it('invokes the callback after a period of time', (done) => {
+      let flag = false;
+      _.delay(() => {
+        flag = true;
+        expect(flag).to.be.true;
+        done();
+      }, 200);
+    });
+
+    it('converts string-type delays into numbers', (done) => {
+      let flag = false;
+      _.delay(() => {
+        flag = true;
+        expect(flag).to.be.true;
+        done();
+      }, '100');
+    });
+
+    it('converts array-type delays into numbers', (done) => {
+      let flag = false;
+      _.delay(() => {
+        flag = true;
+        expect(flag).to.be.true;
+        done();
+      }, [100]);
+    });
+
+    it('passes arguments to the callback function', (done) => {
+      const payLoad1 = ['foo', 'bar'];
+      const payLoad2 = { A: 'B', C: 'D' };
+      const payLoad3 = 3.14159;
+
+      _.delay((...response) => {
+        expect([...response]).to.eql([payLoad1, payLoad2, payLoad3]);
+        done();
+      }, 100, payLoad1, payLoad2, payLoad3);
     });
   });
 });
