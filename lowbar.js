@@ -450,7 +450,7 @@ _.delay = function (func, wait, ...args) {
   if (!isNaN(wait)) wait = +wait;
   if (typeof wait !== 'number' || wait < 0) wait = 0;
 
-  return setTimeout(func, wait, ...args); 
+  return setTimeout(func, wait, ...args);
 };
 
 _.where = function (list, properties) {
@@ -463,7 +463,7 @@ _.where = function (list, properties) {
     let keepItem = true;
 
     _.each(properties, (propVal, index) => {
-      if(propVal !== item[index]) keepItem = false;
+      if (propVal !== item[index]) keepItem = false;
     });
 
     return keepItem;

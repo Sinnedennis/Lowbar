@@ -8,6 +8,7 @@ Refactor all input checking to check in order of arguments passed
 Ensure all methods using a iteratee/predicate bind context the same way
 Extend testing for invalid inputs
 #sortedIndex is very messy, needs refactor
+Check all 'it' descriptions to ensure they match the tests
 */
 
 let _;
@@ -1532,7 +1533,7 @@ describe('_', () => {
     });
 
     it('returns a copy of the list filtered by the passed properties', () => {
-      const list = [
+      let list = [
         {isTrue:  true},
         {isTrue: false},
         {isTrue: false}
@@ -1541,6 +1542,23 @@ describe('_', () => {
       expect(_.where(list, {isTrue: true})).to.eql([{isTrue: true}]);
       expect(_.where(list, {isTrue: false})).to.eql([{isTrue: false}, {isTrue: false}]);
       expect(_.where(list, {isTrue: 'maybe'})).to.eql([]);
+
+      list = [
+        {title: 'Richard III', author: 'Shakespeare', year: 1592},
+        {title: 'The Comedy of Errors', author: 'Shakespeare', year: 1592},
+        {title: 'Titus Andronicus', author: 'Shakespeare', year: 1593},
+        {title: 'The Taming of the Shrew', author: 'Shakespeare', year: 1594},
+        {title: 'The Two Gentlemen of Verona', author: 'Shakespeare', year: 1595}
+      ];
+
+      expect(_.where(list, {year: 1592})).to.eql(list.slice(0, 2));
+      expect(_.where(list, {title: 'Titus Andronicus'})).to.eql(list.slice(2, 3));
+      expect(_.where(list, {author: 'Shakespeare'})).to.eql(list);
+    });
+
+    it('returns the unfiltered list if passed an empty object as properties argument', () => {
+      const list = [{0:0}, {1:1}];
+      expect(_.where(list, {})).to.eql(list);
     });
 
     it('returns an empty array for invalid list inputs', () => {
@@ -1548,7 +1566,7 @@ describe('_', () => {
       expect(_.where([[1], [2], [3]], {1: 1})).to.eql([]);
     });
 
-    it('returns unfiltered list when given invalid properties object', () => {
+    it('returns an empty array when given invalid properties object', () => {
       const list = [{0: true}, {foo: 'bar'}];
 
       expect(_.where(list, 'hello')).to.eql(list);
