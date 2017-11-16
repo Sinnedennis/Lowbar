@@ -1527,7 +1527,7 @@ describe('_', () => {
     });
   });
 
-  describe.only('#where', () => {
+  describe('#where', () => {
     it('should be a function', () => {
       expect(_.where).to.be.a('function');
     });
@@ -1576,6 +1576,16 @@ describe('_', () => {
     it('returns the unfiltered list if passed an empty object as properties argument', () => {
       const list = [{0:0}, {1:1}];
       expect(_.where(list, {})).to.eql(list);
+    });
+  });
+
+  describe.only('#throttle', () => {
+    it('should be a function', () =>  {
+      expect(_.throttle).to.be.a('function');
+    });
+
+    it('returns a function', () => {
+      expect(_.throttle()).to.be.a('function');
     });
   });
 });

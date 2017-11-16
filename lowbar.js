@@ -469,5 +469,16 @@ _.where = function (list, properties) {
     return keepItem;
   });
 };
+//Args: func, wait, ...options
+_.throttle = function () {
+  return function () {
+
+    //Start timer
+    //Invoke func unless {leading: false} is passed
+    //Prevent any further invocations until timer is finished
+    //If a call was ignored during the wait, call immediatly once wait is over unless {trailing: false}
+
+  };
+};
 
 module.exports = _;
