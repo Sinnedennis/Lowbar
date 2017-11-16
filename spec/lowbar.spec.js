@@ -1556,25 +1556,26 @@ describe('_', () => {
       expect(_.where(list, {author: 'Shakespeare'})).to.eql(list);
     });
 
-    it('returns the unfiltered list if passed an empty object as properties argument', () => {
-      const list = [{0:0}, {1:1}];
-      expect(_.where(list, {})).to.eql(list);
-    });
-
     it('returns an empty array for invalid list inputs', () => {
       expect(_.where(['hello'], {e: 'e'})).to.eql([]);
       expect(_.where([[1], [2], [3]], {1: 1})).to.eql([]);
+      expect(_.where(123, {1: 1})).to.eql([]);
+      expect(_.where({foo: 'bar'}, {1: 1})).to.eql([]);
     });
-
-    it('returns an empty array when given invalid properties object', () => {
+    
+    it('returns the unfiltered list when given invalid properties object', () => {
       const list = [{0: true}, {foo: 'bar'}];
-
+      
       expect(_.where(list, 'hello')).to.eql(list);
       expect(_.where(list, 123)).to.eql(list);
       expect(_.where(list, false)).to.eql(list);
       expect(_.where(list, true)).to.eql(list);
       expect(_.where(list, [])).to.eql(list);
     });
-
+    
+    it('returns the unfiltered list if passed an empty object as properties argument', () => {
+      const list = [{0:0}, {1:1}];
+      expect(_.where(list, {})).to.eql(list);
+    });
   });
 });
