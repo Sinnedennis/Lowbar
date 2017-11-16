@@ -1482,7 +1482,7 @@ describe('_', () => {
     });
   });
 
-  describe.only('#delay', () => {
+  describe('#delay', () => {
     it('should be a function', () => {
       expect(_.delay).to.be.a('function');
     });
@@ -1524,5 +1524,39 @@ describe('_', () => {
         done();
       }, 100, payLoad1, payLoad2, payLoad3);
     });
+  });
+
+  describe.only('#where', () => {
+    it('should be a function', () => {
+      expect(_.where).to.be.a('function');
+    });
+
+    it('returns a copy of the list filtered by the passed properties', () => {
+      const list = [
+        {isTrue:  true},
+        {isTrue: false},
+        {isTrue: false}
+      ];
+
+      expect(_.where(list, {isTrue: true})).to.eql([{isTrue: true}]);
+      expect(_.where(list, {isTrue: false})).to.eql([{isTrue: false}, {isTrue: false}]);
+      expect(_.where(list, {isTrue: 'maybe'})).to.eql([]);
+    });
+
+    it('returns an empty array for invalid list inputs', () => {
+      expect(_.where(['hello'], {e: 'e'})).to.eql([]);
+      expect(_.where([[1], [2], [3]], {1: 1})).to.eql([]);
+    });
+
+    it('returns unfiltered list when given invalid properties object', () => {
+      const list = [{0: true}, {foo: 'bar'}];
+
+      expect(_.where(list, 'hello')).to.eql(list);
+      expect(_.where(list, 123)).to.eql(list);
+      expect(_.where(list, false)).to.eql(list);
+      expect(_.where(list, true)).to.eql(list);
+      expect(_.where(list, [])).to.eql(list);
+    });
+
   });
 });

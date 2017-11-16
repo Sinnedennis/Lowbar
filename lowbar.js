@@ -453,4 +453,21 @@ _.delay = function (func, wait, ...args) {
   return setTimeout(func, wait, ...args); 
 };
 
+_.where = function (list, properties) {
+
+  if (!Array.isArray(list)) return [];
+  if (typeof properties !== 'object' || Array.isArray(properties)) return list;
+
+  return _.filter(list, (item) => {
+
+    let keepItem = true;
+
+    _.each(properties, (propVal, index) => {
+      if(propVal !== item[index]) keepItem = false;
+    });
+
+    return keepItem;
+  });
+};
+
 module.exports = _;
