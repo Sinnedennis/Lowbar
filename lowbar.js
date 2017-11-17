@@ -512,13 +512,16 @@ _.throttle = function (func, wait, options = { leading: true, trailing: true }) 
   return throttledFunc;
 };
 
-_.partial = function () {
-  
-  //Prepare argument list (_ = undefined)
-  // return function (...newArgs) {
-  //   //Slot in newArgs into the appropriate positions 
-  //   func(partialArgs);
-  // };
+_.partial = function (func, ...partialArgs) {
+
+  return function (...newArgs) {
+
+    const mappedArgs = _.map(partialArgs, (arg) => {
+      return arg === _ ? newArgs.shift() : arg; 
+    });
+
+    return func(...mappedArgs, ...newArgs);
+  };
 };
 
 module.exports = _;

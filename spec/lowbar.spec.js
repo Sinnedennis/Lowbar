@@ -1690,7 +1690,7 @@ describe('_', () => {
     });
   });
 
-  xdescribe('#partial', () => {
+  describe('#partial', () => {
     it('should be a function', () => {
       expect(_.partial).to.be.a('function');
     });
@@ -1728,8 +1728,7 @@ describe('_', () => {
       expect(partialFunc(2, 8, 10)).to.equal(10);
     });
 
-    it('does not change "this" value', () => {
-      
+    it('does not alter context value', () => {
       let doMaths = function (a, b) {
         return (a - b) * this.multiplier;
       };
@@ -1743,6 +1742,11 @@ describe('_', () => {
 
       expect(partialFunc(60)).to.equal(400);
       expect(partialFunc(30)).to.equal(100);
+    });
+
+    it('throws a TypeError when invoked if given invalid input function', () => {
+      expect(_.partial('hello')).to.be.a('function');
+      expect(function () { _.partial('hello')(); }).to.throw( TypeError );
     });
   });
 });
