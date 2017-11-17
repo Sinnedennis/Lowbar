@@ -269,7 +269,7 @@ describe('_', () => {
 
     it('passes reference of the list to the iteratee', () => {
       const testSpy = sinon.spy();
-      const inputArr = [1,2,3];
+      const inputArr = [1, 2, 3];
 
       _.each(inputArr, testSpy);
 
@@ -335,13 +335,12 @@ describe('_', () => {
   });
 
 
-  //How to test if binary search is faster than unsorted
-  describe('#indexOf', () => {
+  describe.only('#indexOf', () => {
     it('is a function', () => {
       expect(_.indexOf).to.be.a('function');
     });
 
-    it('returns index of value in unsorted arr', () => {
+    it('returns the index of a given value in an array', () => {
       const inputArr = ['a', 'b', 'c'];
       expect(_.indexOf(inputArr, 'a')).to.equal(0);
       expect(_.indexOf(inputArr, 'b')).to.equal(1);
@@ -350,11 +349,12 @@ describe('_', () => {
 
     it('handles nested arrays and objects', () => {
       const nestedArr = ['foo'];
-      const nestedObj = { foo: 'bar' };
       expect(_.indexOf([nestedArr], nestedArr)).to.equal(0);
-      expect(_.indexOf([1, 2, 3, nestedArr, 4, 5], nestedArr)).to.equal(3);
+      expect(_.indexOf([0, 1, 2, nestedArr, 4, 5], nestedArr)).to.equal(3);
+
+      const nestedObj = { foo: 'bar' };
       expect(_.indexOf([nestedObj], nestedObj)).to.equal(0);
-      expect(_.indexOf([1, 2, 3, nestedObj, 4, 5], nestedObj)).to.equal(3);
+      expect(_.indexOf([0, 1, 2, nestedObj, 4, 5], nestedObj)).to.equal(3);
     });
 
     it('returns -1 if array does not contain value', () => {
@@ -364,12 +364,6 @@ describe('_', () => {
       expect(_.indexOf(inputArr, 'true')).to.equal(-1);
     });
 
-    it('returns -1 if given invalid input', () => {
-      expect(_.indexOf()).to.equal(-1);
-      expect(_.indexOf(1, 2, 3)).to.equal(-1);
-      expect(_.indexOf([], NaN, NaN)).to.equal(-1);
-    });
-
     it('works for strings', () => {
       expect(_.indexOf('hello', 'h')).to.equal(0);
       expect(_.indexOf('hello', 'l')).to.equal(2);
@@ -377,18 +371,27 @@ describe('_', () => {
       expect(_.indexOf('hello', 'x')).to.equal(-1);
     });
 
-    it('returns index via binary search of value in a sorted arr', () => {
-      const inputArr = [1, 2, 3, 4, 5];
-      expect(_.indexOf(inputArr, 2, true)).to.equal(1);
-      expect(_.indexOf(inputArr, 5, true)).to.equal(4);
+    it('returns index via binary search of value in a sorted array', () => {
+      const inputArr = [0, 10, 20, 30, 40, 50];
+      expect(_.indexOf(inputArr, 20, true)).to.equal(2);
+      expect(_.indexOf(inputArr, 50, true)).to.equal(5);
       expect(_.indexOf(inputArr, 'hi', true)).to.equal(-1);
+
+      const shuffledArr = [0, 50, 20, 40, 10, 30];
+      expect(_.indexOf(shuffledArr, 10, true)).to.equal(-1);
     });
 
-    it('starts searching at i if given number as third argument', () => {
-      const inputArr = [1, 2, 3, 4, 5];
-      expect(_.indexOf(inputArr, 1, 2)).to.equal(-1);
-      expect(_.indexOf(inputArr, 5, 1)).to.equal(4);
-      expect(_.indexOf(inputArr, 4, 1)).to.equal(3);
+    it('starts searching at a specific index if given a number as the third argument', () => {
+      const inputArr = [0, 10, 20, 30, 40, 50];
+      expect(_.indexOf(inputArr, 10, 3)).to.equal(-1);
+      expect(_.indexOf(inputArr, 50, 1)).to.equal(5);
+      expect(_.indexOf(inputArr, 40, 1)).to.equal(4);
+    });
+
+    it('returns -1 if given invalid input list or invalid third argument', () => {
+      expect(_.indexOf()).to.equal(-1);
+      expect(_.indexOf(1, 2, 3)).to.equal(-1);
+      expect(_.indexOf([], NaN, NaN)).to.equal(-1);
     });
   });
 
