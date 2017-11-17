@@ -71,12 +71,12 @@ describe('_', () => {
   });
 
   //Guard against decimal n's?
-  describe.only('#first', () => {
+  describe('#first', () => {
     it('is a function', () => {
       expect(_.first).to.be.a('function');
     });
 
-    it('returns a shallow copy of the input array', () => {
+    it('does not mutate the input array', () => {
       const inputArr = [0, 1, 2, 3];
 
       expect(_.first(inputArr)).to.not.equal(inputArr);
@@ -147,11 +147,14 @@ describe('_', () => {
     });
   });
 
-  //Guard against decimal n's?
   describe('#last', () => {
-
     it('is a function', () => {
       expect(_.last).to.be.a('function');
+    });
+
+    it('does not mutate the input array', () => {
+      const inputArr = [0, 1, 2, 3];
+      expect(_.last(inputArr)).to.not.equal(inputArr);
     });
 
     it('returns the last n values of an array', () => {
@@ -195,6 +198,12 @@ describe('_', () => {
       expect(_.last('hello', '-1')).to.eql([]);
     });
 
+    it('rounds decimal n up to a whole figure', () => {
+      expect(_.last([1, 2, 3], 0.9)).to.eql([3]);
+      expect(_.last([1, 2, 3], 1.001)).to.eql([2, 3]);
+      expect(_.last([1, 2, 3], 2.3)).to.eql([1, 2, 3]);
+    });
+
     it('returns undefined for invalid list inputs', () => {
       expect(_.last(true)).to.eql(undefined);
       expect(_.last(null)).to.eql(undefined);
@@ -202,13 +211,12 @@ describe('_', () => {
       expect(_.last(31415)).to.eql(undefined);
     });
 
-    //true and false function as 1 and 0
-    //underscore.js returns whole array?
-    it('returns an empty array for invalid n inputs', () => {
-      // expect(_.last([1], NaN)).to.eql([]);
-      // expect(_.last([1], 'a')).to.eql([]);
-      // expect(_.last([1], [1, 2, 3])).to.eql([]);
-      expect(_.last([1], false)).to.eql([]);
+    it('returns a copy of the input array for invalid n inputs', () => {
+      const inputArr = [0, 1, 2, 3, 4];
+      expect(_.last(inputArr, 'o')).to.eql(inputArr);
+      expect(_.last(inputArr, NaN)).to.eql(inputArr);
+      expect(_.last(inputArr, ['o'])).to.eql(inputArr);
+      expect(_.last(inputArr, { foo: 'bar' })).to.eql(inputArr);
     });
   });
 

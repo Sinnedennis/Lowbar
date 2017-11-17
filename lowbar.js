@@ -26,17 +26,17 @@ _.first = function (list, n) {
 
 _.last = function (list, n) {
 
-  // if (isNaN(n) && n !== undefined) return [];
-  if (typeof n === 'string' && !isNaN(n)) n = +n;
-  if (!Array.isArray(list) && typeof list !== 'string') return;
-  if (n !== undefined && typeof n !== 'number') return [];
-
   if (typeof list === 'string') list = list.split('');
+  if (!Array.isArray(list)) return;
+
+  if (!isNaN(n)) n = +n < 0 ? 0 : Math.ceil(+n);
+  else if (typeof n !== 'undefined') return list.slice();
 
   return n === undefined
     ? list[list.length - 1]
     : list.slice(list.length - n, list.length);
 };
+
 
 _.each = function (list, iteratee, context = this) {
 
