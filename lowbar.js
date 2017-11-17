@@ -65,7 +65,11 @@ _.indexOf = function (array, value, isSorted = false) {
 
   if (isSorted === false || typeof isSorted === 'number') {
 
-    const startFrom = typeof isSorted === 'number' ? isSorted : 0;
+    let startFrom = 0;
+    if (typeof isSorted === 'number') {
+      if (isSorted < 0 || isSorted > array.length) return -1;
+      startFrom = isSorted;
+    }
 
     for (let i = startFrom; i < array.length; i++) {
       if (array[i] === value) return i;

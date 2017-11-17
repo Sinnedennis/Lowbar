@@ -342,6 +342,7 @@ describe('_', () => {
 
     it('returns the index of a given value in an array', () => {
       const inputArr = ['a', 'b', 'c'];
+
       expect(_.indexOf(inputArr, 'a')).to.equal(0);
       expect(_.indexOf(inputArr, 'b')).to.equal(1);
       expect(_.indexOf(inputArr, 'c')).to.equal(2);
@@ -359,6 +360,7 @@ describe('_', () => {
 
     it('returns -1 if array does not contain value', () => {
       const inputArr = ['a', 'b', 'c'];
+
       expect(_.indexOf(inputArr, 'aa')).to.equal(-1);
       expect(_.indexOf(inputArr, 1)).to.equal(-1);
       expect(_.indexOf(inputArr, 'true')).to.equal(-1);
@@ -383,6 +385,7 @@ describe('_', () => {
 
     it('starts searching at a specific index if given a number as the third argument', () => {
       const inputArr = [0, 10, 20, 30, 40, 50];
+
       expect(_.indexOf(inputArr, 10, 3)).to.equal(-1);
       expect(_.indexOf(inputArr, 50, 1)).to.equal(5);
       expect(_.indexOf(inputArr, 40, 1)).to.equal(4);
@@ -392,6 +395,16 @@ describe('_', () => {
       expect(_.indexOf()).to.equal(-1);
       expect(_.indexOf(1, 2, 3)).to.equal(-1);
       expect(_.indexOf([], NaN, NaN)).to.equal(-1);
+    });
+
+    it('returns -1 for invalid startFrom third arguments', () => {
+      const inputArr = [0, 10, 20, 30, 40, 50];
+
+      expect(_.indexOf(inputArr, 30, -2)).to.equal(-1);
+      expect(_.indexOf(inputArr, 30, 9000)).to.equal(-1);
+
+      expect(_.indexOf(inputArr, 30, 0.5)).to.equal(-1);
+      expect(_.indexOf(inputArr, 30, 1.1)).to.equal(-1);
     });
   });
 
