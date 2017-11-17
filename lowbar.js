@@ -496,13 +496,11 @@ _.throttle = function (func, wait, options = { leading: true, trailing: true }) 
         _.delay(() => {
           
           if (toBeCalled) {
-
             toBeCalled = false;
             func.apply(null, ...args);
             waitLoop();
-
           } else beenCalled = false;
-          
+
         }, wait);
       };
 
@@ -514,28 +512,13 @@ _.throttle = function (func, wait, options = { leading: true, trailing: true }) 
   return throttledFunc;
 };
 
-
-
-
-/*
- if (beenCalled === false) {
-      beenCalled = true;
-
-      if(options.leading) func.apply(null, ...args);
-      else if(options.trailing) toBeCalled = true;
-
-      _.delay(() => {
-        if (toBeCalled && trailing) {
-          func.apply(null, ...args);
-          
-          ati
-        } 
-      }, wait);
-
-    } else if (beenCalled) {
-      if (options.trailing) toBeCalled = true;
-    }
-
-*/
+_.partial = function () {
+  
+  //Prepare argument list (_ = undefined)
+  // return function (...newArgs) {
+  //   //Slot in newArgs into the appropriate positions 
+  //   func(partialArgs);
+  // };
+};
 
 module.exports = _;

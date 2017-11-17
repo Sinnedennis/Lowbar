@@ -1579,7 +1579,7 @@ describe('_', () => {
     });
   });
 
-  describe.only('#throttle', () => {
+  describe('#throttle', () => {
     it('should be a function', () => {
       expect(_.throttle).to.be.a('function');
     });
@@ -1687,6 +1687,62 @@ describe('_', () => {
         expect(testSpy.callCount).to.equal(2);
         done();
       }, 200);
+    });
+  });
+
+  xdescribe('#partial', () => {
+    it('should be a function', () => {
+      expect(_.partial).to.be.a('function');
+    });
+
+    it('should return a function', () => {
+      expect(_.partial()).to.be.a('function');
+    });
+
+    it('allows arguments to be passed to the wrapped function', () => {
+      const add = (a, b) => a + b;
+      const partialFunc = _.partial(add);
+
+      expect(partialFunc(2, 2)).to.equal(4);
+    });
+
+    it('allows partial binding of arguments', () => {
+      const add = (a, b) => a + b;
+      const partialFunc = _.partial(add, 2);
+
+      expect(partialFunc(2)).to.equal(4);
+      expect(partialFunc(4)).to.equal(6);
+    });
+
+    it('allows for placeholder arguments', () => {
+      const divide = (a, b) => a / b;
+      let partialFunc = _.partial(divide, _, 2);
+
+      expect(partialFunc(10)).to.equal(5);
+      expect(partialFunc(50)).to.equal(25);
+
+      const doMaths = (a, b, c, d) => ((a + b) * c) - d;
+      partialFunc = _.partial(doMaths, _, _, 2, _);
+
+      expect(partialFunc(1, 1, 4)).to.equal(0);
+      expect(partialFunc(2, 8, 10)).to.equal(10);
+    });
+
+    it('does not change "this" value', () => {
+      
+      let doMaths = function (a, b) {
+        return (a - b) * this.multiplier;
+      };
+      
+      const mathsObj = {
+        multiplier: 10
+      };
+
+      doMaths = doMaths.bind(mathsObj);
+      const partialFunc = _.partial(doMaths, _, 20);
+
+      expect(partialFunc(60)).to.equal(400);
+      expect(partialFunc(30)).to.equal(100);
     });
   });
 });
