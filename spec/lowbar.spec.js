@@ -224,7 +224,7 @@ describe('_', () => {
   });
 
 
-  describe.only('#each', () => {
+  describe('#each', () => {
     it('is a function', () => {
       expect(_.each).to.be.a('function');
     });
@@ -265,6 +265,15 @@ describe('_', () => {
         ['value_0', 'key_0', { key_0: 'value_0', key_1: 'value_1' }],
         ['value_1', 'key_1', { key_0: 'value_0', key_1: 'value_1' }]
       ]);
+    });
+
+    it('passes reference of the list to the iteratee', () => {
+      const testSpy = sinon.spy();
+      const inputArr = [1,2,3];
+
+      _.each(inputArr, testSpy);
+
+      expect(testSpy.args[0][2]).to.equal(inputArr);
     });
 
     it('works for strings', () => {
