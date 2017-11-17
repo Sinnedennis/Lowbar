@@ -21,6 +21,7 @@ if (process.env.underscore === 'true') {
 describe('_', () => {
   'use strict';
 
+
   describe('#identity', () => {
     it('is a function', function () {
       expect(_.identity).to.be.a('function');
@@ -39,6 +40,7 @@ describe('_', () => {
       expect(_.identity(value, 1010)).to.eql(value);
     });
   });
+
 
   describe('#values', () => {
     it('is a function', () => {
@@ -70,7 +72,7 @@ describe('_', () => {
     });
   });
 
-  //Guard against decimal n's?
+
   describe('#first', () => {
     it('is a function', () => {
       expect(_.first).to.be.a('function');
@@ -147,6 +149,7 @@ describe('_', () => {
     });
   });
 
+
   describe('#last', () => {
     it('is a function', () => {
       expect(_.last).to.be.a('function');
@@ -220,9 +223,8 @@ describe('_', () => {
     });
   });
 
-  //Test context
-  describe('#each', () => {
 
+  describe.only('#each', () => {
     it('is a function', () => {
       expect(_.each).to.be.a('function');
     });
@@ -249,34 +251,32 @@ describe('_', () => {
 
     it('passes the following arguments in order to the iteratee - value, index/key, list', () => {
       const testSpy = sinon.spy();
-      _.each(['foo', 'bar'], testSpy);
-
-      expect(testSpy.args[0]).to.eql(
-        ['foo', 0, ['foo', 'bar']]
-      );
-      expect(testSpy.args[1]).to.eql(
-        ['bar', 1, ['foo', 'bar']]
-      );
-
-      testSpy.reset();
-      _.each({ foo: 'bar', hello: 'world' }, testSpy);
+      _.each(['value_0', 'value_1'], testSpy);
 
       expect(testSpy.args).to.eql([
-        ['bar', 'foo', { foo: 'bar', hello: 'world' }],
-        ['world', 'hello', { foo: 'bar', hello: 'world' }]
+        ['value_0', 0, ['value_0', 'value_1']],
+        ['value_1', 1, ['value_0', 'value_1']]
+      ]);
+
+      testSpy.reset();
+      _.each({ key_0: 'value_0', key_1: 'value_1' }, testSpy);
+
+      expect(testSpy.args).to.eql([
+        ['value_0', 'key_0', { key_0: 'value_0', key_1: 'value_1' }],
+        ['value_1', 'key_1', { key_0: 'value_0', key_1: 'value_1' }]
       ]);
     });
 
     it('works for strings', () => {
       const testSpy = sinon.spy();
-      _.each('123', testSpy);
+      _.each('012', testSpy);
 
       expect(testSpy.callCount).to.equal(3);
 
       expect(testSpy.args).to.eql([
-        ['1', 0, '123'],
-        ['2', 1, '123'],
-        ['3', 2, '123']
+        ['0', 0, '012'],
+        ['1', 1, '012'],
+        ['2', 2, '012']
       ]);
     });
 
@@ -307,16 +307,24 @@ describe('_', () => {
       }, FoodList);
 
       expect(foodArr).to.eql(['I like risotto', 'I like soup', 'I like more pies']);
-
     });
 
-    it('returns the list if given invalid input', () => {
-      // expect(_.each(1, NaN, 'that')).to.equal(1);
-      // expect(_.each('list', false, 1337)).to.equal('list');
-      // expect(_.each(null, undefined, true)).to.equal(null);
-      // expect(_.each(undefined, NaN, 'that')).to.equal(undefined);
+    it('returns the first argument if given invalid input list', () => {
+      expect(_.each(3.1415, _.identity)).to.equal(3.1415);
+      expect(_.each(NaN, _.identity)).to.eql(NaN);
+      expect(_.each(true, _.identity)).to.equal(true);
+      expect(_.each(undefined, _.identity)).to.equal(undefined);
+      expect(_.each(null, _.identity)).to.equal(null);
+      expect(_.each([], _.identity)).to.eql([]);
+    });
+
+    it('throws a TypeError if given invalid iteratee', () => {
+      expect(function () { _.each([0, 1, 2, 3], 'hello'); }).to.throw(TypeError);
+      expect(function () { _.each([0, 1, 2, 3], null); }).to.throw(TypeError);
+      expect(function () { _.each([0, 1, 2, 3], undefined); }).to.throw(TypeError);
     });
   });
+
 
   //How to test if binary search is faster than unsorted
   describe('#indexOf', () => {
