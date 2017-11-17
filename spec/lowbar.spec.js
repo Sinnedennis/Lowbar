@@ -1534,53 +1534,53 @@ describe('_', () => {
 
     it('returns a copy of the list filtered by the passed properties', () => {
       let list = [
-        {isTrue:  true},
-        {isTrue: false},
-        {isTrue: false}
+        { isTrue: true },
+        { isTrue: false },
+        { isTrue: false }
       ];
 
-      expect(_.where(list, {isTrue: true})).to.eql([{isTrue: true}]);
-      expect(_.where(list, {isTrue: false})).to.eql([{isTrue: false}, {isTrue: false}]);
-      expect(_.where(list, {isTrue: 'maybe'})).to.eql([]);
+      expect(_.where(list, { isTrue: true })).to.eql([{ isTrue: true }]);
+      expect(_.where(list, { isTrue: false })).to.eql([{ isTrue: false }, { isTrue: false }]);
+      expect(_.where(list, { isTrue: 'maybe' })).to.eql([]);
 
       list = [
-        {title: 'Richard III', author: 'Shakespeare', year: 1592},
-        {title: 'The Comedy of Errors', author: 'Shakespeare', year: 1592},
-        {title: 'Titus Andronicus', author: 'Shakespeare', year: 1593},
-        {title: 'The Taming of the Shrew', author: 'Shakespeare', year: 1594},
-        {title: 'The Two Gentlemen of Verona', author: 'Shakespeare', year: 1595}
+        { title: 'Richard III', author: 'Shakespeare', year: 1592 },
+        { title: 'The Comedy of Errors', author: 'Shakespeare', year: 1592 },
+        { title: 'Titus Andronicus', author: 'Shakespeare', year: 1593 },
+        { title: 'The Taming of the Shrew', author: 'Shakespeare', year: 1594 },
+        { title: 'The Two Gentlemen of Verona', author: 'Shakespeare', year: 1595 }
       ];
 
-      expect(_.where(list, {year: 1592})).to.eql(list.slice(0, 2));
-      expect(_.where(list, {title: 'Titus Andronicus'})).to.eql(list.slice(2, 3));
-      expect(_.where(list, {author: 'Shakespeare'})).to.eql(list);
+      expect(_.where(list, { year: 1592 })).to.eql(list.slice(0, 2));
+      expect(_.where(list, { title: 'Titus Andronicus' })).to.eql(list.slice(2, 3));
+      expect(_.where(list, { author: 'Shakespeare' })).to.eql(list);
     });
 
     it('returns an empty array for invalid list inputs', () => {
-      expect(_.where(['hello'], {e: 'e'})).to.eql([]);
-      expect(_.where([[1], [2], [3]], {1: 1})).to.eql([]);
-      expect(_.where(123, {1: 1})).to.eql([]);
-      expect(_.where({foo: 'bar'}, {1: 1})).to.eql([]);
+      expect(_.where(['hello'], { e: 'e' })).to.eql([]);
+      expect(_.where([[1], [2], [3]], { 1: 1 })).to.eql([]);
+      expect(_.where(123, { 1: 1 })).to.eql([]);
+      expect(_.where({ foo: 'bar' }, { 1: 1 })).to.eql([]);
     });
-    
+
     it('returns the unfiltered list when given invalid properties object', () => {
-      const list = [{0: true}, {foo: 'bar'}];
-      
+      const list = [{ 0: true }, { foo: 'bar' }];
+
       expect(_.where(list, 'hello')).to.eql(list);
       expect(_.where(list, 123)).to.eql(list);
       expect(_.where(list, false)).to.eql(list);
       expect(_.where(list, true)).to.eql(list);
       expect(_.where(list, [])).to.eql(list);
     });
-    
+
     it('returns the unfiltered list if passed an empty object as properties argument', () => {
-      const list = [{0:0}, {1:1}];
+      const list = [{ 0: 0 }, { 1: 1 }];
       expect(_.where(list, {})).to.eql(list);
     });
   });
 
   describe.only('#throttle', () => {
-    it('should be a function', () =>  {
+    it('should be a function', () => {
       expect(_.throttle).to.be.a('function');
     });
 
@@ -1588,51 +1588,103 @@ describe('_', () => {
       expect(_.throttle()).to.be.a('function');
     });
 
-    xit('prevents repeated function calls until wait time has expired', () => {
+    it('prevents repeated function calls until wait time has expired', () => {
       const testSpy = sinon.spy();
-      const throttledFunc = _.throttle(testSpy, 100);
+      const throttledFunc = _.throttle(testSpy, 50);
       throttledFunc();
       throttledFunc();
       throttledFunc();
-      expect(testSpy.calledOnce).to.be.true;
+      expect(testSpy.callCount).to.equal(1);
     });
 
-    xit('delays the intial call when passed optional argument', (done) => {
+    it('delays the intial call when passed optional argument', (done) => {
       const testSpy = sinon.spy();
-      const throttledFunc = _.throttle(testSpy, 100, {leading: false});
+      const throttledFunc = _.throttle(testSpy, 20, { leading: false });
       throttledFunc();
 
-      expect(testSpy.callCount).to.equal(0);
+      expect(testSpy.called).to.be.false;
 
-      setTimeout(() => {
-        expect(testSpy.calledOnce).to.be.true;
+      _.delay(() => {
+        expect(testSpy.callCount).to.equal(1);
         done();
-      }, 200);
+      }, 40);
     });
 
-    xit('invokes the function immediately once the wait period as ended if it was called during this time', (done) => {
+    it('invokes the function immediately once the wait period has ended if it was called during the delay', (done) => {
       const testSpy = sinon.spy();
-      const throttledFunc = _.throttle(testSpy, 100);
+      const throttledFunc = _.throttle(testSpy, 20);
       throttledFunc();
       throttledFunc();
-      expect(testSpy.calledOnce).to.be.true;
+      expect(testSpy.callCount).to.equal(1);
 
-      setTimeout(() => {
-        expect(testSpy.calledTwice).to.be.true;
+      _.delay(() => {
+        expect(testSpy.callCount).to.equal(2);
         done();
-      }, 200);
+      }, 40);
     });
 
-    xit('does not follow the above behaviour if passed optional argument', (done) => {
+    it('does not follow the above behaviour if passed optional argument', (done) => {
       const testSpy = sinon.spy();
-      const throttledFunc = _.throttle(testSpy, 100, {trailing: false});
+      const throttledFunc = _.throttle(testSpy, 20, { trailing: false });
       throttledFunc();
       throttledFunc();
-      expect(testSpy.calledOnce).to.be.true;
+      expect(testSpy.callCount).to.equal(1);
+
+      _.delay(() => {
+        expect(testSpy.callCount).to.equal(1);
+        done();
+      }, 40);
+    });
+
+    it('defaults to correct leading and trailing behaviours when given invalid option input', (done) => {
+      const testSpy = sinon.spy();
+      const throttledFunc = _.throttle(testSpy, 20, [true]);
+      throttledFunc();
+      throttledFunc();
+      expect(testSpy.callCount).to.equal(1);
+
+      _.delay(() => {
+        expect(testSpy.callCount).to.equal(2);
+        throttledFunc();
+        expect(testSpy.callCount).to.equal(3);
+        done();
+      }, 60);
+    });
+
+    it('does not allow a third call to occur without wait', (done) => {
+      const testSpy = sinon.spy();
+      const throttledFunc = _.throttle(testSpy, 20);
+      throttledFunc();
+      throttledFunc();
+      expect(testSpy.callCount).to.equal(1);
+
+      _.delay(() => {
+        expect(testSpy.callCount).to.equal(2);
+        throttledFunc();
+        expect(testSpy.callCount).to.equal(2);
+
+        _.delay(() => {
+          expect(testSpy.callCount).to.equal(3);
+          done();
+        }, 20);
+
+      }, 30);
+    });
+
+    it('allows a maximum of one queued call', (done) => {
+      const testSpy = sinon.spy();
+      const throttledFunc = _.throttle(testSpy, 20);
+
+      throttledFunc();
+      throttledFunc();
+      throttledFunc();
+      throttledFunc();
+      throttledFunc();
+
+      expect(testSpy.callCount).to.equal(1);
 
       setTimeout(() => {
-        expect(testSpy.calledTwice).to.be.false;
-        expect(testSpy.calledOnce).to.be.true;
+        expect(testSpy.callCount).to.equal(2);
         done();
       }, 200);
     });

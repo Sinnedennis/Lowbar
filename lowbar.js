@@ -469,16 +469,73 @@ _.where = function (list, properties) {
     return keepItem;
   });
 };
-//Args: func, wait, ...options
-_.throttle = function () {
-  return function () {
 
-    //Start timer
-    //Invoke func unless {leading: false} is passed
-    //Prevent any further invocations until timer is finished
-    //If a call was ignored during the wait, call immediatly once wait is over unless {trailing: false}
+
+/*
+  makes note of time when intialised
+  returns a function that, when called, returns an _.delay with the appropriate wait time
+*/
+
+_.throttle = function (func, wait, options = { leading: true, trailing: true }) {
+
+  options.leading = options.leading === false ? false: true;
+  options.trailing = options.trailing === false ? false: true;
+
+  let beenCalled = false;
+  let toBeCalled = false;
+
+  const throttledFunc = function (...args) {
+
+    if (beenCalled === false) {
+      beenCalled = true;
+
+      if (options.leading) func.apply(null, ...args);
+      else toBeCalled = true;
+      
+      const waitLoop = function () {
+        _.delay(() => {
+          
+          if (toBeCalled) {
+
+            toBeCalled = false;
+            func.apply(null, ...args);
+            waitLoop();
+
+          } else beenCalled = false;
+          
+        }, wait);
+      };
+
+      waitLoop();
+      
+    } else if (options.trailing) toBeCalled = true;
 
   };
+  return throttledFunc;
 };
+
+
+
+
+/*
+ if (beenCalled === false) {
+      beenCalled = true;
+
+      if(options.leading) func.apply(null, ...args);
+      else if(options.trailing) toBeCalled = true;
+
+      _.delay(() => {
+        if (toBeCalled && trailing) {
+          func.apply(null, ...args);
+          
+          ati
+        } 
+      }, wait);
+
+    } else if (beenCalled) {
+      if (options.trailing) toBeCalled = true;
+    }
+
+*/
 
 module.exports = _;
