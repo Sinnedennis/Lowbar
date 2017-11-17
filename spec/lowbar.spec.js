@@ -22,39 +22,40 @@ describe('_', () => {
   'use strict';
 
   describe('#identity', () => {
-
     it('is a function', function () {
       expect(_.identity).to.be.a('function');
     });
 
-    it('returns the argument that was passed to it', () => {
+    it('returns only the first argument that was passed to it', () => {
       let value = 'foo';
-      expect(_.identity(value)).to.equal(value);
+      expect(_.identity(value, 'hello', 'world')).to.equal(value);
 
       value = [10];
-      expect(_.identity(value)).to.equal(value);
-      expect(_.identity(value)).to.eql(value);
+      expect(_.identity(value, true)).to.equal(value);
+      expect(_.identity(value, false)).to.eql(value);
 
       value = { foo: 'bar' };
-      expect(_.identity(value)).to.equal(value);
-      expect(_.identity(value)).to.eql(value);
+      expect(_.identity(value, 1010)).to.equal(value);
+      expect(_.identity(value, 1010)).to.eql(value);
     });
   });
 
   describe('#values', () => {
-
     it('is a function', () => {
       expect(_.values).to.be.a('function');
     });
 
-    it('returns the values of an object', () => {
+    it('returns an array containing the values of an object', () => {
       const inputObj = { one: 10, two: 'hello', three: true };
+
       expect(_.values(inputObj)).to.eql([10, 'hello', true]);
     });
 
-    it('returns a shallow copy of an array', () => {
-      const inputObj = ['h', [1], [1, 2, 3]];
-      expect(_.values(inputObj)).to.eql(['h', [1], [1, 2, 3]]);
+    it('returns a shallow copy of the input array', () => {
+      const inputArr = ['h', [1], [1, 2, 3]];
+
+      expect(_.values(inputArr)).to.not.equal(inputArr);
+      expect(_.values(inputArr)).to.eql(['h', [1], [1, 2, 3]]);
     });
 
     it('returns an empty array for non-objects/arrays', () => {
@@ -70,14 +71,20 @@ describe('_', () => {
   });
 
   //Guard against decimal n's?
-  describe('#first', () => {
-
+  describe.only('#first', () => {
     it('is a function', () => {
       expect(_.first).to.be.a('function');
     });
 
+    it('returns a shallow copy of the input array', () => {
+      const inputArr = [0, 1, 2, 3];
+
+      expect(_.first(inputArr)).to.not.equal(inputArr);
+    });
+
     it('returns the first n values of an array', () => {
       const inputArr = [0, 1, 2, 3];
+
       expect(_.first(inputArr, 1)).to.eql([0]);
       expect(_.first(inputArr, 2)).to.eql([0, 1]);
       expect(_.first(inputArr, 3)).to.eql([0, 1, 2]);
@@ -93,11 +100,13 @@ describe('_', () => {
 
     it('returns the whole array if n > array length', () => {
       const inputArr = [0, 1, 2, 3];
-      expect(_.first(inputArr, 99)).to.eql([0, 1, 2, 3]);
+      expect(_.first(inputArr, 99)).to.not.equal(inputArr);
+      expect(_.first(inputArr, 99)).to.eql(inputArr);
     });
 
     it('returns an empty array if n <= 0', () => {
       const inputArr = [0, 1, 2, 3];
+
       expect(_.first(inputArr, 0)).to.eql([]);
       expect(_.first(inputArr, -1)).to.eql([]);
       expect(_.first(inputArr, -99)).to.eql([]);
@@ -117,6 +126,12 @@ describe('_', () => {
       expect(_.first('hello', '-1')).to.eql([]);
     });
 
+    it('rounds decimal n down to a whole figure', () => {
+      expect(_.first([1, 2, 3], 1.9)).to.eql([1]);
+      expect(_.first([1, 2, 3], 2.9)).to.eql([1, 2]);
+      expect(_.first([1, 2, 3], 3.9)).to.eql([1, 2, 3]);
+    });
+
     it('returns undefined for invalid inputs', () => {
       expect(_.first(true)).to.equal(undefined);
       expect(_.first(null)).to.equal(undefined);
@@ -124,7 +139,6 @@ describe('_', () => {
       expect(_.first(31415)).to.equal(undefined);
     });
 
-    //true and false function as 1 and 0
     it('returns an empty array for invalid n inputs', () => {
       expect(_.first([1], NaN)).to.eql([]);
       expect(_.first([1], 'a')).to.eql([]);
@@ -1233,15 +1247,6 @@ describe('_', () => {
       expect(_.sortedIndex(inputArr, 4.5)).to.equal(5);
     });
 
-    xit('as above but for unsorted array', () => {
-      let inputArr = [0, 1, 2, 3, 4, 5];
-      inputArr = _.shuffle(inputArr);
-
-      expect(_.sortedIndex(inputArr, 3.5)).to.equal(4);
-      expect(_.sortedIndex(inputArr, 0.5)).to.equal(1);
-      expect(_.sortedIndex(inputArr, 4.5)).to.equal(5);
-    });
-
     it('finds index based on passed iteratee', () => {
       const inputArr = ['hello', 'my', 'name', 'is', 'dennis'];
 
@@ -1335,11 +1340,6 @@ describe('_', () => {
       ];
 
       expect(_.intersection(...inputArrays)).to.eql([nestedObj, 'foo', 'bar', nestedArr]);
-    });
-
-    // Issue with use of flatten
-    xit('handles empty nested arrays', () => {
-      expect(_.intersection([[], [], []])).to.eql([[], [], []]);
     });
 
     it('maintains order based on first in first out', () => {
@@ -1732,7 +1732,7 @@ describe('_', () => {
       let doMaths = function (a, b) {
         return (a - b) * this.multiplier;
       };
-      
+
       const mathsObj = {
         multiplier: 10
       };
@@ -1746,7 +1746,7 @@ describe('_', () => {
 
     it('throws a TypeError when invoked if given invalid input function', () => {
       expect(_.partial('hello')).to.be.a('function');
-      expect(function () { _.partial('hello')(); }).to.throw( TypeError );
+      expect(function () { _.partial('hello')(); }).to.throw(TypeError);
     });
   });
 });

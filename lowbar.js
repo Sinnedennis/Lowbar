@@ -4,26 +4,26 @@ _.identity = function (value) {
   return value;
 };
 
-//Refactor to not use ES6 ?
+
 _.values = function (object) {
 
   if (typeof object !== 'object' || object === null) return [];
   return Object.values(object);
 };
 
+
 _.first = function (list, n) {
 
-  if (typeof n === 'string' && !isNaN(n)) n = +n;
-  if (!Array.isArray(list) && typeof list !== 'string') return;
-  if (n !== undefined && typeof n !== 'number') return [];
-
-  if (+n < 0) n = 0;
   if (typeof list === 'string') list = list.split('');
+  if (!Array.isArray(list)) return;
+
+  if (!isNaN(n)) n = +n < 0 ? 0 : Math.floor(+n);
+  else if (typeof n !== 'undefined') return [];
 
   return n === undefined ? list[0] : list.slice(0, n);
 };
 
-//Too busy. Refactor.
+
 _.last = function (list, n) {
 
   // if (isNaN(n) && n !== undefined) return [];
@@ -402,6 +402,7 @@ _.intersection = function (...arrays) {
   const input = _.flatten([...arrays], true);
   const inputCopy = input.slice();
   const unique = [];
+
   const common = _.reduce(inputCopy, (memo, value) => {
     unique.push(input.shift());
     if (_.contains(input, value)) memo.push(value);
@@ -410,7 +411,6 @@ _.intersection = function (...arrays) {
   }, []);
 
   return _.uniq(common);
-
 };
 
 _.difference = function (array, ...otherArrays) {
@@ -478,8 +478,8 @@ _.where = function (list, properties) {
 
 _.throttle = function (func, wait, options = { leading: true, trailing: true }) {
 
-  options.leading = options.leading === false ? false: true;
-  options.trailing = options.trailing === false ? false: true;
+  options.leading = options.leading === false ? false : true;
+  options.trailing = options.trailing === false ? false : true;
 
   let beenCalled = false;
   let toBeCalled = false;
@@ -491,10 +491,10 @@ _.throttle = function (func, wait, options = { leading: true, trailing: true }) 
 
       if (options.leading) func.apply(null, ...args);
       else toBeCalled = true;
-      
+
       const waitLoop = function () {
         _.delay(() => {
-          
+
           if (toBeCalled) {
             toBeCalled = false;
             func.apply(null, ...args);
@@ -505,7 +505,7 @@ _.throttle = function (func, wait, options = { leading: true, trailing: true }) 
       };
 
       waitLoop();
-      
+
     } else if (options.trailing) toBeCalled = true;
 
   };
@@ -517,7 +517,7 @@ _.partial = function (func, ...partialArgs) {
   return function (...newArgs) {
 
     const mappedArgs = _.map(partialArgs, (arg) => {
-      return arg === _ ? newArgs.shift() : arg; 
+      return arg === _ ? newArgs.shift() : arg;
     });
 
     return func(...mappedArgs, ...newArgs);
