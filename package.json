@@ -5,10 +5,10 @@
   "main": "lowbar.js",
   "scripts": {
     "test": "mocha ./spec/*",
-    "lint": "eslint ./ -- --fix",
+    "lint": "eslint ./",
     "posttest": "npm run lint",
     "precommit": "npm test",
-    "t_": "underscore=true npm test"
+    "_": "underscore=true npm test"
   },
   "repository": {
     "type": "git",
@@ -30,8 +30,7 @@
     "husky": "^0.14.3",
     "mocha": "^4.0.1",
     "sinon": "~4.1.2",
-    "underscore": "^1.8.3",
-    "npm-watch": "~0.3.0"
+    "underscore": "^1.8.3"
   },
   "dependencies": {
     "chai": "~4.1.2",
