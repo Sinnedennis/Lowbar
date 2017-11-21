@@ -17,13 +17,13 @@ ___
     ``` 
     node -v
     ```
-    If you do not receieve a response in the format of v7.2.1, or your version of node is older than 7x, [click here](https://nodejs.org/en/) to download and install Node from the official website.
+    If you do not receieve a response in the format of v7.2.1, or your version of Node is older than 7x, [click here](https://nodejs.org/en/) to download and install Node from the official website.
    
 2. Ensure you have Node Package Manager (NPM) installed. As above, open a terminal window and type:
     ``` 
     npm -v
     ```
-    If you do not receieve a response in the format of v5.5.1, or your version of node is older than 5x, please type the following commands into your terminal:
+    If you do not receieve a response in the format of v5.5.1, or your version of NPM is older than 5x, type the following commands into your terminal:
     ``` 
     npm install npm
     ```
@@ -43,13 +43,13 @@ ___
     ```
 ___
 ### Usage
-To run the test suite using Lowbar, run the following terminal command:
+To run the test suite using Lowbar, type the following terminal command:
 
 ```
 npm t
 ```
 
-To run the same test suite using Underscore.js, run: 
+To run the same test suite using Underscore.js, type: 
 
 ```
 npm run _
@@ -66,7 +66,7 @@ The Lowbar library and testing suite makes use of the following packages:
 | [Sinon](https://www.npmjs.com/package/sinon)                 | Spies, mocks, and stubs library |
 | [Underscore.js](https://www.npmjs.com/package/underscore)    | The subject of this reimplementation |
 | [ESLint](https://www.npmjs.com/package/eslint)               | Code linting tool |
-| [Huksy](https://www.npmjs.com/package/husky)                 | Provides git hooks |
+| [Husky](https://www.npmjs.com/package/husky)                 | Provides git hooks |
 
 ___
 
