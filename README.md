@@ -44,7 +44,7 @@ npm t
 To run the same test suite using Underscore.js, run: 
 
 ```
-npm run t_
+npm run _
 ```
 
 ___
