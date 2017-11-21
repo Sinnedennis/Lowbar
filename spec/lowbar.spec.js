@@ -1190,6 +1190,7 @@ describe('_', () => {
     });
   });
 
+
   describe('#invoke', () => {
     it('should be a function', () => {
       expect(_.invoke).to.be.a('function');
@@ -1234,19 +1235,21 @@ describe('_', () => {
     });
   });
 
+
   describe('#sortBy', () => {
     it('should be a function', () => {
       expect(_.sortBy).to.be.a('function');
     });
 
-    it('returns a stably sorted copy of the list', () => {
+    it('returns a copy of an input array', () => {
       const inputArr = [0, 1, 2, 3, 4, 5];
       expect(_.sortBy(inputArr)).to.not.equal(inputArr);
     });
 
     it('returns an array in acending order if passed no iteratee', () => {
       expect(_.sortBy([5, 3, 4, 0, 1, 2])).to.eql([0, 1, 2, 3, 4, 5]);
-      expect(_.sortBy(['a', 'c', 'b'])).to.eql(['a', 'b', 'c']);
+      expect(_.sortBy('acb')).to.eql(['a', 'b', 'c']);
+      expect(_.sortBy({ 3: 3, 0: 0, 2: 2, 1: 1 })).to.eql([0, 1, 2, 3]);
     });
 
     it('returns an array sorted by iteratee in acending order', () => {
@@ -1277,6 +1280,7 @@ describe('_', () => {
       expect(_.sortBy(null)).to.eql([]);
     });
   });
+
 
   describe('#zip', () => {
     it('should be a function', () => {

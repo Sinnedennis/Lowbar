@@ -285,10 +285,9 @@ _.shuffle = function (list) {
   return result;
 };
 
-_.invoke = function (list, methodName) {
-  if (typeof list !== 'object' && typeof list !== 'string' || list === null) return [];
 
-  const args = [].slice.call(arguments, 2);
+_.invoke = function (list, methodName, ...args) {
+  if (typeof list !== 'object' && typeof list !== 'string' || list === null) return [];
 
   return _.map(list, function (item) {
     if (item[methodName] === undefined) return undefined;
@@ -296,13 +295,16 @@ _.invoke = function (list, methodName) {
   });
 };
 
+
 _.sortBy = function (list, iteratee, context) {
 
-  if (typeof list !== 'object' && typeof list !== 'string' || list === null) return [];
-  list = list.slice();
+  if (Array.isArray(list)) list = list.slice();
+  else if (typeof list === 'object') list = _.values(list);
+  else if (typeof list === 'string') list = list.split('');
+
+  if (!Array.isArray(list)) return [];
 
   if (iteratee === undefined) return list.sort();
-
   else if (typeof iteratee === 'function') {
     iteratee = iteratee.bind(context);
 
