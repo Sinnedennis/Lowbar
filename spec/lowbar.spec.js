@@ -986,15 +986,17 @@ describe('_', () => {
 
     it('makes a shallow copy of the properties in the source lists into the destination', () => {
       const destination = { hello: 'world' };
-      const copy = _.extend(destination, { foo: 'bar' }, { fish: 'pie' });
-      expect(copy).to.eql({ hello: 'world', foo: 'bar', fish: 'pie' });
+      const result = _.extend(destination, { foo: 'bar' }, { fish: 'pie' });
+
+      expect(result).to.eql({ hello: 'world', foo: 'bar', fish: 'pie' });
     });
 
     it('makes copies by reference', () => {
       const destination = { hello: 'world' };
       const reference = { foo: 'bar' };
-      const copy = _.extend(destination, { reference });
-      expect(copy.reference).to.equal(reference);
+      const result = _.extend(destination, { reference });
+
+      expect(result.reference).to.equal(reference);
     });
 
     it('mutates the original object', () => {
@@ -1004,15 +1006,17 @@ describe('_', () => {
 
     it('runs in-order, so the last source will override properties of the same name in previous arguments', () => {
       const destination = { hello: 'world' };
-      const copy = _.extend(destination, { foo: 'sushi' }, { foo: 'bar' });
-      expect(copy.foo).to.equal('bar');
+      const result = _.extend(destination, { foo: 'sushi' }, { foo: 'bar' });
+
+      expect(result.foo).to.equal('bar');
     });
 
-    it('returns the key-value pair of index-value when given an array as secondary argument', () => {
-      const copy = _.extend({ hello: 'world' }, [0, 1, 2]);
-      expect(copy).to.eql({ 0: 0, 1: 1, 2: 2, hello: 'world' });
+    it('when given array(s) as a secondary argument, returns an index-value pair', () => {
+      const result = _.extend({ hello: 'world' }, ['a', 'b', 'c']);
+      expect(result).to.eql({ 0: 'a', 1: 'b', 2: 'c', hello: 'world' });
     });
   });
+
 
   describe('#defaults', () => {
     it('should be a function', () => {

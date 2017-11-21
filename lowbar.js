@@ -217,11 +217,10 @@ _.some = function (list, predicate, context) {
   return false;
 };
 
-//Double-check that arguments are processed in order
-_.extend = function (destination) {
+
+_.extend = function (destination, ...sources) {
 
   if (typeof destination === 'object' && destination !== null) {
-    let sources = [].slice.call(arguments, 1);
     return Object.assign(destination, ...sources);
   }
 
