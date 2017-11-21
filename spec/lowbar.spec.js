@@ -780,7 +780,7 @@ describe('_', () => {
         return this.contextIteratee(memo, value);
       };
 
-      const arrResult = _.reduce([5, 5, 5, 5, 5], iteratee , 0, contextObj);
+      const arrResult = _.reduce([5, 5, 5, 5, 5], iteratee, 0, contextObj);
 
       const objResult = _.reduce({ a: 5, b: 5, c: 5, d: 5, e: 5 }, iteratee, 0, contextObj);
 
@@ -841,7 +841,7 @@ describe('_', () => {
     it('short-circuits if one value fails', () => {
       const predicate = value => value;
       let testSpy = sinon.spy(predicate);
-      
+
       const inputArr = [true, false, true, true];
       _.every(inputArr, testSpy);
       expect(testSpy.calledTwice).to.be.true;
@@ -870,7 +870,7 @@ describe('_', () => {
     it('works with the characters of strings', () => {
       let predicate = value => value === 'f';
       let testSpy = sinon.spy(predicate);
-      
+
       let inputStr = 'fff';
       expect(_.every(inputStr, testSpy)).to.be.true;
       expect(testSpy.callCount).to.equal(3);
@@ -951,7 +951,7 @@ describe('_', () => {
     it('works with the characters in strings', () => {
       let predicate = value => value === '2';
       let testSpy = sinon.spy(predicate);
-      
+
       let inputStr = '123';
       expect(_.some(inputStr, testSpy)).to.be.true;
       expect(testSpy.callCount).to.equal(2);
@@ -1034,11 +1034,11 @@ describe('_', () => {
       const destination = { foo: 'bar' };
       const defaultObjs = [{ foo: 'ice-cream' }, { yes: 'no' }, { yes: 'certainly not' }];
 
-      expect(_.defaults(destination, ...defaultObjs )).to.eql({ foo: 'bar', yes: 'no' });
+      expect(_.defaults(destination, ...defaultObjs)).to.eql({ foo: 'bar', yes: 'no' });
     });
 
     it('mutates the first argument', () => {
-      const destination = {foo: 'bar'};
+      const destination = { foo: 'bar' };
       const defaultObjs = { yes: 'no' };
 
       expect(_.defaults(destination, defaultObjs)).to.equal(destination);
@@ -1093,6 +1093,7 @@ describe('_', () => {
     });
   });
 
+
   describe('#negate', () => {
     it('should be a function', () => {
       expect(_.negate).to.be.a('function');
@@ -1111,6 +1112,7 @@ describe('_', () => {
       expect(result).to.eql([false]);
     });
   });
+
 
   describe('#shuffle', () => {
     it('should be a function', () => {
@@ -1139,7 +1141,7 @@ describe('_', () => {
       expect(firstShuffle).to.not.eql(secondShuffle);
     });
 
-    it('works for objects', () => {
+    it('works with the values of an object', () => {
       const inputObj = {
         a: 0,
         b: 1,
@@ -1156,7 +1158,7 @@ describe('_', () => {
 
     });
 
-    it('works for strings', () => {
+    it('works with the characters of a string', () => {
       const inputStr = '012345';
       const shuffled = _.shuffle(inputStr);
 
@@ -1166,19 +1168,17 @@ describe('_', () => {
 
     it('does not mutate the input list', () => {
       const inputArr = [0, 1, 2, 3, 4, 5];
-      const arrCopy = inputArr.slice();
-      _.shuffle(inputArr);
-      expect(inputArr).to.eql(arrCopy);
+      let result = _.shuffle(inputArr);
+      expect(inputArr).to.not.equal(result);
+      expect(inputArr).to.eql([0, 1, 2, 3, 4, 5]);
 
       const inputObj = { 0: 0, 1: 1, 2: 2 };
-      const objCopy = Object.assign({}, inputObj);
       _.shuffle(inputObj);
-      expect(inputObj).to.eql(objCopy);
+      expect(inputObj).to.eql({ 0: 0, 1: 1, 2: 2 });
 
       const inputStr = '012345';
-      const strCopy = inputStr;
       _.shuffle(inputStr);
-      expect(inputStr).to.equal(strCopy);
+      expect(inputStr).to.equal('012345');
     });
 
     it('returns an empty array when passed invalid list input', () => {
