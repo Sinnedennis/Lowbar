@@ -322,14 +322,15 @@ _.sortBy = function (list, iteratee, context) {
   return [];
 };
 
+
 _.zip = function () {
 
   const inputArrays = [].slice.apply(arguments);
   const zippedArray = [];
-  const longestArr = _.sortBy(inputArrays, 'length').slice(-1)[0].length;
+  const longestArrLength = _.sortBy(inputArrays, 'length').slice(-1)[0].length;
 
   _.each(inputArrays, (array) => {
-    for (let i = 0; i < longestArr; i++) {
+    for (let i = 0; i < longestArrLength; i++) {
       if (zippedArray[i] === undefined) zippedArray[i] = [array[i]];
       else zippedArray[i].push(array[i]);
     }
@@ -338,21 +339,26 @@ _.zip = function () {
   return zippedArray;
 };
 
-//Needs refactor
+
 _.sortedIndex = function (list, value, iteratee, context) {
 
   if (Array.isArray(list)) list = list.slice();
   else if (typeof list === 'string') list = list.split('');
   else return 0;
 
-  if (iteratee) {
+  const isValidValue = _.every(list, (listValue) => {
+    return typeof listValue === typeof value;
+  });
+  if (!isValidValue) return 0;
 
-    const isValidValue = _.every(list, (listValue) => {
-      return typeof listValue === typeof value;
-    });
-    if (!isValidValue) return 0;
+  if (!iteratee) {
 
-    _.sortBy(list, iteratee, context);
+    list.push(value);
+    list.sort();
+
+    return _.indexOf(list, value, true);
+
+  } else {
 
     if (typeof iteratee === 'string') {
       list = _.map(list, item => item[iteratee]);
@@ -387,11 +393,6 @@ _.sortedIndex = function (list, value, iteratee, context) {
     }
     return 0;
   }
-
-  list.push(value);
-  list.sort();
-
-  return _.indexOf(list, value, true);
 };
 
 _.flatten = function (array, shallow = false) {

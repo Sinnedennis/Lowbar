@@ -1287,7 +1287,7 @@ describe('_', () => {
       expect(_.zip).to.be.a('function');
     });
 
-    it('returns a zipped array of arrays', () => {
+    it('returns a zipped array of arrays (see underscorejs.org for more)', () => {
       const inputArrays = [
         ['moe', 'larry', 'curly'],
         [30, 40, 50],
@@ -1303,7 +1303,7 @@ describe('_', () => {
       expect(_.zip(...inputArrays)).to.eql(expected);
     });
 
-    it('works for strings', () => {
+    it('works with the characters in strings', () => {
       const expected = [
         ['h', 'p', 's'],
         ['o', 'i', 'p'],
@@ -1339,33 +1339,70 @@ describe('_', () => {
     });
   });
 
-  describe('#sortedIndex', () => {
+
+  describe.only('#sortedIndex', () => {
     it('should be a function', () => {
       expect(_.sortedIndex).to.be.a('function');
     });
 
-    it('returns the index of the correct position', () => {
+    it('returns the index that the given value would best fit in the sorted list', () => {
       const inputArr = [0, 1, 2, 3, 4, 5];
 
       expect(_.sortedIndex(inputArr, 3.5)).to.equal(4);
       expect(_.sortedIndex(inputArr, 0.5)).to.equal(1);
       expect(_.sortedIndex(inputArr, 4.5)).to.equal(5);
+
+      expect(_.sortedIndex(['a', 'b', 'c', 'd'], 'c')).to.equal(2);
     });
 
-    it('finds index based on passed iteratee', () => {
+    it('finds index based on the result of a passed iteratee', () => {
       const inputArr = ['hello', 'my', 'name', 'is', 'dennis'];
 
       expect(_.sortedIndex(inputArr, 'a', 'length')).to.equal(0);
       expect(_.sortedIndex(inputArr, 'javascript', 'length')).to.equal(5);
     });
 
-    it('Does stuff', () => {
+    it('finds index based on a passed property', () => {
+      const inputArr = [{ age: 1 }, { age: 2 }, { age: 3 }];
+
+      expect(_.sortedIndex(inputArr, { age: 2.5 }, 'age')).to.equal(2);
+      expect(_.sortedIndex(inputArr, { age: 0 }, 'age')).to.equal(0);
+      expect(_.sortedIndex(inputArr, { age: 10 }, 'age')).to.equal(3);
+    });
+
+    it('works with the characters of a string', () => {
       expect(_.sortedIndex('abcde', 'c')).to.equal(2);
-      expect(_.sortedIndex(['a', 'b', 'c', 'd'], 'c')).to.equal(2);
-      expect(_.sortedIndex([{ age: 1 }, { age: 2 }, { age: 3 }], 2.5, 'age')).to.equal(0);
-      expect(_.sortedIndex([{ age: 1 }, { age: 2 }, { age: 3 }], { age: 2.5 }, 'age')).to.equal(2);
+      expect(_.sortedIndex('abcde', 'x')).to.equal(5);
+      expect(_.sortedIndex('abcde', 'a')).to.equal(0);
+    });
+    
+    it('takes a context argument', () => {
+      const contextObj = {
+        prop: 'age'
+      };
+
+      const iteratee = function (value) {
+        return value[this.prop];
+      };
+
+      expect(_.sortedIndex([{ age: 1 }, { age: 2 }], {age: 10}, iteratee, contextObj)).to.equal(2);
+
+    });
+
+    it('returns 0 when given invalid input list', () => {
+      expect(_.sortedIndex(123, 2)).to.equal(0);
+      expect(_.sortedIndex(null, 2)).to.equal(0);
+      expect(_.sortedIndex(true, 2)).to.equal(0);
+    });
+
+    it('returns 0 with given a value that is a different datatype to the list values', () => {
+      expect(_.sortedIndex([0,1,2,3], null)).to.equal(0);
+      expect(_.sortedIndex([0,1,2,3], 'null')).to.equal(0);
+      expect(_.sortedIndex([0,1,2,3], false)).to.equal(0);
+      expect(_.sortedIndex([{ age: 1 }, { age: 2 }], 2.5, 'age')).to.equal(0);
     });
   });
+
 
   describe('#flatten', () => {
     it('should be a function', () => {
