@@ -3,13 +3,21 @@
 A reimplementation of the popular [underscore.js](http://underscorejs.org/) library to demonstrate a solid understanding of vanilla *JavaScript* and *Test Driven Development*.
 ___
 
+### Table of contents
+
+* [Setup](https://github.com/Sinnedennis/Lowbar#setup)
+* [Lowbar Installation](https://github.com/Sinnedennis/Lowbar#lowbar-installation)
+* [Usage](https://github.com/Sinnedennis/Lowbar#usage)
+* [Depenencies](https://github.com/Sinnedennis/Lowbar#depenencies)
+* [Table of methods](https://github.com/Sinnedennis/Lowbar#table-of-methods)
+
 ### Setup
 
 1. Ensure that your machine is running Node version 7 or above. To check what version you are running, open a terminal window and type:
     ``` 
     node -v
     ```
-    If you do not receieve a response in the format of v7.2.1, or your version of node is older than 7x, please [click here](https://nodejs.org/en/) to download and install Node from the official website.
+    If you do not receieve a response in the format of v7.2.1, or your version of node is older than 7x, [click here](https://nodejs.org/en/) to download and install Node from the official website.
    
 2. Ensure you have Node Package Manager (NPM) installed. As above, open a terminal window and type:
     ``` 
@@ -62,7 +70,7 @@ The Lowbar library and testing suite makes use of the following packages:
 
 ___
 
-### Table of contents
+### Table of methods
 
 | #        | Method        |
 |:-------------:|:-------------|
