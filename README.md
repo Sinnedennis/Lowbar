@@ -1,5 +1,12 @@
 # Lowbar
-A reimplementation of the underscore.js library to practice vanilla JS and TDD
+========
+A reimplementation of the popular [underscore.js](http://underscorejs.org/) library to demonstrate a solid understanding vanilla *JavaScript* and *Test Driven Development*.
+
+### Setup
+=========
+1. Ensure that your machine is running Node version 7 or above. To check what version you are running, open a terminal window and type:
+⋅⋅⋅<b>node -v</b>
+
 
 1. identity
 2. values
@@ -18,12 +25,11 @@ A reimplementation of the underscore.js library to practice vanilla JS and TDD
 15. some
 16. extends
 17. defaults
-
 18. once
 19. negate
 20. shuffle
 21. invoke
-22. sortBy (NB the Underscore library uses the native JavaScript sort but feel free to use your sort algorithm!)
+22. sortBy
 23. zip
 24. sortedIndex
 25. flatten
