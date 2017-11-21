@@ -5,10 +5,48 @@ A reimplementation of the popular [underscore.js](http://underscorejs.org/) libr
 ### Setup
 
 1. Ensure that your machine is running Node version 7 or above. To check what version you are running, open a terminal window and type:
-``` javascript 
-node -v
+    ``` 
+    node -v
+    ```
+    If you do not receieve a response in the format of v7.2.1, or your version of node is older than 7x, please [click here](https://nodejs.org/en/) to download and install Node from the official website.
+   
+2. Ensure you have Node Package Manager (NPM) installed. As above, open a terminal window and type:
+    ``` 
+    npm -v
+    ```
+    If you do not receieve a response in the format of v5.5.1, or your version of node is older than 5x, please type the following commands into your terminal:
+    ``` 
+    npm install npm
+    ```
+    If you run into any issues with the above steps, [click here](https://docs.npmjs.com/getting-started/installing-node) to follow NPM's official guide to installing Node and NPM.
+
+### Lowbar Installation
+
+1. Open a terminal window, navigate to the directory where you wish to install this repository, and run the following command:
+    ```
+    git clone https://github.com/Sinnedennis/Lowbar
+    ```
+
+2. Navigate into the freshly-cloned directory and run:
+    ```
+    npm install
+    ```
+
+### Usage
+To run the test suite using Lowbar, run the following terminal command:
+
+```
+npm t
 ```
 
+To run the test suite using Underscore.js, run: 
+
+```
+npm run t_
+```
+
+
+### Table of contents
 
 1. identity
 2. values
