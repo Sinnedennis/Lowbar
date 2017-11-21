@@ -199,6 +199,7 @@ _.every = function (list, predicate, context) {
   return true;
 };
 
+
 _.some = function (list, predicate, context) {
 
   if (Array.isArray(list)) list = list.slice();
