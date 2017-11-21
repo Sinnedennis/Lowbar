@@ -257,12 +257,14 @@ _.once = function (func) {
   };
 };
 
+
 _.negate = function (predicate) {
 
   return function () {
     return !predicate.apply(null, arguments);
   };
 };
+
 
 _.shuffle = function (list) {
 
@@ -429,6 +431,7 @@ _.intersection = function (...arrays) {
   return _.uniq(common);
 };
 
+
 _.difference = function (array, ...otherArrays) {
 
   if (typeof array === 'string') array = array.split('');
@@ -440,6 +443,7 @@ _.difference = function (array, ...otherArrays) {
     return _.contains(flatArrays, value);
   });
 };
+
 
 _.memoize = function (func, hashFunc) {
 
@@ -461,6 +465,7 @@ _.memoize = function (func, hashFunc) {
   return memoizedFunc;
 };
 
+
 _.delay = function (func, wait, ...args) {
 
   if (!isNaN(wait)) wait = +wait < 0 ? 0 : +wait;
@@ -468,6 +473,7 @@ _.delay = function (func, wait, ...args) {
 
   return setTimeout(func, wait, ...args);
 };
+
 
 _.where = function (list, properties) {
 
@@ -522,6 +528,7 @@ _.throttle = function (func, wait, options) {
     } else if (options.trailing) toBeCalled = true;
   };
 };
+
 
 _.partial = function (func, ...partialArgs) {
 

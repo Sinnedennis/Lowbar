@@ -2,21 +2,13 @@ const path = require('path');
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
-/*
-Make sure tests mirror their seperation of concerns
-Refactor all input checking to check in order of arguments passed
-Ensure all methods using a iteratee/predicate bind context the same way
-Extend testing for invalid inputs
-#sortedIndex is very messy, needs refactor
-Check all 'it' descriptions to ensure they match the tests
-*/
-
 let _;
 if (process.env.underscore === 'true') {
   _ = require('underscore');
 } else {
   _ = require(path.join(__dirname, '..', './lowbar.js'));
 }
+
 
 describe('_', () => {
   'use strict';
@@ -1884,15 +1876,15 @@ describe('_', () => {
     });
 
     it('does not alter context value', () => {
+      const contextObj = {
+        multiplier: 10
+      };
+
       let doMaths = function (a, b) {
         return (a - b) * this.multiplier;
       };
 
-      const mathsObj = {
-        multiplier: 10
-      };
-
-      doMaths = doMaths.bind(mathsObj);
+      doMaths = doMaths.bind(contextObj);
       const partialFunc = _.partial(doMaths, _, 20);
 
       expect(partialFunc(60)).to.equal(400);
