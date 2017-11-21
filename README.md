@@ -1,6 +1,7 @@
 # Lowbar
 
 A reimplementation of the popular [underscore.js](http://underscorejs.org/) library to demonstrate a solid understanding vanilla *JavaScript* and *Test Driven Development*.
+___
 
 ### Setup
 
@@ -19,6 +20,7 @@ A reimplementation of the popular [underscore.js](http://underscorejs.org/) libr
     npm install npm
     ```
     If you run into any issues with the above steps, [click here](https://docs.npmjs.com/getting-started/installing-node) to follow NPM's official guide to installing Node and NPM.
+___
 
 ### Lowbar Installation
 
@@ -31,7 +33,7 @@ A reimplementation of the popular [underscore.js](http://underscorejs.org/) libr
     ```
     npm install
     ```
-
+___
 ### Usage
 To run the test suite using Lowbar, run the following terminal command:
 
@@ -45,38 +47,40 @@ To run the test suite using Underscore.js, run:
 npm run t_
 ```
 
-
+___
 ### Table of contents
 
-1. identity
-2. values
-3. first
-4. last
-5. each
-6. indexOf
-7. filter
-8. reject
-9. uniq
-10. map
-11. contains
-12. pluck
-13. reduce
-14. every
-15. some
-16. extends
-17. defaults
-18. once
-19. negate
-20. shuffle
-21. invoke
-22. sortBy
-23. zip
-24. sortedIndex
-25. flatten
-26. intersection
-27. difference
-28. memoize
-29. delay
-30. where
-31. throttle
-32. partial
+| #        | Method        |
+|:-------------:|:-------------|
+| 1 | [identity](http://underscorejs.org/#identity)         |
+| 2 | [values](http://underscorejs.org/#values)             |
+| 3 | [first](http://underscorejs.org/#first)               |
+| 4 | [last](http://underscorejs.org/#last)                 |
+| 5 | [each](http://underscorejs.org/#each)                 |
+| 6 | [indexOf](http://underscorejs.org/#indexOf)           |
+| 7 | [filter](http://underscorejs.org/#filter)             |
+| 8 | [reject](http://underscorejs.org/#reject)             |
+| 9 | [uniq](http://underscorejs.org/#uniq)                 |
+| 10| [map](http://underscorejs.org/#map)                   |
+| 11| [contains](http://underscorejs.org/#contains)         |
+| 12| [pluck](http://underscorejs.org/#pluck)               |
+| 13| [reduce](http://underscorejs.org/#reduce)             |
+| 14| [every](http://underscorejs.org/#every)               |
+| 15| [some](http://underscorejs.org/#some)                 |
+| 16| [extends](http://underscorejs.org/#extends)           |
+| 17| [defaults](http://underscorejs.org/#defaults)         |
+| 18| [once](http://underscorejs.org/#once)                 |
+| 19| [negate](http://underscorejs.org/#negate)             |
+| 20| [shuffle](http://underscorejs.org/#shuffle)           |
+| 21| [invoke](http://underscorejs.org/#invoke)             |
+| 22| [sortBy](http://underscorejs.org/#sortBy)             |
+| 23| [zip](http://underscorejs.org/#zip)                   |
+| 24| [sortedIndex](http://underscorejs.org/#sortedIndex)   |
+| 25| [flatten](http://underscorejs.org/#flatten)           |
+| 26| [intersection](http://underscorejs.org/#intersection) |
+| 27| [difference](http://underscorejs.org/#difference)     |
+| 28| [memoize](http://underscorejs.org/#memoize)           |
+| 29| [delay](http://underscorejs.org/#delay)               |
+| 30| [where](http://underscorejs.org/#where)               |
+| 31| [throttle](http://underscorejs.org/#throttle)         |
+| 32| [partial](http://underscorejs.org/#partial)           |
