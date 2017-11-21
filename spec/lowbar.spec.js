@@ -409,7 +409,7 @@ describe('_', () => {
   });
 
 
-  describe.only('#filter', () => {
+  describe('#filter', () => {
     it('is a function', () => {
       expect(_.filter).to.be.a('function');
     });
@@ -455,6 +455,17 @@ describe('_', () => {
       expect(_.filter(inputObj, predicate)).to.eql([3, 4, 5]);
     });
 
+    it('works with the characters of strings', () => {
+      const testSpy = sinon.spy();
+      let inputStr = 'hello world';
+
+      _.filter(inputStr, testSpy);
+      expect(testSpy.callCount).to.eql(inputStr.length);
+
+      let predicate = (char) => char === 'h';
+      expect(_.filter(inputStr, predicate)).to.eql(['h']);
+    });
+
     it('takes a context argument for arrays', () => {
       const contextObj = {
         predicate: item => item > 2,
@@ -472,20 +483,39 @@ describe('_', () => {
         predicate: item => item > 2,
       };
 
-      const result = _.filter({ 1: 1, 2: 2, 3: 3, 4: 4, 5: 5 }, function (item) {
+      const result = _.filter({ a: 1, b: 2, c: 3, d: 4, e: 5 }, function (item) {
         return this.predicate(item);
       }, contextObj);
 
       expect(result).to.eql([3, 4, 5]);
     });
 
-    it('returns list if given invalid inputs', () => {
-      // expect(_.filter([], () => { })).to.eql([]);
-      // expect(_.filter(1, NaN, false)).to.eql(1);
-      // expect(_.filter('five', null, undefined)).to.eql('five');
-      // expect(_.filter({}, 1, 2)).to.eql({});
+    it('returns an empty array for invalid list inputs', () => {
+      const predicate = () => true;
+
+      expect(_.filter(true, predicate)).to.eql([]);
+      expect(_.filter(10101, predicate)).to.eql([]);
+      expect(_.filter({}, predicate)).to.eql([]);
+    });
+
+    it('returns an empty array for invalid predicate inputs', () => {
+      const inputArr = [1,2,3,4,5];
+
+      expect(_.filter(inputArr, true)).to.eql([]);
+      expect(_.filter(inputArr, NaN)).to.eql([]);
+      expect(_.filter(inputArr, 'predicate')).to.eql([]);
+    });
+
+    it('functions as normal if given invalid context input', () => {
+      const inputArr = [1,2,3,4,5];
+      const predicate = (val) => val % 2 === 0;
+
+      expect(_.filter(inputArr, predicate, 'context')).to.eql([2, 4]);
+      expect(_.filter(inputArr, predicate, 10101)).to.eql([2, 4]);
+      expect(_.filter(inputArr, predicate, [])).to.eql([2, 4]);
     });
   });
+
 
   describe('#reject', () => {
     it('is a function', () => {

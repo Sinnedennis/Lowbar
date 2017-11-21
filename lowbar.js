@@ -104,7 +104,7 @@ _.indexOf = function (array, value, isSorted = false) {
 
 _.filter = function (list, predicate, context = this) {
 
-  if (typeof predicate !== 'function') return list;
+  if (typeof predicate !== 'function') return [];
   predicate = predicate.bind(context);
 
   let result = [];
@@ -115,6 +115,7 @@ _.filter = function (list, predicate, context = this) {
 
   return result;
 };
+
 
 _.reject = function (list, predicate, context = this) {
   return _.filter(list, _.negate(predicate), context);
