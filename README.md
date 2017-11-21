@@ -1,11 +1,13 @@
 # Lowbar
-========
+
 A reimplementation of the popular [underscore.js](http://underscorejs.org/) library to demonstrate a solid understanding vanilla *JavaScript* and *Test Driven Development*.
 
 ### Setup
-=========
+
 1. Ensure that your machine is running Node version 7 or above. To check what version you are running, open a terminal window and type:
-⋅⋅⋅<b>node -v</b>
+``` javascript 
+node -v
+```
 
 
 1. identity
