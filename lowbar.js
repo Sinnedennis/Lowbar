@@ -38,7 +38,7 @@ _.last = function (list, n) {
 };
 
 
-_.each = function (list, iteratee, context = this) {
+_.each = function (list, iteratee, context) {
 
   iteratee = iteratee.bind(context);
 
@@ -102,7 +102,7 @@ _.indexOf = function (array, value, isSorted = false) {
 };
 
 
-_.filter = function (list, predicate, context = this) {
+_.filter = function (list, predicate, context) {
 
   if (typeof predicate !== 'function') return [];
   predicate = predicate.bind(context);
@@ -117,7 +117,7 @@ _.filter = function (list, predicate, context = this) {
 };
 
 
-_.reject = function (list, predicate, context = this) {
+_.reject = function (list, predicate, context) {
   return _.filter(list, _.negate(predicate), context);
 };
 
@@ -336,7 +336,7 @@ _.zip = function () {
 };
 
 //Needs refactor
-_.sortedIndex = function (list, value, iteratee, context = this) {
+_.sortedIndex = function (list, value, iteratee, context) {
 
   if (Array.isArray(list)) list = list.slice();
   else if (typeof list === 'string') list = list.split('');

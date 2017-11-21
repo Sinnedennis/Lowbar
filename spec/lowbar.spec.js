@@ -839,10 +839,10 @@ describe('_', () => {
     });
 
     it('short-circuits if one value fails', () => {
-      const inputArr = [true, false, true, true];
       const predicate = value => value;
       let testSpy = sinon.spy(predicate);
-
+      
+      const inputArr = [true, false, true, true];
       _.every(inputArr, testSpy);
       expect(testSpy.calledTwice).to.be.true;
 
@@ -868,10 +868,10 @@ describe('_', () => {
     });
 
     it('works with the characters of strings', () => {
-      let inputStr = 'fff';
       let predicate = value => value === 'f';
       let testSpy = sinon.spy(predicate);
-
+      
+      let inputStr = 'fff';
       expect(_.every(inputStr, testSpy)).to.be.true;
       expect(testSpy.callCount).to.equal(3);
 
@@ -897,7 +897,7 @@ describe('_', () => {
   });
 
 
-  describe.only('#some', () => {
+  describe('#some', () => {
     it('should be a function', () => {
       expect(_.some).to.be.a('function');
     });
@@ -921,45 +921,46 @@ describe('_', () => {
     });
 
     it('short-circuits of one item passes', () => {
-      const inputArr = [1, 'foo', 3, 2, 1, 0];
       const predicate = num => num === 'foo';
       const testSpy = sinon.spy(predicate);
 
+      const inputArr = [1, 'foo', 3, 2, 1, 0];
       _.some(inputArr, testSpy);
-      expect(testSpy.calledTwice).to.be.true;
+      expect(testSpy.callCount).to.equal(2);
 
       testSpy.reset();
 
       const inputObj = { a: 0, b: 'foo', c: 2, d: 3 };
       _.some(inputObj, testSpy);
-      expect(testSpy.calledTwice).to.be.true;
+      expect(testSpy.callCount).to.equal(2);
     });
 
     it('takes a context argument', () => {
-      const predicateObj = {
-        value: true
+      const contextObj = {
+        value: 'pass'
       };
 
       const predicate = function (value) {
         return value === this.value;
       };
 
-      expect(_.some([false, false, false], predicate, predicateObj)).to.be.false;
-      expect(_.some([false, false, true], predicate, predicateObj)).to.be.true;
+      expect(_.some([false, false, false], predicate, contextObj)).to.be.false;
+      expect(_.some([false, false, 'pass'], predicate, contextObj)).to.be.true;
     });
 
-    it('works for strings', () => {
-      let inputStr = '123';
+    it('works with the characters in strings', () => {
       let predicate = value => value === '2';
       let testSpy = sinon.spy(predicate);
-
+      
+      let inputStr = '123';
       expect(_.some(inputStr, testSpy)).to.be.true;
-      expect(testSpy.calledTwice).to.be.true;
+      expect(testSpy.callCount).to.equal(2);
 
       testSpy.reset();
+
       inputStr = 'foo';
       expect(_.some(inputStr, testSpy)).to.be.false;
-      expect(testSpy.calledThrice).to.be.true;
+      expect(testSpy.callCount).to.equal(3);
     });
 
     it('returns false if given invalid list', () => {
@@ -976,6 +977,7 @@ describe('_', () => {
       expect(_.some([1, 2, 3], true)).to.be.false;
     });
   });
+
 
   describe('#extend', () => {
     it('should be a function', () => {
