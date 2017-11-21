@@ -65,8 +65,8 @@ The Lowbar library and testing suite makes use of the following packages:
 | [Chai](https://www.npmjs.com/package/chai)                   | Assertion library |
 | [Sinon](https://www.npmjs.com/package/sinon)                 | Spies, mocks, and stubs library |
 | [Underscore.js](https://www.npmjs.com/package/underscore)    | The subject of this reimplementation |
-| [ESLint](https://www.npmjs.com/package/eslint)               | Code lintint tool |
-| [Huksy](https://www.npmjs.com/package/husky)                 | Provides pre-commit git hooks |
+| [ESLint](https://www.npmjs.com/package/eslint)               | Code linting tool |
+| [Huksy](https://www.npmjs.com/package/husky)                 | Provides git hooks |
 
 ___
 
