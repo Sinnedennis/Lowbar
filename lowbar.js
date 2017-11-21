@@ -227,6 +227,7 @@ _.extend = function (destination, ...sources) {
   return destination;
 };
 
+
 _.defaults = function (object) {
   _.each(arguments, (arg) => {
     _.reduce(arg, (memo, value, i) => {
@@ -234,7 +235,7 @@ _.defaults = function (object) {
       if (!memo.hasOwnProperty(i)) {
         return memo[i] = value;
       }
-      return memo;
+      else return memo;
 
     }, object);
   });

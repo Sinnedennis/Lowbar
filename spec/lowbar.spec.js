@@ -1026,16 +1026,22 @@ describe('_', () => {
     it('fills in undefined properties in the object with the default list', () => {
       const destination = { foo: 'bar' };
       const defaultObjs = { foo: 'ice-cream', yes: 'no' };
+
       expect(_.defaults(destination, defaultObjs)).to.eql({ foo: 'bar', yes: 'no' });
     });
 
     it('uses the first value present in the default lists', () => {
       const destination = { foo: 'bar' };
-      expect(_.defaults(destination,
-        { foo: 'ice-cream' },
-        { yes: 'no' },
-        { yes: 'maybe' }
-      )).to.eql({ foo: 'bar', yes: 'no' });
+      const defaultObjs = [{ foo: 'ice-cream' }, { yes: 'no' }, { yes: 'certainly not' }];
+
+      expect(_.defaults(destination, ...defaultObjs )).to.eql({ foo: 'bar', yes: 'no' });
+    });
+
+    it('mutates the first argument', () => {
+      const destination = {foo: 'bar'};
+      const defaultObjs = { yes: 'no' };
+
+      expect(_.defaults(destination, defaultObjs)).to.equal(destination);
     });
   });
 
