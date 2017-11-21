@@ -1,6 +1,6 @@
 # Lowbar
 
-A reimplementation of the popular [underscore.js](http://underscorejs.org/) library to demonstrate a solid understanding vanilla *JavaScript* and *Test Driven Development*.
+A reimplementation of the popular [underscore.js](http://underscorejs.org/) library to demonstrate a solid understanding of vanilla *JavaScript* and *Test Driven Development*.
 ___
 
 ### Setup
@@ -41,13 +41,27 @@ To run the test suite using Lowbar, run the following terminal command:
 npm t
 ```
 
-To run the test suite using Underscore.js, run: 
+To run the same test suite using Underscore.js, run: 
 
 ```
 npm run t_
 ```
 
 ___
+### Depenencies
+The Lowbar library and testing suite makes use of the following packages:
+
+|    Package    | Use          |
+|:-------------:|:-------------|
+| [Mocha](https://www.npmjs.com/package/mocha)                 | Testing enviromnent |
+| [Chai](https://www.npmjs.com/package/chai)                   | Assertion library |
+| [Sinon](https://www.npmjs.com/package/sinon)                 | Spies, mocks, and stubs library |
+| [Underscore.js](https://www.npmjs.com/package/underscore)    | The subject of this reimplementation |
+| [ESLint](https://www.npmjs.com/package/eslint)               | Code lintint tool |
+| [Huksy](https://www.npmjs.com/package/husky)                 | Provides pre-commit git hooks |
+
+___
+
 ### Table of contents
 
 | #        | Method        |
