@@ -335,7 +335,7 @@ describe('_', () => {
   });
 
 
-  describe.only('#indexOf', () => {
+  describe('#indexOf', () => {
     it('is a function', () => {
       expect(_.indexOf).to.be.a('function');
     });
@@ -408,70 +408,75 @@ describe('_', () => {
     });
   });
 
-  describe('#filter', () => {
+
+  describe.only('#filter', () => {
     it('is a function', () => {
       expect(_.filter).to.be.a('function');
     });
 
-    it('passes every list item to the predicate', () => {
+    it('invokes the predicate for each item in the list', () => {
       let inputArr = [0, 1, 2, 3, 4, 5];
       let testSpy = sinon.spy();
       _.filter(inputArr, testSpy);
+
       expect(testSpy.callCount).to.equal(inputArr.length);
 
-      inputArr = [0, 1, 2, 3];
       testSpy.reset();
+
+      inputArr = [0, 1, 2, 3];
       _.filter(inputArr, testSpy);
+
       expect(testSpy.callCount).to.equal(inputArr.length);
     });
 
     it('only returns list items that pass the predicate test', () => {
       let inputArr = [0, 1, 2, 3, 4, 5];
+
       let predicate = (num) => num > 2;
       expect(_.filter(inputArr, predicate)).to.eql([3, 4, 5]);
 
       inputArr = ['a', 'b', 'c'];
+
       predicate = (char) => char === 'b';
       expect(_.filter(inputArr, predicate)).to.eql(['b']);
+
       predicate = (char) => char === 'hi';
       expect(_.filter(inputArr, predicate)).to.eql([]);
     });
 
-    it('works for objects', () => {
+    it('works with the values of objects', () => {
       const testSpy = sinon.spy();
-      let inputObj = { 0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5 };
+      let inputObj = { a: 0, b: 1, c: 2, d: 3, e: 4, f: 5 };
 
       _.filter(inputObj, testSpy);
-      expect(testSpy.callCount).to.eql(Object.keys(inputObj).length);
+      expect(testSpy.callCount).to.eql(_.values(inputObj).length);
 
       let predicate = (num) => num > 2;
       expect(_.filter(inputObj, predicate)).to.eql([3, 4, 5]);
     });
 
     it('takes a context argument for arrays', () => {
-      const predicateObj = {
+      const contextObj = {
         predicate: item => item > 2,
       };
 
       const result = _.filter([0, 1, 2, 3, 4, 5], function (item) {
         return this.predicate(item);
-      }, predicateObj);
+      }, contextObj);
 
       expect(result).to.eql([3, 4, 5]);
-
     });
 
     it('takes a context argument for objects', () => {
-      const predicateObj = {
+      const contextObj = {
         predicate: item => item > 2,
       };
 
       const result = _.filter({ 1: 1, 2: 2, 3: 3, 4: 4, 5: 5 }, function (item) {
         return this.predicate(item);
-      }, predicateObj);
+      }, contextObj);
 
       expect(result).to.eql([3, 4, 5]);
-
     });
 
     it('returns list if given invalid inputs', () => {

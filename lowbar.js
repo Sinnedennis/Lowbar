@@ -56,6 +56,7 @@ _.each = function (list, iteratee, context = this) {
   return list;
 };
 
+
 _.indexOf = function (array, value, isSorted = false) {
 
   if (typeof array === 'string') array = array.split('');
@@ -94,12 +95,12 @@ _.indexOf = function (array, value, isSorted = false) {
       } else {
         end = mid - 1;
       }
-
     }
   }
 
   return -1;
 };
+
 
 _.filter = function (list, predicate, context = this) {
 
