@@ -547,7 +547,7 @@ describe('_', () => {
   });
 
 
-  describe.only('#uniq', () => {
+  describe('#uniq', () => {
     it('is a function', () => {
       expect(_.uniq).to.be.a('function');
     });
@@ -601,46 +601,47 @@ describe('_', () => {
     });
   });
 
-  
-  describe('#map', () => {
+
+  describe.only('#map', () => {
     it('is a function', () => {
       expect(_.map).to.be.a('function');
     });
 
     it('yields each item to the iteratee', () => {
       const testSpy = sinon.spy();
-      const testArr = [1, 2, 3];
+      const inputArr = [1, 2, 3];
 
-      _.map(testArr, testSpy);
+      _.map(inputArr, testSpy);
 
-      expect(testSpy.callCount).to.equal(testArr.length);
+      expect(testSpy.callCount).to.equal(inputArr.length);
     });
 
     it('passes the following arguments in order to the iteratee - value, index/key, list', () => {
       const testSpy = sinon.spy();
-      const testArr = [1, 2, 3];
+      const inputArr = [1, 2, 3];
 
-      _.map(testArr, testSpy);
+      _.map(inputArr, testSpy);
 
       expect(testSpy.args).to.eql([
-        [1, 0, testArr],
-        [2, 1, testArr],
-        [3, 2, testArr]
+        [1, 0, inputArr],
+        [2, 1, inputArr],
+        [3, 2, inputArr]
       ]);
     });
 
     it('returns a new transformed array without mutating the original input', () => {
-      const testArr = [1, 2, 3];
+      const inputArr = [1, 2, 3];
 
-      const result = _.map(testArr, (item) => {
+      const result = _.map(inputArr, (item) => {
         return item * 10;
       });
 
       expect(result).to.eql([10, 20, 30]);
-      expect(testArr).to.eql([1, 2, 3]);
+      expect(inputArr).to.eql([1, 2, 3]);
+      expect(result).to.not.equal(inputArr);
     });
 
-    it('works for objects', () => {
+    it('works with the values of an object', () => {
       const inputObj = { 0: 'a', 1: 'b', 2: 'c' };
 
       const result = _.map(inputObj, (char) => {
@@ -650,7 +651,7 @@ describe('_', () => {
       expect(result).to.eql(['A', 'B', 'C']);
     });
 
-    it('works for strings', () => {
+    it('works with the characters of a string', () => {
       const result = _.map('hello world', (char) => {
         return char.toUpperCase();
       });
@@ -677,6 +678,7 @@ describe('_', () => {
       expect(_.map(undefined)).to.eql([]);
     });
   });
+  
 
   describe('#contains', () => {
     it('is a function', () => {

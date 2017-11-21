@@ -144,11 +144,12 @@ _.uniq = function (array, isSorted, iteratee) {
 _.map = function (list, iteratee, context) {
 
   if (typeof iteratee !== 'function') return [];
+  
   iteratee = iteratee.bind(context);
-  let mappedArr = [];
+  const mappedArr = [];
 
   _.each(list, (value, index, list) => {
-    mappedArr.push(iteratee.call(null, value, index, list));
+    mappedArr.push(iteratee(value, index, list));
   }, context);
 
   return mappedArr;
