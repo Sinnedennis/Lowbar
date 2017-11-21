@@ -395,6 +395,7 @@ _.sortedIndex = function (list, value, iteratee, context) {
   }
 };
 
+
 _.flatten = function (array, shallow = false) {
   if (!Array.isArray(array) && typeof array !== 'string') return [];
 
@@ -403,6 +404,7 @@ _.flatten = function (array, shallow = false) {
     return memo.concat(value);
   }, []);
 };
+
 
 _.intersection = function (...arrays) {
 

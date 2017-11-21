@@ -1375,7 +1375,7 @@ describe('_', () => {
       expect(_.sortedIndex('abcde', 'x')).to.equal(5);
       expect(_.sortedIndex('abcde', 'a')).to.equal(0);
     });
-    
+
     it('takes a context argument', () => {
       const contextObj = {
         prop: 'age'
@@ -1385,7 +1385,7 @@ describe('_', () => {
         return value[this.prop];
       };
 
-      expect(_.sortedIndex([{ age: 1 }, { age: 2 }], {age: 10}, iteratee, contextObj)).to.equal(2);
+      expect(_.sortedIndex([{ age: 1 }, { age: 2 }], { age: 10 }, iteratee, contextObj)).to.equal(2);
 
     });
 
@@ -1396,9 +1396,9 @@ describe('_', () => {
     });
 
     it('returns 0 with given a value that is a different datatype to the list values', () => {
-      expect(_.sortedIndex([0,1,2,3], null)).to.equal(0);
-      expect(_.sortedIndex([0,1,2,3], 'null')).to.equal(0);
-      expect(_.sortedIndex([0,1,2,3], false)).to.equal(0);
+      expect(_.sortedIndex([0, 1, 2, 3], null)).to.equal(0);
+      expect(_.sortedIndex([0, 1, 2, 3], 'null')).to.equal(0);
+      expect(_.sortedIndex([0, 1, 2, 3], false)).to.equal(0);
       expect(_.sortedIndex([{ age: 1 }, { age: 2 }], 2.5, 'age')).to.equal(0);
     });
   });
@@ -1460,21 +1460,19 @@ describe('_', () => {
       expect(_.intersection).to.be.a('function');
     });
 
-    it('returns the common elements between different arrays', () => {
+    it('returns an array of the common elements between multiple arrays', () => {
       let inputArrays = [
         [0, 1, 2, 3, 'foo', 'bar'],
         [4, 5, 6, 7, 'foo', 'bar'],
         [8, 9, 10, 'foo', 'bar'],
       ];
-
       expect(_.intersection(...inputArrays)).to.eql(['foo', 'bar']);
 
       inputArrays = [
-        [{ foo: 'bar' }],
-        [1, 2, 3],
-        ['hello']
+        ['foo'],
+        ['bar'],
+        ['pie']
       ];
-
       expect(_.intersection(...inputArrays)).to.eql([]);
     });
 
@@ -1499,10 +1497,8 @@ describe('_', () => {
       ];
 
       expect(_.intersection(...inputArrays)).to.eql(['f', 'o', 'O']);
-      expect(_.intersection(...inputArrays)).to.not.eql(['O', 'o', 'f']);
     });
 
-    //Requires further testing
     it('mirrors underscore.js behaviour for strings', () => {
       expect(_.intersection('foo bar')).to.eql(['f', 'o', ' ', 'b', 'a', 'r']);
       expect(_.intersection('aabbcc')).to.eql(['a', 'b', 'c']);
@@ -1515,12 +1511,13 @@ describe('_', () => {
     });
   });
 
+
   describe('#difference', () => {
     it('should be a function', () => {
       expect(_.difference).to.be.a('function');
     });
 
-    it('returns the values present in the first array but not present in other arrays', () => {
+    it('returns the values present in the first array that are not present in other arrays', () => {
       expect(_.difference([1, 2, 3, 4, 5], [4], [5])).to.eql([1, 2, 3]);
       expect(_.difference([1, 2, 3, 4, 5], [1], [2])).to.eql([3, 4, 5]);
       expect(_.difference([1, 2, 3, 4, 5], [1, 2, 3])).to.eql([4, 5]);
@@ -1541,9 +1538,10 @@ describe('_', () => {
       expect(_.difference(inputArray, ...inputArrays)).to.eql(['hello', 'world', nestedObj]);
     });
 
-    it('works for strings', () => {
+    it('works with the characters in strings', () => {
       expect(_.difference('hello', ['h'])).to.eql('ello'.split(''));
-      expect(_.difference('1f2o3o4 5b6a7r8', ['1', '2', '3', '4'], ['5', '6', '7', '8'])).to.eql('foo bar'.split(''));
+      expect(_.difference('1f2o3o4 5b6a7r8', ['1', '2', '3', '4'], ['5', '6', '7', '8']))
+        .to.eql('foo bar'.split(''));
     });
 
     it('does not type-convert when comparing values', () => {
@@ -1574,7 +1572,7 @@ describe('_', () => {
     });
   });
 
-  //test obscure hashes
+
   describe('#memoize', () => {
     it('should be a function', () => {
       expect(_.memoize).to.be.a('function');
@@ -1585,19 +1583,20 @@ describe('_', () => {
     });
 
     it('returns the cached results of the passed function without making additional function calls', () => {
-      const func = (arg1, arg2) => arg1 * arg2;
-      const testSpy = sinon.spy(func);
+      const mulitply = (arg1, arg2) => arg1 * arg2;
+      const testSpy = sinon.spy(mulitply);
       const memoizedFunc = _.memoize(testSpy);
 
       expect(memoizedFunc(2, 5)).to.equal(10);
-      expect(testSpy.calledOnce).to.be.true;
+      expect(testSpy.callCount).to.equal(1);
+
       expect(memoizedFunc(2, 5)).to.equal(10);
-      expect(testSpy.calledOnce).to.be.true;
+      expect(testSpy.callCount).to.equal(1);
     });
 
     it('stores the results from the invocation of the passed function in the cache property with a default key of the first passed argument', () => {
-      const func = (arg1, arg2) => arg1 * arg2;
-      const memoizedFunc = _.memoize(func);
+      const multiply = (arg1, arg2) => arg1 * arg2;
+      const memoizedFunc = _.memoize(multiply);
 
       expect(memoizedFunc(2, 5)).to.equal(10);
       expect(memoizedFunc.cache[2]).to.equal(10);
@@ -1607,9 +1606,9 @@ describe('_', () => {
     });
 
     it('generates a hashed key based on a passed hash function', () => {
-      const func = (arg1, arg2) => arg1 + arg2;
+      const add = (arg1, arg2) => arg1 + arg2;
       const hashFunc = (arg1, arg2) => `${arg1} plus ${arg2}`;
-      const memoizedFunc = _.memoize(func, hashFunc);
+      const memoizedFunc = _.memoize(add, hashFunc);
 
       expect(memoizedFunc(5, 5)).to.equal(10);
       expect(memoizedFunc.cache['5 plus 5']).to.equal(10);
@@ -1623,14 +1622,15 @@ describe('_', () => {
       expect(function () { _.memoize(null)(); }).to.throw(TypeError);
     });
 
-    it('defaults to built-in hash func using first argument when given invalid hashing function', () => {
-      const func = (arg1, arg2) => arg1 + arg2;
+    it('throws a TypeError when given invalid hashing function and called', () => {
+      const add = (arg1, arg2) => arg1 + arg2;
 
-      expect(function () { _.memoize(func, 123)(2, 2); }).to.throw(TypeError);
-      expect(function () { _.memoize(func, '123')(2, 2); }).to.throw(TypeError);
-      expect(function () { _.memoize(func, [123])(2, 2); }).to.throw(TypeError);
+      expect(function () { _.memoize(add, 123)(2, 2); }).to.throw(TypeError);
+      expect(function () { _.memoize(add, '123')(2, 2); }).to.throw(TypeError);
+      expect(function () { _.memoize(add, [123])(2, 2); }).to.throw(TypeError);
     });
   });
+  
 
   describe('#delay', () => {
     it('should be a function', () => {
