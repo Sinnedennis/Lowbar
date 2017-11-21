@@ -1340,7 +1340,7 @@ describe('_', () => {
   });
 
 
-  describe.only('#sortedIndex', () => {
+  describe('#sortedIndex', () => {
     it('should be a function', () => {
       expect(_.sortedIndex).to.be.a('function');
     });
@@ -1409,12 +1409,12 @@ describe('_', () => {
       expect(_.flatten).to.be.a('function');
     });
 
-    it('returns a shallowly flattened array when passed true', () => {
+    it('returns a shallowly flattened array when passed true as second argument', () => {
       let inputArr = [[[1]], [2], [[3]]];
       expect(_.flatten(inputArr, true)).to.eql([[1], 2, [3]]);
     });
 
-    it('returns a flat array', () => {
+    it('returns a flat array when not passed a second argument', () => {
       let inputArr = [[1], [2], [3]];
       expect(_.flatten(inputArr)).to.eql([1, 2, 3]);
 
@@ -1435,7 +1435,7 @@ describe('_', () => {
       expect(_.flatten(inputArrays)).to.eql([1, 2, 3, 1, 2, 3, 1, 2, 3]);
     });
 
-    it('works for strings', () => {
+    it('works with characters in a string', () => {
       expect(_.flatten('hello')).to.eql('hello'.split(''));
     });
 
@@ -1446,7 +1446,14 @@ describe('_', () => {
       expect(_.flatten(NaN)).to.eql([]);
       expect(_.flatten({ 1: 1, 2: 2 })).to.eql([]);
     });
+
+    it('second argument defaults to truthy of falsy value if not boolean', () => {
+      expect(_.flatten([[1], [2]], 'hello')).to.eql(_.flatten([[1], [2]], true));
+      expect(_.flatten([[[[1]]], [2]], 0)).to.eql(_.flatten([[[[1]]], [2]], false));
+      expect(_.flatten([[1], [[[2]]]], '')).to.eql(_.flatten([[1], [[[2]]]], false));
+    });
   });
+
 
   describe('#intersection', () => {
     it('should be a function', () => {
