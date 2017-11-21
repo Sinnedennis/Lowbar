@@ -144,7 +144,7 @@ _.uniq = function (array, isSorted, iteratee) {
 _.map = function (list, iteratee, context) {
 
   if (typeof iteratee !== 'function') return [];
-  
+
   iteratee = iteratee.bind(context);
   const mappedArr = [];
 
@@ -155,9 +155,11 @@ _.map = function (list, iteratee, context) {
   return mappedArr;
 };
 
+
 _.contains = function (list, value, fromIndex = 0) {
   return _.indexOf(list, value, fromIndex) > -1 ? true : false;
 };
+
 
 _.pluck = function (list, propName) {
   return _.map(list, item => {
@@ -165,8 +167,7 @@ _.pluck = function (list, propName) {
   });
 };
 
-//Do I want to mirror underscore.js and throw a type error
-//when given an invalid iteratee function?
+
 _.reduce = function (list, iteratee, memo, context) {
 
   if (typeof list !== 'object' && !Array.isArray(list) && typeof list !== 'string') return;
@@ -179,6 +180,7 @@ _.reduce = function (list, iteratee, memo, context) {
 
   return memo;
 };
+
 
 _.every = function (list, predicate, context) {
 

@@ -602,7 +602,7 @@ describe('_', () => {
   });
 
 
-  describe.only('#map', () => {
+  describe('#map', () => {
     it('is a function', () => {
       expect(_.map).to.be.a('function');
     });
@@ -678,35 +678,39 @@ describe('_', () => {
       expect(_.map(undefined)).to.eql([]);
     });
   });
-  
+
 
   describe('#contains', () => {
     it('is a function', () => {
       expect(_.contains).to.be.a('function');
     });
+
     it('returns true if value is present in list', () => {
       const inputArr = [1, 2, 3, 4];
       expect(_.contains(inputArr, 1)).to.be.true;
       expect(_.contains(inputArr, 4)).to.be.true;
     });
+
     it('returns false if value is not present in the array', () => {
       const inputArr = [1, 2, 3, 4];
       expect(_.contains(inputArr, 'foo')).to.be.false;
       expect(_.contains(inputArr, '2')).to.be.false;
     });
+
     it('starts searching from given index', () => {
       const inputArr = [1, 2, 3, 4];
-      expect(_.contains(inputArr, 1, 1)).to.be.false;
-      expect(_.contains(inputArr, 1, 0)).to.be.true;
+      expect(_.contains(inputArr, 1, 3)).to.be.false;
+      expect(_.contains(inputArr, 4, 2)).to.be.true;
     });
   });
+
 
   describe('#pluck', () => {
     it('should be a function', () => {
       expect(_.pluck).to.be.a('function');
     });
 
-    it('returns an array containing an extracted value from an array of objects', () => {
+    it('returns an array containing an extracted target value from an array of objects', () => {
       const inputArr = [
         { name: 'moe', age: 40 },
         { name: 'larry', age: 50 },
@@ -717,7 +721,7 @@ describe('_', () => {
       expect(_.pluck(inputArr, 'age')).to.eql([40, 50, 60]);
     });
 
-    it('returns undefined when value is not present in object', () => {
+    it('returns undefined when target value is not present in object', () => {
       const inputArr = [
         { foo: 'bar' },
         { foo: 'bar' }
@@ -727,25 +731,22 @@ describe('_', () => {
     });
   });
 
-  describe('#reduce', () => {
+
+  describe.only('#reduce', () => {
     it('should be a function', () => {
       expect(_.reduce).to.be.a('function');
     });
 
-    it('returns a single value by iterating through each array item', () => {
+    it('returns a single value calculated by iterating through each array item', () => {
       const inputArr = [5, 5, 5, 5, 5];
       let iteratee = (memo, value) => memo + value;
       expect(_.reduce(inputArr, iteratee, 0)).to.equal(25);
 
       const inputObj = { a: 1, b: 2, c: 3 };
-      // iteratee = ;
-      expect(_.reduce(inputObj, (memo, value, index) => {
-        memo[index] = value + 1;
-        return memo;
-      }, {})).to.eql({ a: 2, b: 3, c: 4 });
+      expect(_.reduce(inputObj, iteratee, 0)).to.equal(6);
     });
 
-    it('uses the first list item as the memo if memo is not supplied', () => {
+    it('uses the first list item as the memo (starting value) if memo is not supplied', () => {
       const inputArr = [5, 5, 5, 5, 5];
       const iteratee = (memo, num) => memo * num;
       expect(_.reduce(inputArr, iteratee)).to.equal(Math.pow(5, 5));
@@ -754,7 +755,7 @@ describe('_', () => {
       expect(_.reduce(inputObj, iteratee)).to.equal(Math.pow(5, 5));
     });
 
-    it('does not mutate the input array', () => {
+    it('does not mutate the input list', () => {
       const inputArr = [5, 5, 5, 5, 5];
       const inputObj = { a: 5, b: 5, c: 5, d: 5, e: 5 };
 
@@ -771,31 +772,31 @@ describe('_', () => {
     });
 
     it('takes a context argument', () => {
-      const iterateeObj = {
-        iteratee: (memo, num) => memo + num,
+      const contextObj = {
+        contextIteratee: (memo, num) => memo + num,
       };
 
-      const arrResult = _.reduce([5, 5, 5, 5, 5], function (memo, value) {
-        return this.iteratee(memo, value);
-      }, 0, iterateeObj);
+      const iteratee = function (memo, value) {
+        return this.contextIteratee(memo, value);
+      };
 
-      const objResult = _.reduce({ a: 5, b: 5, c: 5, d: 5, e: 5 }, function (memo, value) {
-        return this.iteratee(memo, value);
-      }, 0, iterateeObj);
+      const arrResult = _.reduce([5, 5, 5, 5, 5], iteratee , 0, contextObj);
+
+      const objResult = _.reduce({ a: 5, b: 5, c: 5, d: 5, e: 5 }, iteratee, 0, contextObj);
 
       expect(arrResult).to.eql(25);
       expect(objResult).to.eql(25);
     });
 
-    it('works for strings', () => {
-      const iterateeObj = {
+    it('works with the characters in strings', () => {
+      const contextObj = {
         iteratee: (memo, num) => (memo + num).toUpperCase(),
       };
 
       const strResult = _.reduce('foo', function (memo, value) {
         return this.iteratee(memo, value);
 
-      }, '', iterateeObj);
+      }, '', contextObj);
 
       expect(strResult).to.equal('FOO');
     });
@@ -812,6 +813,7 @@ describe('_', () => {
       expect(function () { _.reduce([1, 2, 3], 'foo'); }).to.throw(TypeError);
     });
   });
+
 
   describe('#every', () => {
     it('should be a function', () => {
