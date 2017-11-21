@@ -499,7 +499,7 @@ describe('_', () => {
     });
 
     it('returns an empty array for invalid predicate inputs', () => {
-      const inputArr = [1,2,3,4,5];
+      const inputArr = [1, 2, 3, 4, 5];
 
       expect(_.filter(inputArr, true)).to.eql([]);
       expect(_.filter(inputArr, NaN)).to.eql([]);
@@ -507,7 +507,7 @@ describe('_', () => {
     });
 
     it('functions as normal if given invalid context input', () => {
-      const inputArr = [1,2,3,4,5];
+      const inputArr = [1, 2, 3, 4, 5];
       const predicate = (val) => val % 2 === 0;
 
       expect(_.filter(inputArr, predicate, 'context')).to.eql([2, 4]);
@@ -522,10 +522,12 @@ describe('_', () => {
       expect(_.reject).to.be.a('function');
     });
 
-    it('passes every list item to the predicate', () => {
+    it('invokes the predicate for each item in the list', () => {
       const inputArr = [0, 1, 2, 3, 4, 5];
       const testSpy = sinon.spy();
+
       _.reject(inputArr, testSpy);
+
       expect(testSpy.callCount).to.equal(inputArr.length);
     });
 
@@ -538,12 +540,14 @@ describe('_', () => {
       predicate = (char) => char === 'b';
       expect(_.reject(inputObj, predicate)).to.eql(['a', 'c']);
 
-      predicate = (char) => char === 'hi';
-      expect(_.reject(inputObj, predicate)).to.eql(_.values(inputObj));
+      const inputStr = 'hello world';
+      predicate = (char) => char === 'h';
+      expect(_.reject(inputStr, predicate)).to.eql('ello world'.split(''));
     });
   });
 
-  describe('#uniq', () => {
+
+  describe.only('#uniq', () => {
     it('is a function', () => {
       expect(_.uniq).to.be.a('function');
     });
@@ -551,6 +555,7 @@ describe('_', () => {
     it('removes duplicate entries from array', () => {
       let inputArr = [1, '2', 1, 'three'];
       expect(_.uniq(inputArr)).to.eql([1, '2', 'three']);
+
       inputArr = [null, undefined, null, undefined];
       expect(_.uniq(inputArr)).to.eql([null, undefined]);
     });
@@ -558,8 +563,8 @@ describe('_', () => {
     it('yeilds EVERY item to an interatee, regardless of being unique or not', () => {
       const inputArr = [1, 2, 3, 2, 3];
       const testSpy = sinon.spy();
-
       _.uniq(inputArr, false, testSpy);
+
       expect(testSpy.callCount).to.equal(inputArr.length);
     });
 
@@ -581,9 +586,11 @@ describe('_', () => {
     });
 
     it('filters array via faster binary search', () => {
-      const testArr = [1, 2, 2, 2, 3, 3];
-      expect(_.uniq(testArr, true)).to.eql([1, 2, 3]);
+      const inputArr = [1, 2, 2, 2, 3, 3];
+      const unsortedInputArr = [3, 1, 2, 3, 1, 1, 2];
 
+      expect(_.uniq(inputArr, true)).to.eql([1, 2, 3]);
+      expect(_.uniq(unsortedInputArr, true)).to.not.eql([1, 2, 3]);
     });
 
     it('returns empty array when given invalid array input', () => {
@@ -592,14 +599,9 @@ describe('_', () => {
       expect(_.uniq(null)).to.eql([]);
       expect(_.uniq([])).to.eql([]);
     });
-
-    it('Functions normally if given invalid optional inputs (isSorted & iteratee)', () => {
-      // expect(_.uniq('foo', 1, NaN)).to.eql(['f', 'o']);
-      // expect(_.uniq('foo', 'true', 'function')).to.eql(['f', 'o']);
-      // expect(_.uniq('foo', null, 10)).to.eql(['f', 'o']);
-    });
   });
 
+  
   describe('#map', () => {
     it('is a function', () => {
       expect(_.map).to.be.a('function');

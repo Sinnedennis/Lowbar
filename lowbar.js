@@ -121,12 +121,12 @@ _.reject = function (list, predicate, context = this) {
   return _.filter(list, _.negate(predicate), context);
 };
 
-//Underscore passes EVERY item to the iteratee - why?
+
 _.uniq = function (array, isSorted, iteratee) {
 
   if (typeof array === 'string' && array.length > 0) array = array.split('');
-  if (typeof iteratee !== 'function') iteratee = _.identity;
   if (typeof isSorted !== 'boolean') isSorted = false;
+  if (typeof iteratee !== 'function') iteratee = _.identity;
 
   if (!Array.isArray(array)) return [];
 
@@ -139,6 +139,7 @@ _.uniq = function (array, isSorted, iteratee) {
 
   return result;
 };
+
 
 _.map = function (list, iteratee, context) {
 
