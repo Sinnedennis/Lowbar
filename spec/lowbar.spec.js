@@ -1630,7 +1630,7 @@ describe('_', () => {
       expect(function () { _.memoize(add, [123])(2, 2); }).to.throw(TypeError);
     });
   });
-  
+
 
   describe('#delay', () => {
     it('should be a function', () => {
@@ -1639,6 +1639,7 @@ describe('_', () => {
 
     it('invokes the callback after a period of time', (done) => {
       let flag = false;
+
       _.delay(() => {
         flag = true;
         expect(flag).to.be.true;
@@ -1648,6 +1649,7 @@ describe('_', () => {
 
     it('converts string-type delays into numbers', (done) => {
       let flag = false;
+
       _.delay(() => {
         flag = true;
         expect(flag).to.be.true;
@@ -1657,6 +1659,7 @@ describe('_', () => {
 
     it('converts array-type delays into numbers', (done) => {
       let flag = false;
+
       _.delay(() => {
         flag = true;
         expect(flag).to.be.true;
@@ -1675,6 +1678,7 @@ describe('_', () => {
       }, 100, payLoad1, payLoad2, payLoad3);
     });
   });
+
 
   describe('#where', () => {
     it('should be a function', () => {
@@ -1728,6 +1732,7 @@ describe('_', () => {
     });
   });
 
+
   describe('#throttle', () => {
     it('should be a function', () => {
       expect(_.throttle).to.be.a('function');
@@ -1737,7 +1742,7 @@ describe('_', () => {
       expect(_.throttle()).to.be.a('function');
     });
 
-    it('prevents repeated function calls until wait time has expired', () => {
+    it('prevents repeated function calls until cool-down time has expired', () => {
       const testSpy = sinon.spy();
       const throttledFunc = _.throttle(testSpy, 50);
       throttledFunc();
@@ -1759,7 +1764,7 @@ describe('_', () => {
       }, 40);
     });
 
-    it('invokes the function immediately once the wait period has ended if it was called during the delay', (done) => {
+    it('invokes the function immediately once the cool-down has ended if it was called during the cool-down', (done) => {
       const testSpy = sinon.spy();
       const throttledFunc = _.throttle(testSpy, 20);
       throttledFunc();
@@ -1787,7 +1792,7 @@ describe('_', () => {
 
     it('defaults to correct leading and trailing behaviours when given invalid option input', (done) => {
       const testSpy = sinon.spy();
-      const throttledFunc = _.throttle(testSpy, 20, [true]);
+      const throttledFunc = _.throttle(testSpy, 20, NaN);
       throttledFunc();
       throttledFunc();
       expect(testSpy.callCount).to.equal(1);
@@ -1838,6 +1843,7 @@ describe('_', () => {
       }, 200);
     });
   });
+
 
   describe('#partial', () => {
     it('should be a function', () => {

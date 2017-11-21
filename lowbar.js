@@ -410,10 +410,10 @@ _.intersection = function (...arrays) {
 
   if (arguments.length === 1 && typeof arguments[0] === 'string') return _.uniq(arguments[0].split(''));
 
-  const isValidValue = _.every([...arrays], (array) => {
+  const isValidArray = _.every([...arrays], (array) => {
     return Array.isArray(array);
   });
-  if (!isValidValue) return [];
+  if (!isValidArray) return [];
 
   const input = _.flatten([...arrays], true);
   const inputCopy = input.slice();
@@ -463,8 +463,8 @@ _.memoize = function (func, hashFunc) {
 
 _.delay = function (func, wait, ...args) {
 
-  if (!isNaN(wait)) wait = +wait;
-  if (typeof wait !== 'number' || wait < 0) wait = 0;
+  if (!isNaN(wait)) wait = +wait < 0 ? 0 : +wait;
+  else wait = 0;
 
   return setTimeout(func, wait, ...args);
 };
@@ -487,12 +487,9 @@ _.where = function (list, properties) {
 };
 
 
-/*
-  makes note of time when intialised
-  returns a function that, when called, returns an _.delay with the appropriate wait time
-*/
+_.throttle = function (func, wait, options) {
 
-_.throttle = function (func, wait, options = { leading: true, trailing: true }) {
+  if (typeof options !== 'object' || options === null || Array.isArray(options)) options = {};
 
   options.leading = options.leading === false ? false : true;
   options.trailing = options.trailing === false ? false : true;
@@ -500,7 +497,7 @@ _.throttle = function (func, wait, options = { leading: true, trailing: true }) 
   let beenCalled = false;
   let toBeCalled = false;
 
-  const throttledFunc = function (...args) {
+  return function (...args) {
 
     if (beenCalled === false) {
       beenCalled = true;
@@ -523,9 +520,7 @@ _.throttle = function (func, wait, options = { leading: true, trailing: true }) 
       waitLoop();
 
     } else if (options.trailing) toBeCalled = true;
-
   };
-  return throttledFunc;
 };
 
 _.partial = function (func, ...partialArgs) {
