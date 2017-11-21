@@ -1045,6 +1045,7 @@ describe('_', () => {
     });
   });
 
+
   describe('#once', () => {
     it('should be a function', () => {
       expect(_.once).to.be.a('function');
@@ -1071,11 +1072,15 @@ describe('_', () => {
     });
 
     it('only allows one invocation of the wrapped function', () => {
-      const func = (working) => working ? 'once' : 'twice';
-      let wrappedFunc = _.once(func);
+      const testSpy = sinon.spy();
+      let wrappedFunc = _.once(testSpy);
 
-      expect(wrappedFunc(true)).to.equal('once');
-      expect(wrappedFunc(false)).to.not.equal('twice');
+      wrappedFunc();
+      expect(testSpy.callCount).to.equal(1);
+
+      wrappedFunc();
+      wrappedFunc();
+      expect(testSpy.callCount).to.equal(1);
     });
 
     it('should always return the result of the first invocation', () => {
