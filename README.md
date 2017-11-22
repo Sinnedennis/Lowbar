@@ -11,19 +11,19 @@ ___
 * [Depenencies](https://github.com/Sinnedennis/Lowbar#depenencies)
 * [Table of methods](https://github.com/Sinnedennis/Lowbar#table-of-methods)
 
-### Setup
+### Set-up
 
 1. Ensure that your machine is running Node version 7 or above. To check what version you are running, open a terminal window and type:
     ``` 
     node -v
     ```
-    If you do not receieve a response in the format of v7.2.1, or your version of Node is older than 7x, [click here](https://nodejs.org/en/) to download and install Node from the official website.
+    If you do not receive a response in the format of v7.2.1, or your version of Node is older than 7x, [click here](https://nodejs.org/en/) to download and install Node from the official website.
    
 2. Ensure you have Node Package Manager (NPM) installed. As above, open a terminal window and type:
     ``` 
     npm -v
     ```
-    If you do not receieve a response in the format of v5.5.1, or your version of NPM is older than 5x, type the following commands into your terminal:
+    If you do not receive a response in the format of v5.5.1, or your version of NPM is older than 5x, type the following commands into your terminal:
     ``` 
     npm install npm
     ```
@@ -54,14 +54,14 @@ To run the same test suite using Underscore.js, type:
 ```
 npm run _
 ```
-
+Lowbar was written to emulate the behaviours of underscore.js as closely as possible meaning that all tests that pass for underscore should also pass for Lowbar.
 ___
-### Depenencies
+### Dependencies
 The Lowbar library and testing suite makes use of the following packages:
 
 |    Package    | Use          |
 |:-------------:|:-------------|
-| [Mocha](https://www.npmjs.com/package/mocha)                 | Testing enviromnent |
+| [Mocha](https://www.npmjs.com/package/mocha)                 | Testing environment |
 | [Chai](https://www.npmjs.com/package/chai)                   | Assertion library |
 | [Sinon](https://www.npmjs.com/package/sinon)                 | Spies, mocks, and stubs library |
 | [Underscore.js](https://www.npmjs.com/package/underscore)    | The subject of this reimplementation |
