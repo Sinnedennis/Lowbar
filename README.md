@@ -1,6 +1,6 @@
 # Lowbar
 
-A reimplementation of the popular [underscore.js](http://underscorejs.org/) library to demonstrate a solid understanding of vanilla *JavaScript* and *Test Driven Development*.
+A reimplementation of the popular [Underscore.js](http://underscorejs.org/) library to demonstrate a solid understanding of vanilla *JavaScript* and *Test Driven Development*.
 ___
 
 ### Table of contents
@@ -54,7 +54,7 @@ To run the same test suite using Underscore.js, type:
 ```
 npm run _
 ```
-Lowbar was written to emulate the behaviours of underscore.js as closely as possible meaning that all tests that pass for underscore should also pass for Lowbar.
+Lowbar was written to emulate the behaviours of Underscore.js as closely as possible meaning that all tests that pass for Underscore should also pass for Lowbar.
 ___
 ### Dependencies
 The Lowbar library and testing suite makes use of the following packages:
