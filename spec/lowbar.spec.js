@@ -5,8 +5,10 @@ const sinon = require('sinon');
 let _;
 if (process.env.underscore === 'true') {
   _ = require('underscore');
+  _.underscore = true;
 } else {
   _ = require(path.join(__dirname, '..', './lowbar.js'));
+  _.underscore = false;
 }
 
 
@@ -15,10 +17,6 @@ describe('_', () => {
 
 
   describe('#identity', () => {
-    it('is a function', function () {
-      expect(_.identity).to.be.a('function');
-    });
-
     it('returns only the first argument that was passed to it', () => {
       let value = 'foo';
       expect(_.identity(value, 'hello', 'world')).to.equal(value);
@@ -35,10 +33,6 @@ describe('_', () => {
 
 
   describe('#values', () => {
-    it('is a function', () => {
-      expect(_.values).to.be.a('function');
-    });
-
     it('returns an array containing the values of an object', () => {
       const inputObj = { one: 10, two: 'hello', three: true };
 
@@ -66,10 +60,6 @@ describe('_', () => {
 
 
   describe('#first', () => {
-    it('is a function', () => {
-      expect(_.first).to.be.a('function');
-    });
-
     it('does not mutate the input array', () => {
       const inputArr = [0, 1, 2, 3];
 
@@ -143,10 +133,6 @@ describe('_', () => {
 
 
   describe('#last', () => {
-    it('is a function', () => {
-      expect(_.last).to.be.a('function');
-    });
-
     it('does not mutate the input array', () => {
       const inputArr = [0, 1, 2, 3];
       expect(_.last(inputArr)).to.not.equal(inputArr);
@@ -217,10 +203,6 @@ describe('_', () => {
 
 
   describe('#each', () => {
-    it('is a function', () => {
-      expect(_.each).to.be.a('function');
-    });
-
     it('invokes the iteratee for each item in an array', () => {
       const testSpy = sinon.spy();
       _.each([1, 2, 3, 4], testSpy);
@@ -319,19 +301,27 @@ describe('_', () => {
       expect(_.each([], _.identity)).to.eql([]);
     });
 
-    it('throws a TypeError if given invalid iteratee', () => {
-      expect(function () { _.each([0, 1, 2, 3], 'hello'); }).to.throw(TypeError);
-      expect(function () { _.each([0, 1, 2, 3], null); }).to.throw(TypeError);
-      expect(function () { _.each([0, 1, 2, 3], undefined); }).to.throw(TypeError);
-    });
+    if (_.underscore) {
+
+      it('throws a TypeError if given invalid iteratee', () => {
+        const inputArr = [0, 1, 2, 3, 4, 5];
+        expect(function () { _.each(inputArr, 'hello'); }).to.throw(TypeError);
+        expect(function () { _.each(inputArr, null); }).to.throw(TypeError);
+        expect(function () { _.each(inputArr, undefined); }).to.throw(TypeError);
+      });
+
+    } else {
+
+      it('defaults to _.identity when given invalid iteratee', () => {
+        const inputArr = [0, 1, 2, 3, 4, 5];
+        expect(_.each(inputArr)).to.equal(inputArr);
+        expect(_.each(inputArr)).to.equal(inputArr);
+      });
+    }
   });
 
 
   describe('#indexOf', () => {
-    it('is a function', () => {
-      expect(_.indexOf).to.be.a('function');
-    });
-
     it('returns the index of a given value in an array', () => {
       const inputArr = ['a', 'b', 'c'];
 
@@ -402,10 +392,6 @@ describe('_', () => {
 
 
   describe('#filter', () => {
-    it('is a function', () => {
-      expect(_.filter).to.be.a('function');
-    });
-
     it('invokes the predicate for each item in the list', () => {
       let inputArr = [0, 1, 2, 3, 4, 5];
       let testSpy = sinon.spy();
@@ -510,10 +496,6 @@ describe('_', () => {
 
 
   describe('#reject', () => {
-    it('is a function', () => {
-      expect(_.reject).to.be.a('function');
-    });
-
     it('invokes the predicate for each item in the list', () => {
       const inputArr = [0, 1, 2, 3, 4, 5];
       const testSpy = sinon.spy();
@@ -540,10 +522,6 @@ describe('_', () => {
 
 
   describe('#uniq', () => {
-    it('is a function', () => {
-      expect(_.uniq).to.be.a('function');
-    });
-
     it('removes duplicate entries from array', () => {
       let inputArr = [1, '2', 1, 'three'];
       expect(_.uniq(inputArr)).to.eql([1, '2', 'three']);
@@ -595,10 +573,6 @@ describe('_', () => {
 
 
   describe('#map', () => {
-    it('is a function', () => {
-      expect(_.map).to.be.a('function');
-    });
-
     it('yields each item to the iteratee', () => {
       const testSpy = sinon.spy();
       const inputArr = [1, 2, 3];
@@ -673,10 +647,6 @@ describe('_', () => {
 
 
   describe('#contains', () => {
-    it('is a function', () => {
-      expect(_.contains).to.be.a('function');
-    });
-
     it('returns true if value is present in list', () => {
       const inputArr = [1, 2, 3, 4];
       expect(_.contains(inputArr, 1)).to.be.true;
@@ -698,10 +668,6 @@ describe('_', () => {
 
 
   describe('#pluck', () => {
-    it('should be a function', () => {
-      expect(_.pluck).to.be.a('function');
-    });
-
     it('returns an array containing an extracted target value from an array of objects', () => {
       const inputArr = [
         { name: 'moe', age: 40 },
@@ -725,10 +691,6 @@ describe('_', () => {
 
 
   describe('#reduce', () => {
-    it('should be a function', () => {
-      expect(_.reduce).to.be.a('function');
-    });
-
     it('returns a single value calculated by iterating through each array item', () => {
       const inputArr = [5, 5, 5, 5, 5];
       let iteratee = (memo, value) => memo + value;
@@ -808,10 +770,6 @@ describe('_', () => {
 
 
   describe('#every', () => {
-    it('should be a function', () => {
-      expect(_.every).to.be.a('function');
-    });
-
     it('returns true if every list value passes the predicate', () => {
       const inputArr = [true, true, true];
       const predicate = value => value;
@@ -890,10 +848,6 @@ describe('_', () => {
 
 
   describe('#some', () => {
-    it('should be a function', () => {
-      expect(_.some).to.be.a('function');
-    });
-
     it('returns true if some of the values in the list pass the predicate', () => {
       const inputArr = [0, 1, 2, 3, 4, 5];
       const predicate = num => num === 3;
@@ -972,10 +926,6 @@ describe('_', () => {
 
 
   describe('#extend', () => {
-    it('should be a function', () => {
-      expect(_.extend).to.be.a('function');
-    });
-
     it('makes a shallow copy of the properties in the source lists into the destination', () => {
       const destination = { hello: 'world' };
       const result = _.extend(destination, { foo: 'bar' }, { fish: 'pie' });
@@ -1011,10 +961,6 @@ describe('_', () => {
 
 
   describe('#defaults', () => {
-    it('should be a function', () => {
-      expect(_.defaults).to.be.a('function');
-    });
-
     it('fills in undefined properties in the object with the default list', () => {
       const destination = { foo: 'bar' };
       const defaultObjs = { foo: 'ice-cream', yes: 'no' };
@@ -1039,10 +985,6 @@ describe('_', () => {
 
 
   describe('#once', () => {
-    it('should be a function', () => {
-      expect(_.once).to.be.a('function');
-    });
-
     it('returns a function', () => {
       expect(_.once()).to.be.a('function');
     });
@@ -1087,10 +1029,6 @@ describe('_', () => {
 
 
   describe('#negate', () => {
-    it('should be a function', () => {
-      expect(_.negate).to.be.a('function');
-    });
-
     it('returns a function', () => {
       expect(_.negate()).to.be.a('function');
     });
@@ -1107,10 +1045,6 @@ describe('_', () => {
 
 
   describe('#shuffle', () => {
-    it('should be a function', () => {
-      expect(_.shuffle).to.be.a('function');
-    });
-
     it('returns an array of the same length', () => {
       const inputArr = [0, 1, 2, 3, 4, 5];
       const shuffled = _.shuffle(inputArr);
@@ -1184,10 +1118,6 @@ describe('_', () => {
 
 
   describe('#invoke', () => {
-    it('should be a function', () => {
-      expect(_.invoke).to.be.a('function');
-    });
-
     it('applies an array method on each array value in an array list', () => {
       expect(_.invoke([[2, 4, 1, 3], [4, 6, 5, 7]], 'join'))
         .to.eql(['2,4,1,3', '4,6,5,7']);
@@ -1229,10 +1159,6 @@ describe('_', () => {
 
 
   describe('#sortBy', () => {
-    it('should be a function', () => {
-      expect(_.sortBy).to.be.a('function');
-    });
-
     it('returns a copy of an input array', () => {
       const inputArr = [0, 1, 2, 3, 4, 5];
       expect(_.sortBy(inputArr)).to.not.equal(inputArr);
@@ -1275,10 +1201,6 @@ describe('_', () => {
 
 
   describe('#zip', () => {
-    it('should be a function', () => {
-      expect(_.zip).to.be.a('function');
-    });
-
     it('returns a zipped array of arrays (see underscorejs.org for more)', () => {
       const inputArrays = [
         ['moe', 'larry', 'curly'],
@@ -1333,10 +1255,6 @@ describe('_', () => {
 
 
   describe('#sortedIndex', () => {
-    it('should be a function', () => {
-      expect(_.sortedIndex).to.be.a('function');
-    });
-
     it('returns the index that the given value would best fit in the sorted list', () => {
       const inputArr = [0, 1, 2, 3, 4, 5];
 
@@ -1397,10 +1315,6 @@ describe('_', () => {
 
 
   describe('#flatten', () => {
-    it('should be a function', () => {
-      expect(_.flatten).to.be.a('function');
-    });
-
     it('returns a shallowly flattened array when passed true as second argument', () => {
       let inputArr = [[[1]], [2], [[3]]];
       expect(_.flatten(inputArr, true)).to.eql([[1], 2, [3]]);
@@ -1448,10 +1362,6 @@ describe('_', () => {
 
 
   describe('#intersection', () => {
-    it('should be a function', () => {
-      expect(_.intersection).to.be.a('function');
-    });
-
     it('returns an array of the common elements between multiple arrays', () => {
       let inputArrays = [
         [0, 1, 2, 3, 'foo', 'bar'],
@@ -1505,10 +1415,6 @@ describe('_', () => {
 
 
   describe('#difference', () => {
-    it('should be a function', () => {
-      expect(_.difference).to.be.a('function');
-    });
-
     it('returns the values present in the first array that are not present in other arrays', () => {
       expect(_.difference([1, 2, 3, 4, 5], [4], [5])).to.eql([1, 2, 3]);
       expect(_.difference([1, 2, 3, 4, 5], [1], [2])).to.eql([3, 4, 5]);
@@ -1566,10 +1472,6 @@ describe('_', () => {
 
 
   describe('#memoize', () => {
-    it('should be a function', () => {
-      expect(_.memoize).to.be.a('function');
-    });
-
     it('returns return a function', () => {
       expect(_.memoize()).to.be.a('function');
     });
@@ -1625,10 +1527,6 @@ describe('_', () => {
 
 
   describe('#delay', () => {
-    it('should be a function', () => {
-      expect(_.delay).to.be.a('function');
-    });
-
     it('invokes the callback after a period of time', (done) => {
       let flag = false;
 
@@ -1673,10 +1571,6 @@ describe('_', () => {
 
 
   describe('#where', () => {
-    it('should be a function', () => {
-      expect(_.where).to.be.a('function');
-    });
-
     it('returns a copy of the list filtered by the passed properties', () => {
       let list = [
         { isTrue: true },
@@ -1726,10 +1620,6 @@ describe('_', () => {
 
 
   describe('#throttle', () => {
-    it('should be a function', () => {
-      expect(_.throttle).to.be.a('function');
-    });
-
     it('returns a function', () => {
       expect(_.throttle()).to.be.a('function');
     });
@@ -1838,10 +1728,6 @@ describe('_', () => {
 
 
   describe('#partial', () => {
-    it('should be a function', () => {
-      expect(_.partial).to.be.a('function');
-    });
-
     it('should return a function', () => {
       expect(_.partial()).to.be.a('function');
     });

@@ -40,6 +40,7 @@ _.last = function (list, n) {
 
 _.each = function (list, iteratee, context) {
 
+  if (typeof iteratee !== 'function') iteratee = _.identity;
   iteratee = iteratee.bind(context);
 
   if (Array.isArray(list) || typeof list === 'string') {
