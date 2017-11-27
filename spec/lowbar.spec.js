@@ -5,10 +5,8 @@ const sinon = require('sinon');
 let _;
 if (process.env.underscore === 'true') {
   _ = require('underscore');
-  _.underscore = true;
 } else {
   _ = require(path.join(__dirname, '..', './lowbar.js'));
-  _.underscore = false;
 }
 
 
@@ -301,7 +299,7 @@ describe('_', () => {
       expect(_.each([], _.identity)).to.eql([]);
     });
 
-    if (_.underscore) {
+    if (process.env.underscore === 'true') {
 
       it('throws a TypeError if given invalid iteratee', () => {
         const inputArr = [0, 1, 2, 3, 4, 5];
@@ -315,7 +313,9 @@ describe('_', () => {
       it('defaults to _.identity when given invalid iteratee', () => {
         const inputArr = [0, 1, 2, 3, 4, 5];
         expect(_.each(inputArr)).to.equal(inputArr);
-        expect(_.each(inputArr)).to.equal(inputArr);
+        expect(_.each(inputArr, null)).to.equal(inputArr);
+        expect(_.each(inputArr, NaN)).to.equal(inputArr);
+        expect(_.each(inputArr, 'foo')).to.equal(inputArr);
       });
     }
   });
@@ -839,11 +839,26 @@ describe('_', () => {
       expect(_.every(NaN)).to.be.true;
     });
 
-    it('returns true if given invalid predicate', () => {
-      expect(_.every([1, 2, 3], NaN)).to.be.false;
-      expect(_.every([1, 2, 3], 123)).to.be.false;
-      expect(_.every([1, 2, 3], 'foo')).to.be.false;
-    });
+    if (process.env.underscore === 'true') {
+
+      it('returns false if given invalid predicate', () => {
+        expect(_.every([1, 2, 3], NaN)).to.be.false;
+        expect(_.every([1, 2, 3], 123)).to.be.false;
+        expect(_.every([1, 2, 3], 'foo')).to.be.false;
+      });
+
+    } else {
+
+      it.only('defaults to _.identity if given invalid predicate', () => {
+        expect(_.every([1, 2, 3])).to.be.true;
+        expect(_.every([1, 2, 3], 'foo')).to.be.true;
+        expect(_.every([1, 2, 3], NaN)).to.be.true;
+
+        expect(_.every([1, 2, 3, null])).to.be.false;
+        expect(_.every([1, 2, 3, ''], 'foo')).to.be.false;
+        expect(_.every([0, 1, 2, 3], NaN)).to.be.false;
+      });
+    }
   });
 
 
