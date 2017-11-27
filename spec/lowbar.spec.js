@@ -2,11 +2,13 @@ const path = require('path');
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
-let _;
-if (process.env.underscore === 'true') {
-  _ = require('underscore');
-} else {
+let _, usingLowbar;
+if (process.env.underscore !== 'true') {
   _ = require(path.join(__dirname, '..', './lowbar.js'));
+  usingLowbar = true;
+} else {
+  _ = require('underscore');
+  usingLowbar = false;
 }
 
 
@@ -94,7 +96,7 @@ describe('_', () => {
       expect(_.first(inputArr, -99)).to.eql([]);
     });
 
-    it('works for strings', () => {
+    it('works with the characters of a string', () => {
       expect(_.first('hello')).to.equal('h');
       expect(_.first('hello', 2)).to.eql(['h', 'e']);
       expect(_.first('hello', 99)).to.eql(['h', 'e', 'l', 'l', 'o']);
@@ -248,7 +250,7 @@ describe('_', () => {
       expect(testSpy.args[0][2]).to.equal(inputArr);
     });
 
-    it('works for strings', () => {
+    it('works with the characters of a string', () => {
       const testSpy = sinon.spy();
       _.each('012', testSpy);
 
@@ -299,16 +301,7 @@ describe('_', () => {
       expect(_.each([], _.identity)).to.eql([]);
     });
 
-    if (process.env.underscore === 'true') {
-
-      it('throws a TypeError if given invalid iteratee', () => {
-        const inputArr = [0, 1, 2, 3, 4, 5];
-        expect(function () { _.each(inputArr, 'hello'); }).to.throw(TypeError);
-        expect(function () { _.each(inputArr, null); }).to.throw(TypeError);
-        expect(function () { _.each(inputArr, undefined); }).to.throw(TypeError);
-      });
-
-    } else {
+    if (usingLowbar) {
 
       it('defaults to _.identity when given invalid iteratee', () => {
         const inputArr = [0, 1, 2, 3, 4, 5];
@@ -316,6 +309,15 @@ describe('_', () => {
         expect(_.each(inputArr, null)).to.equal(inputArr);
         expect(_.each(inputArr, NaN)).to.equal(inputArr);
         expect(_.each(inputArr, 'foo')).to.equal(inputArr);
+      });
+
+    } else {
+
+      it('throws a TypeError if given invalid iteratee', () => {
+        const inputArr = [0, 1, 2, 3, 4, 5];
+        expect(function () { _.each(inputArr, 'hello'); }).to.throw(TypeError);
+        expect(function () { _.each(inputArr, null); }).to.throw(TypeError);
+        expect(function () { _.each(inputArr, undefined); }).to.throw(TypeError);
       });
     }
   });
@@ -348,12 +350,21 @@ describe('_', () => {
       expect(_.indexOf(inputArr, 'true')).to.equal(-1);
     });
 
-    it('works for strings', () => {
+    it('works with the characters of a string', () => {
       expect(_.indexOf('hello', 'h')).to.equal(0);
       expect(_.indexOf('hello', 'l')).to.equal(2);
       expect(_.indexOf('hello', 'o')).to.equal(4);
       expect(_.indexOf('hello', 'x')).to.equal(-1);
     });
+
+    if (usingLowbar) {
+      it('works with the values of objects (index is irrelevant)', () => {
+        expect(_.indexOf({0: 0, 1: 1, 2: 2}, 1)).to.be.greaterThan(-1);
+        expect(_.indexOf({0: 0, 1: 1, 2: 2}, 8)).to.equal(-1);
+        expect(_.indexOf({foo: 'bar'}, 'foo')).to.equal(-1);
+        expect(_.indexOf({foo: 'bar'}, 'bar')).to.be.greaterThan(-1);
+      });
+    }
 
     it('returns index via binary search of value in a sorted array', () => {
       const inputArr = [0, 10, 20, 30, 40, 50];
@@ -476,20 +487,22 @@ describe('_', () => {
       expect(_.filter({}, predicate)).to.eql([]);
     });
 
-    if (process.env.underscore === 'true') {
+    if (usingLowbar) {
+
+      it('defaults to _.identity when given invalid predicate', () => {
+        expect(_.filter([0, 1, 2, '', null], true)).to.eql([1, 2]);
+        expect(_.filter([0, 1, 2, '', null], NaN)).to.eql([1, 2]);
+        expect(_.filter([0, 1, 2, '', null], 'predicate')).to.eql([1, 2]);
+      });
+
+    } else {
+
       it('returns an empty array for invalid predicate', () => {
         const inputArr = [1, 2, 3, 4, 5];
 
         expect(_.filter(inputArr, true)).to.eql([]);
         expect(_.filter(inputArr, NaN)).to.eql([]);
         expect(_.filter(inputArr, 'predicate')).to.eql([]);
-      });
-
-    } else {
-      it('defaults to _.identity when given invalid predicate', () => {
-        expect(_.filter([0, 1, 2, '', null], true)).to.eql([1, 2]);
-        expect(_.filter([0, 1, 2, '', null], NaN)).to.eql([1, 2]);
-        expect(_.filter([0, 1, 2, '', null], 'predicate')).to.eql([1, 2]);
       });
     }
 
@@ -652,6 +665,17 @@ describe('_', () => {
       expect(_.map(null)).to.eql([]);
       expect(_.map(undefined)).to.eql([]);
     });
+
+    if (usingLowbar) {
+
+      it('defaults to _.identity when given invalid iteratee', () => {
+        const inputArr = [0, 1, 2];
+        expect(_.map(inputArr)).to.eql(inputArr);
+        expect(_.map(inputArr, 'iteratee')).to.eql(inputArr);
+        expect(_.map(inputArr, null)).to.eql(inputArr);
+        expect(_.map(inputArr, 3.1415)).to.eql(inputArr);
+      });
+    }
   });
 
 
@@ -672,6 +696,13 @@ describe('_', () => {
       const inputArr = [1, 2, 3, 4];
       expect(_.contains(inputArr, 1, 3)).to.be.false;
       expect(_.contains(inputArr, 4, 2)).to.be.true;
+    });
+
+    it('works with the values of objects', () => {
+      expect(_.contains({0: 0, 1: 1, 2: 2}, 1)).to.be.true;
+      expect(_.contains({0: 0, 1: 1, 2: 2}, 8)).to.be.false;
+      expect(_.contains({foo: 'bar'}, 'foo')).to.be.false;
+      expect(_.contains({foo: 'bar'}, 'bar')).to.be.true;
     });
   });
 
@@ -770,11 +801,24 @@ describe('_', () => {
       expect(_.reduce(NaN)).to.equal(undefined);
     });
 
-    it('throws type error if given invalid iteratee function', () => {
-      expect(function () { _.reduce([1, 2, 3], true); }).to.throw(TypeError);
-      expect(function () { _.reduce([1, 2, 3], 123); }).to.throw(TypeError);
-      expect(function () { _.reduce([1, 2, 3], 'foo'); }).to.throw(TypeError);
-    });
+    if (usingLowbar) {
+
+      xit('defaults to _.identity if given invalid iteratee function', () => {
+        // const inputArr = [1, 2, 3];
+        // expect(_.reduce(inputArr)).to.eql(inputArr);
+        // expect(_.reduce(inputArr, true)).to.eql(inputArr);
+        // expect(_.reduce(inputArr, 123)).to.eql(inputArr);
+        // expect(_.reduce(inputArr, 'foo')).to.eql(inputArr);
+      });
+
+    } else {
+
+      it('throws type error if given invalid iteratee function', () => {
+        expect(function () { _.reduce([1, 2, 3], true); }).to.throw(TypeError);
+        expect(function () { _.reduce([1, 2, 3], 123); }).to.throw(TypeError);
+        expect(function () { _.reduce([1, 2, 3], 'foo'); }).to.throw(TypeError);
+      });
+    }
   });
 
 
@@ -848,15 +892,7 @@ describe('_', () => {
       expect(_.every(NaN)).to.be.true;
     });
 
-    if (process.env.underscore === 'true') {
-
-      it('returns false if given invalid predicate', () => {
-        expect(_.every([1, 2, 3], NaN)).to.be.false;
-        expect(_.every([1, 2, 3], 123)).to.be.false;
-        expect(_.every([1, 2, 3], 'foo')).to.be.false;
-      });
-
-    } else {
+    if (usingLowbar) {
 
       it('defaults to _.identity if given invalid predicate', () => {
         expect(_.every([1, 2, 3])).to.be.true;
@@ -866,6 +902,14 @@ describe('_', () => {
         expect(_.every([1, 2, 3, null])).to.be.false;
         expect(_.every([1, 2, 3, ''], 'foo')).to.be.false;
         expect(_.every([0, 1, 2, 3], NaN)).to.be.false;
+      });
+
+    } else {
+
+      it('returns false if given invalid predicate', () => {
+        expect(_.every([1, 2, 3], NaN)).to.be.false;
+        expect(_.every([1, 2, 3], 123)).to.be.false;
+        expect(_.every([1, 2, 3], 'foo')).to.be.false;
       });
     }
   });

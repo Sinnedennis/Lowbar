@@ -61,6 +61,7 @@ _.each = function (list, iteratee, context) {
 _.indexOf = function (array, value, isSorted = false) {
 
   if (typeof array === 'string') array = array.split('');
+  else if (typeof array === 'object' && !Array.isArray(array)) array = _.values(array);
 
   if (!Array.isArray(array) || array.length === 0) return -1;
   if (typeof isSorted !== 'boolean' && typeof isSorted !== 'number') return -1;
@@ -144,7 +145,7 @@ _.uniq = function (array, isSorted, iteratee) {
 
 _.map = function (list, iteratee, context) {
 
-  if (typeof iteratee !== 'function') return [];
+  if (typeof iteratee !== 'function') iteratee = _.identity;
 
   iteratee = iteratee.bind(context);
   const mappedArr = [];
@@ -172,6 +173,8 @@ _.pluck = function (list, propName) {
 _.reduce = function (list, iteratee, memo, context) {
 
   if (typeof list !== 'object' && !Array.isArray(list) && typeof list !== 'string') return;
+
+  if (typeof iteratee !== 'function') iteratee = _.identity;
   iteratee = iteratee.bind(context);
 
   _.each(list, (value, i, list) => {
