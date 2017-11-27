@@ -105,7 +105,7 @@ _.indexOf = function (array, value, isSorted = false) {
 
 _.filter = function (list, predicate, context) {
 
-  if (typeof predicate !== 'function') return [];
+  if (typeof predicate !== 'function') predicate = _.identity;
   predicate = predicate.bind(context);
 
   let result = [];

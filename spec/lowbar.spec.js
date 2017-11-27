@@ -476,13 +476,22 @@ describe('_', () => {
       expect(_.filter({}, predicate)).to.eql([]);
     });
 
-    it('returns an empty array for invalid predicate inputs', () => {
-      const inputArr = [1, 2, 3, 4, 5];
+    if (process.env.underscore === 'true') {
+      it('returns an empty array for invalid predicate', () => {
+        const inputArr = [1, 2, 3, 4, 5];
 
-      expect(_.filter(inputArr, true)).to.eql([]);
-      expect(_.filter(inputArr, NaN)).to.eql([]);
-      expect(_.filter(inputArr, 'predicate')).to.eql([]);
-    });
+        expect(_.filter(inputArr, true)).to.eql([]);
+        expect(_.filter(inputArr, NaN)).to.eql([]);
+        expect(_.filter(inputArr, 'predicate')).to.eql([]);
+      });
+
+    } else {
+      it('defaults to _.identity when given invalid predicate', () => {
+        expect(_.filter([0, 1, 2, '', null], true)).to.eql([1, 2]);
+        expect(_.filter([0, 1, 2, '', null], NaN)).to.eql([1, 2]);
+        expect(_.filter([0, 1, 2, '', null], 'predicate')).to.eql([1, 2]);
+      });
+    }
 
     it('functions as normal if given invalid context input', () => {
       const inputArr = [1, 2, 3, 4, 5];
@@ -849,7 +858,7 @@ describe('_', () => {
 
     } else {
 
-      it.only('defaults to _.identity if given invalid predicate', () => {
+      it('defaults to _.identity if given invalid predicate', () => {
         expect(_.every([1, 2, 3])).to.be.true;
         expect(_.every([1, 2, 3], 'foo')).to.be.true;
         expect(_.every([1, 2, 3], NaN)).to.be.true;
