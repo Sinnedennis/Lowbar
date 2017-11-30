@@ -803,12 +803,13 @@ describe('_', () => {
 
     if (usingLowbar) {
 
-      xit('defaults to _.identity if given invalid iteratee function', () => {
-        // const inputArr = [1, 2, 3];
-        // expect(_.reduce(inputArr)).to.eql(inputArr);
-        // expect(_.reduce(inputArr, true)).to.eql(inputArr);
-        // expect(_.reduce(inputArr, 123)).to.eql(inputArr);
-        // expect(_.reduce(inputArr, 'foo')).to.eql(inputArr);
+      it('defaults to _.identity if given invalid iteratee function', () => {
+        const inputArr = [1, 2, 3];
+        expect(_.reduce(inputArr)).to.eql(1);
+        expect(_.reduce(inputArr, true)).to.eql(1);
+
+        expect(_.reduce(inputArr, undefined, 'memo')).to.eql('memo');
+        expect(_.reduce(inputArr, null, true)).to.be.true;
       });
 
     } else {
