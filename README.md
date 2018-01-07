@@ -11,7 +11,7 @@ ___
 * [Depenencies](https://github.com/Sinnedennis/Lowbar#depenencies)
 * [Table of methods](https://github.com/Sinnedennis/Lowbar#table-of-methods)
 
-### Set-up
+### Setup
 
 1. Ensure that your machine is running Node version 7 or above. To check what version you are running, open a terminal window and type:
     ``` 
