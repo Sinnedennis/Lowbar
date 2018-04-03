@@ -1422,7 +1422,7 @@ describe('_', () => {
       expect(_.flatten({ 1: 1, 2: 2 })).to.eql([]);
     });
 
-    it('second argument defaults to truthy of falsy value if not boolean', () => {
+    it('second argument defaults to truthy or falsy value if not boolean', () => {
       expect(_.flatten([[1], [2]], 'hello')).to.eql(_.flatten([[1], [2]], true));
       expect(_.flatten([[[[1]]], [2]], 0)).to.eql(_.flatten([[[[1]]], [2]], false));
       expect(_.flatten([[1], [[[2]]]], '')).to.eql(_.flatten([[1], [[[2]]]], false));
