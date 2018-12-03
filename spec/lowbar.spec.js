@@ -53,7 +53,7 @@ describe('_', () => {
       expect(_.values('12345')).to.eql([]);
     });
 
-    it('returns an empty array if passed the object null', () => {
+    it('returns an empty array if passed null', () => {
       expect(_.values(null)).to.eql([]);
     });
   });
