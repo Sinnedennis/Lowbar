@@ -236,7 +236,7 @@ _.defaults = function (object) {
   _.each(arguments, (arg) => {
     _.reduce(arg, (memo, value, i) => {
 
-      if (!memo.hasOwnProperty(i)) {
+      if (!Object.prototype.hasOwnProperty.call(memo, i)) {
         return memo[i] = value;
       }
       else return memo;
